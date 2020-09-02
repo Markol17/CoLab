@@ -1,7 +1,9 @@
-import React from "react";
-import { Box, IconButton, Link } from "@chakra-ui/core";
-import NextLink from "next/link";
-import { useDeletePostMutation, useMeQuery } from "../generated/graphql";
+import React from 'react';
+import Link from '@material-ui/core/Link';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import NextLink from 'next/link';
+import { useDeletePostMutation, useMeQuery } from '../generated/graphql';
 
 interface EditDeletePostButtonsProps {
   id: number;
@@ -21,18 +23,18 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
 
   return (
     <Box>
-      <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
-        <IconButton as={Link} mr={4} icon="edit" aria-label="Edit Post" />
+      <NextLink href='/post/edit/[id]' as={`/post/edit/${id}`}>
+        <IconButton /*icon='edit'*/ aria-label='Edit Post' />
       </NextLink>
       <IconButton
-        icon="delete"
-        aria-label="Delete Post"
+        // icon='delete'
+        aria-label='Delete Post'
         onClick={() => {
           deletePost({
             variables: { id },
             update: (cache) => {
               // Post:77
-              cache.evict({ id: "Post:" + id });
+              cache.evict({ id: 'Post:' + id });
             },
           });
         }}
