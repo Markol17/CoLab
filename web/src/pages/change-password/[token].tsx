@@ -3,8 +3,7 @@ import { NextPage } from 'next';
 import { Wrapper } from '../../components/Wrapper';
 import { Formik, Form } from 'formik';
 import { toErrorMap } from '../../utils/toErrorMap';
-import { InputField } from '../../components/InputField';
-import { Box, Button, Link, Flex } from '@chakra-ui/core';
+import { Button, Box, Input, Link } from '@material-ui/core';
 import {
   useChangePasswordMutation,
   MeDocument,
@@ -53,30 +52,24 @@ const ChangePassword: NextPage = () => {
           }
         }}
       >
-        {({ isSubmitting }) => (
+        {(props) => (
           <Form>
-            <InputField
+            <Input
               name='newPassword'
               placeholder='new password'
-              label='New Password'
               type='password'
+              value={props.values.newPassword}
+              onChange={props.handleChange}
             />
             {tokenError ? (
-              <Flex>
-                <Box mr={2} style={{ color: 'red' }}>
-                  {tokenError}
-                </Box>
+              <>
+                <Box>{tokenError}</Box>
                 <NextLink href='/forgot-password'>
                   <Link>click here to get a new one</Link>
                 </NextLink>
-              </Flex>
+              </>
             ) : null}
-            <Button
-              mt={4}
-              type='submit'
-              isLoading={isSubmitting}
-              variantColor='teal'
-            >
+            <Button type='submit' disabled={props.isSubmitting}>
               change password
             </Button>
           </Form>

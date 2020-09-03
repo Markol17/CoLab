@@ -1,8 +1,7 @@
-import { Box, Button } from '@chakra-ui/core';
+import React from 'react';
+import { Button, Box, Input } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { InputField } from '../../../components/InputField';
 import { Layout } from '../../../components/Layout';
 import {
   usePostQuery,
@@ -46,23 +45,23 @@ const EditPost = ({}) => {
           router.back();
         }}
       >
-        {({ isSubmitting }) => (
+        {(props) => (
           <Form>
-            <InputField name='title' placeholder='title' label='Title' />
+            <Input
+              name='title'
+              placeholder='title'
+              value={props.values.title}
+              onChange={props.handleChange}
+            />
             <Box mt={4}>
-              <InputField
-                textarea
+              <Input
                 name='text'
                 placeholder='text...'
-                label='Body'
+                value={props.values.text}
+                onChange={props.handleChange}
               />
             </Box>
-            <Button
-              mt={4}
-              type='submit'
-              isLoading={isSubmitting}
-              variantColor='teal'
-            >
+            <Button type='submit' disabled={props.isSubmitting}>
               update post
             </Button>
           </Form>

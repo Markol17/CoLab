@@ -3,7 +3,7 @@
   "host": "localhost",
   "port": 5432,
   "username": "postgres",
-  "password": "postgres",
+  "password": "Markol17",
   "database": "CoLab",
   "entities": ["dist/entities/*.js"],
   "migrations": ["dist/migrations/*.js"]

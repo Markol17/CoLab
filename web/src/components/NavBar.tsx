@@ -106,7 +106,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { RenderPromises } from '@apollo/client/react/ssr';
 
 const drawerWidth = 240;
 
@@ -252,6 +251,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const logoutUser = async () => {
     await logout();
     await apolloClient.resetStore();
+    handleMenuClose();
   };
 
   const menuId = 'primary-search-account-menu';
@@ -268,7 +268,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
-      <MenuItem onClick={logoutUser}>Logout</MenuItem>
+      <MenuItem onClick={logoutUser} disabled={logoutFetching}>
+        Logout
+      </MenuItem>
     </Menu>
   );
 

@@ -47,7 +47,7 @@ const Login: React.FC<{}> = ({}) => {
             <Input
               name='usernameOrEmail'
               placeholder='username or email'
-              value={props.values.email}
+              value={props.values.usernameOrEmail}
               onChange={props.handleChange}
             />
             <Box mt={4}>

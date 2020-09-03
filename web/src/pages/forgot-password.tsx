@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Wrapper } from '../components/Wrapper';
 import { Formik, Form } from 'formik';
-import { InputField } from '../components/InputField';
-import { Box, Button } from '@chakra-ui/core';
+import { Button, Box, Input } from '@material-ui/core';
 import { useForgotPasswordMutation } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 
@@ -18,25 +17,21 @@ const ForgotPassword: React.FC<{}> = ({}) => {
           setComplete(true);
         }}
       >
-        {({ isSubmitting }) =>
+        {(props) =>
           complete ? (
             <Box>
               if an account with that email exists, we sent you can email
             </Box>
           ) : (
             <Form>
-              <InputField
+              <Input
                 name='email'
                 placeholder='email'
-                label='Email'
                 type='email'
+                value={props.values.email}
+                onChange={props.handleChange}
               />
-              <Button
-                mt={4}
-                type='submit'
-                isLoading={isSubmitting}
-                variantColor='teal'
-              >
+              <Button type='submit' disabled={props.isSubmitting}>
                 forgot password
               </Button>
             </Form>
