@@ -1,8 +1,7 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { Box, Button } from '@chakra-ui/core';
+import { Button, Box, Input } from '@material-ui/core';
 import { Wrapper } from '../components/Wrapper';
-import { InputField } from '../components/InputField';
 import { useRegisterMutation, MeQuery, MeDocument } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
@@ -18,6 +17,7 @@ const Register: React.FC<registerProps> = ({}) => {
       <Formik
         initialValues={{ email: '', username: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
+          console.log(values);
           const response = await register({
             variables: { options: values },
             update: (cache, { data }) => {
@@ -38,30 +38,41 @@ const Register: React.FC<registerProps> = ({}) => {
           }
         }}
       >
-        {({ isSubmitting }) => (
+        {(props) => (
           <Form>
-            <InputField
+            <Input
               name='username'
               placeholder='username'
-              label='Username'
+              value={props.values.username}
+              onChange={props.handleChange}
             />
             <Box mt={4}>
-              <InputField name='email' placeholder='email' label='Email' />
-            </Box>
-            <Box mt={4}>
-              <InputField
-                name='password'
-                placeholder='password'
-                label='Password'
-                type='password'
+              <Input
+                name='email'
+                placeholder='email'
+                value={props.values.email}
+                onChange={props.handleChange}
               />
             </Box>
-            <Button
-              mt={4}
-              type='submit'
-              isLoading={isSubmitting}
-              variantColor='teal'
-            >
+            <Box mt={4}>
+              <Input
+                name='password'
+                placeholder='password'
+                type='password'
+                value={props.values.password}
+                onChange={props.handleChange}
+              />
+            </Box>
+            {props.errors.username ||
+              props.errors.email ||
+              (props.errors.password && (
+                <div id='feedback'>
+                  {props.errors.username &&
+                    props.errors.email &&
+                    props.errors.password}
+                </div>
+              ))}
+            <Button type='submit' disabled={props.isSubmitting}>
               register
             </Button>
           </Form>

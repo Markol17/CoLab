@@ -1,8 +1,7 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { Box, Button, Link, Flex } from '@chakra-ui/core';
+import { Button, Box, Input, Link } from '@material-ui/core';
 import { Wrapper } from '../components/Wrapper';
-import { InputField } from '../components/InputField';
 import { useLoginMutation, MeQuery, MeDocument } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
@@ -43,32 +42,29 @@ const Login: React.FC<{}> = ({}) => {
           }
         }}
       >
-        {({ isSubmitting }) => (
+        {(props) => (
           <Form>
-            <InputField
+            <Input
               name='usernameOrEmail'
               placeholder='username or email'
-              label='Username or Email'
+              value={props.values.email}
+              onChange={props.handleChange}
             />
             <Box mt={4}>
-              <InputField
+              <Input
                 name='password'
                 placeholder='password'
-                label='Password'
                 type='password'
+                value={props.values.password}
+                onChange={props.handleChange}
               />
             </Box>
-            <Flex mt={2}>
-              <NextLink href='/forgot-password'>
-                <Link ml='auto'>forgot password?</Link>
-              </NextLink>
-            </Flex>
-            <Button
-              mt={4}
-              type='submit'
-              isLoading={isSubmitting}
-              variantColor='teal'
-            >
+
+            <NextLink href='/forgot-password'>
+              <Link>forgot password?</Link>
+            </NextLink>
+
+            <Button type='submit' disabled={props.isSubmitting}>
               login
             </Button>
           </Form>
