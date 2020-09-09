@@ -1,0 +1,20 @@
+query Project($id: Int!) {
+  project(id: $id) {
+    id
+    createdAt
+    updatedAt
+    name
+    desc
+    points
+    skills {
+      type
+    }
+    categories {
+      name
+    }
+    creator {
+      id
+      username
+    }
+  }
+}

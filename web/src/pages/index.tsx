@@ -2,11 +2,11 @@ import NextLink from 'next/link';
 import { useState } from 'react';
 import { Layout } from '../components/Layout';
 //import { UpdootSection } from '../components/UpdootSection';
-import { usePostsQuery, PostsQuery } from '../generated/graphql';
+import { useProjectsQuery, ProjectsQuery } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 
 const Index = () => {
-  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+  const { data, error, loading, fetchMore, variables } = useProjectsQuery({
     variables: {
       limit: 15,
       cursor: null,

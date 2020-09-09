@@ -4,22 +4,23 @@ import { __prod__, COOKIE_NAME } from './constants';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
-import { PostResolver } from './resolvers/post';
+import { ProjectResolver } from './resolvers/project';
 import { UserResolver } from './resolvers/user';
 import Redis from 'ioredis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
-import { Post } from './entities/Post';
+import { Project } from './entities/Project';
 import { User } from './entities/User';
 import path from 'path';
-import { Updoot } from './entities/Updoot';
+import { Skill } from './entities/Skill';
 import { createUserLoader } from './dataloaders/createUserLoader';
-import { createUpdootLoader } from './dataloaders/createUpdootLoader';
+// import { createUpdootLoader } from './dataloaders/createUpdootLoader';
+import { Category } from './entities/Category';
 
 const main = async () => {
-  const conn = await createConnection({
+  await createConnection({
     type: 'postgres',
     database: 'CoLab',
     username: 'postgres',
@@ -27,11 +28,10 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Post, User, Updoot],
+    entities: [Project, User, Skill, Category],
   });
-  await conn.runMigrations();
-
-  //await Post.delete({});
+  // example to generate migration: yarn typeorm migration:generate -n setup
+  // await conn.runMigrations();
 
   const app = express();
 
@@ -56,7 +56,6 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookies only work in https
-        domain: __prod__ ? '.codeponder.com' : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
@@ -66,7 +65,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [PostResolver, UserResolver],
+      resolvers: [ProjectResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({
@@ -74,7 +73,7 @@ const main = async () => {
       res,
       redis,
       userLoader: createUserLoader(),
-      updootLoader: createUpdootLoader(),
+      // updootLoader: createUpdootLoader(),
     }),
   });
 
