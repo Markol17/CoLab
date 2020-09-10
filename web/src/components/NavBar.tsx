@@ -1,75 +1,4 @@
-// import React from 'react';
-// import { Box, Link, Flex, Button, Heading } from '@chakra-ui/core';
-// import NextLink from 'next/link';
-// import { useMeQuery, useLogoutMutation } from '../generated/graphql';
-// import { isServer } from '../utils/isServer';
-// import { useRouter } from 'next/router';
-// import { useApolloClient } from '@apollo/client';
-
-// interface NavBarProps {}
-
-// export const NavBar: React.FC<NavBarProps> = ({}) => {
-//   const router = useRouter();
-//   const [logout, { loading: logoutFetching }] = useLogoutMutation();
-//   const apolloClient = useApolloClient();
-//   const { data, loading } = useMeQuery({
-//     skip: isServer(),
-//   });
-
-//   let body = null;
-
-//   // data is loading
-//   if (loading) {
-//     // user not logged in
-//   } else if (!data?.me) {
-//     body = (
-//       <>
-//         <NextLink href='/login'>
-//           <Link mr={2}>login</Link>
-//         </NextLink>
-//         <NextLink href='/register'>
-//           <Link>register</Link>
-//         </NextLink>
-//       </>
-//     );
-//     // user is logged in
-//   } else {
-//     body = (
-//       <Flex align='center'>
-//         <NextLink href='/create-post'>
-//           <Button as={Link} mr={4}>
-//             create post
-//           </Button>
-//         </NextLink>
-//         <Box mr={2}>{data.me.username}</Box>
-//         <Button
-//           onClick={async () => {
-//             await logout();
-//             await apolloClient.resetStore();
-//           }}
-//           isLoading={logoutFetching}
-//           variant='link'
-//         >
-//           logout
-//         </Button>
-//       </Flex>
-//     );
-//   }
-
-//   return (
-//     <Flex zIndex={1} position='sticky' top={0} p={4}>
-//       <Flex flex={1} m='auto' align='center' maxW={800}>
-//         <NextLink href='/'>
-//           <Link>
-//             <Heading>Test App</Heading>
-//           </Link>
-//         </NextLink>
-//         <Box ml={'auto'}>{body}</Box>
-//       </Flex>
-//     </Flex>
-//   );
-// };
-
+//pierre bélair
 import React from 'react';
 import clsx from 'clsx';
 import {
@@ -92,8 +21,7 @@ import {
   Menu,
   InputBase,
   fade,
-  Link,
-  Divider,
+  Button,
 } from '@material-ui/core';
 
 import { useApolloClient } from '@apollo/client';
@@ -103,9 +31,9 @@ import { isServer } from '../utils/isServer';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import AddIcon from '@material-ui/icons/Add';
 
 const drawerWidth = 240;
 
@@ -121,36 +49,23 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
+      padding: theme.spacing(0.3),
     },
     menuButton: {
-      marginRight: 36,
+      marginRight: 10,
     },
     hide: {
       display: 'none',
     },
-    toolbar: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-    },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
+    },
+    container: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     search: {
       position: 'relative',
@@ -164,11 +79,13 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
-        width: 'auto',
+        width: '25%',
+        minWidth: '300px',
+        justifyContent: 'center',
       },
     },
     searchIcon: {
-      padding: theme.spacing(0, 2),
+      padding: theme.spacing(0, 1.5),
       height: '100%',
       position: 'absolute',
       pointerEvents: 'none',
@@ -201,17 +118,33 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'none',
       },
     },
+    login: {
+      marginRight: theme.spacing(2),
+      color: theme.palette.common.white,
+      borderColor: theme.palette.common.white,
+      textTransform: 'unset',
+    },
+    register: {
+      color: theme.palette.common.white,
+      textTransform: 'unset',
+    },
   })
 );
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
+  const [openProjects, setOpenProjects] = React.useState(true);
+  const [openBookmarks, setOpenBookmarks] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [
     mobileMoreAnchorEl,
     setMobileMoreAnchorEl,
+  ] = React.useState<null | HTMLElement>(null);
+  const [
+    unregisteredMobileMoreAnchorEl,
+    setUnregisteredMobileMoreAnchorEl,
   ] = React.useState<null | HTMLElement>(null);
 
   const apolloClient = useApolloClient();
@@ -222,6 +155,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isUnregisteredMobileMenuOpen = Boolean(unregisteredMobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -229,23 +163,44 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+    setUnregisteredMobileMoreAnchorEl(null);
+  };
+  const handleUnregisteredMobileMenuClose = () => {
+    setUnregisteredMobileMoreAnchorEl(null);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+    handleUnregisteredMobileMenuClose();
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleDrawerOpen = () => {
+  const handleUnregisteredMobileMenuOpen = (
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    setUnregisteredMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const toggleDrawer = () => {
+    setOpen(!open);
+    if (open) {
+      setOpenProjects(false);
+      setOpenBookmarks(false);
+    }
+  };
+
+  const handleProjectsClick = () => {
+    setOpenProjects(!openProjects);
     setOpen(true);
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleBookmarksClick = () => {
+    setOpenBookmarks(!openBookmarks);
+    setOpen(true);
   };
 
   const logoutUser = async () => {
@@ -288,10 +243,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       <MenuItem>
         <IconButton aria-label='show 4 new mails' color='inherit'>
           <Badge badgeContent={null} color='secondary'>
-            <MailIcon />
+            <AddIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>Create Project</p>
       </MenuItem>
       <MenuItem>
         <IconButton aria-label='show 11 new notifications' color='inherit'>
@@ -315,100 +270,142 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     </Menu>
   );
 
+  const mobileMenuIdUnregistered = 'primary-unregistered-menu-mobile';
+  const renderMobileMenuUnregistered = (
+    <Menu
+      anchorEl={unregisteredMobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuIdUnregistered}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isUnregisteredMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem>
+        <p>Login</p>
+      </MenuItem>
+      <MenuItem>
+        <p>Register</p>
+      </MenuItem>
+    </Menu>
+  );
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <Paper elevation={3}>
-        <AppBar
-          position='fixed'
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
+        <AppBar position='fixed' className={classes.appBar}>
           <Toolbar>
             <IconButton
               color='inherit'
               aria-label='open drawer'
-              onClick={handleDrawerOpen}
+              onClick={toggleDrawer}
               edge='start'
-              className={clsx(classes.menuButton, {
-                [classes.hide]: open,
-              })}
+              className={classes.menuButton}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant='h6' noWrap>
-              Colab
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
+            <div className={classes.container}>
+              <Typography variant='h6' noWrap>
+                Colab
+              </Typography>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder='Search a project…'
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ 'aria-label': 'search' }}
+                />
               </div>
-              <InputBase
-                placeholder='Search…'
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ 'aria-label': 'search' }}
-              />
+              {loading ? null /* data loading */ : !data?.me ? (
+                /*user not logged in*/ <>
+                  <div className={classes.sectionDesktop}>
+                    <NextLink href='/login'>
+                      <Button className={classes.login} variant='outlined'>
+                        Login
+                      </Button>
+                    </NextLink>
+                    <NextLink href='/register'>
+                      <Button
+                        className={classes.register}
+                        variant='outlined'
+                        color='secondary'
+                      >
+                        Register
+                      </Button>
+                    </NextLink>
+                  </div>
+                  <div className={classes.sectionMobile}>
+                    <IconButton
+                      aria-label='show more'
+                      aria-controls={mobileMenuIdUnregistered}
+                      aria-haspopup='true'
+                      onClick={handleUnregisteredMobileMenuOpen}
+                      color='inherit'
+                    >
+                      <MoreHorizIcon />
+                    </IconButton>
+                  </div>
+                </>
+              ) : (
+                /* user logged in */ <>
+                  <div className={classes.sectionDesktop}>
+                    <IconButton aria-label='show 4 new mails' color='inherit'>
+                      <Badge badgeContent={null} color='secondary'>
+                        <AddIcon />
+                      </Badge>
+                    </IconButton>
+                    <IconButton
+                      aria-label='show 17 new notifications'
+                      color='inherit'
+                    >
+                      <Badge badgeContent={4} color='secondary'>
+                        <NotificationsIcon />
+                      </Badge>
+                    </IconButton>
+                    <IconButton
+                      edge='end'
+                      aria-label='account of current user'
+                      aria-controls={menuId}
+                      aria-haspopup='true'
+                      onClick={handleProfileMenuOpen}
+                      color='inherit'
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                  </div>
+                  <div className={classes.sectionMobile}>
+                    <IconButton
+                      aria-label='show more'
+                      aria-controls={mobileMenuId}
+                      aria-haspopup='true'
+                      onClick={handleMobileMenuOpen}
+                      color='inherit'
+                    >
+                      <MoreHorizIcon />
+                    </IconButton>
+                  </div>
+                </>
+              )}
             </div>
-            {loading ? null /* data loading */ : !data?.me ? (
-              /*user not logged in*/ <>
-                <NextLink href='/login'>
-                  <Link>login</Link>
-                </NextLink>
-                <NextLink href='/register'>
-                  <Link>register</Link>
-                </NextLink>
-              </>
-            ) : (
-              /* user logged in */ <>
-                <div className={classes.grow} />
-                <div className={classes.sectionDesktop}>
-                  <IconButton aria-label='show 4 new mails' color='inherit'>
-                    <Badge badgeContent={null} color='secondary'>
-                      <MailIcon />
-                    </Badge>
-                  </IconButton>
-                  <IconButton
-                    aria-label='show 17 new notifications'
-                    color='inherit'
-                  >
-                    <Badge badgeContent={4} color='secondary'>
-                      <NotificationsIcon />
-                    </Badge>
-                  </IconButton>
-                  <IconButton
-                    edge='end'
-                    aria-label='account of current user'
-                    aria-controls={menuId}
-                    aria-haspopup='true'
-                    onClick={handleProfileMenuOpen}
-                    color='inherit'
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                </div>
-                <div className={classes.sectionMobile}>
-                  <IconButton
-                    aria-label='show more'
-                    aria-controls={mobileMenuId}
-                    aria-haspopup='true'
-                    onClick={handleMobileMenuOpen}
-                    color='inherit'
-                  >
-                    <MoreHorizIcon />
-                  </IconButton>
-                </div>
-              </>
-            )}
           </Toolbar>
         </AppBar>
         {renderMobileMenu}
+        {renderMobileMenuUnregistered}
         {renderMenu}
       </Paper>
-      <IndexDrawer handleDrawerClose={handleDrawerClose} isOpen={open} />
+      <IndexDrawer
+        isDrawerOpen={open}
+        isProjectOpen={openProjects}
+        isBookmarksOpen={openBookmarks}
+        handleProjectsClick={handleProjectsClick}
+        handleBookmarksClick={handleBookmarksClick}
+      />
       <main className={classes.content}></main>
     </div>
   );

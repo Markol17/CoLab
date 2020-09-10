@@ -104,7 +104,8 @@ export const ProjectDrawer: React.FC<ProjectDrawerProps> = ({}) => {
       }}
     >
       <div className={classes.toolbar}>
-        <IconButton onClick={handleDrawerClose}>
+        {/* <IconButton onClick={handleDrawerClose}> */}
+        <IconButton>
           {theme.direction === 'rtl' ? (
             <ChevronRightIcon />
           ) : (

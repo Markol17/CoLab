@@ -3,7 +3,7 @@ import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import NextLink from 'next/link';
-import { useDeletePostMutation, useMeQuery } from '../generated/graphql';
+import { useDeleteProjectMutation, useMeQuery } from '../generated/graphql';
 
 interface EditDeletePostButtonsProps {
   id: number;
@@ -15,7 +15,7 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
   creatorId,
 }) => {
   const { data: meData } = useMeQuery();
-  const [deletePost] = useDeletePostMutation();
+  const [deleteProject] = useDeleteProjectMutation();
 
   if (meData?.me?.id !== creatorId) {
     return null;
@@ -30,7 +30,7 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
         // icon='delete'
         aria-label='Delete Post'
         onClick={() => {
-          deletePost({
+          deleteProject({
             variables: { id },
             update: (cache) => {
               // Post:77

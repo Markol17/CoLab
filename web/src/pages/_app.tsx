@@ -9,7 +9,7 @@ function CoLab({ Component, pageProps }: any) {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
-      jssStyles && jssStyles.parentElement.removeChild(jssStyles);
+      jssStyles && jssStyles.parentElement!.removeChild(jssStyles);
     }
   }, []);
 

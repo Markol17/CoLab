@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction, Dispatch } from 'react';
 import { useState } from 'react';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -38,8 +38,11 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 const drawerWidth = 240;
 
 interface IndexDrawerProps {
-  handleDrawerClose: () => void;
-  isOpen: boolean;
+  isDrawerOpen: boolean;
+  isProjectOpen: boolean;
+  isBookmarksOpen: boolean;
+  handleProjectsClick: () => void;
+  handleBookmarksClick: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,12 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(7) + 1,
       },
     },
-    toolbar: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
+    spacer: {
       ...theme.mixins.toolbar,
     },
     nested: {
@@ -82,45 +80,30 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const IndexDrawer: React.FC<IndexDrawerProps> = ({
-  handleDrawerClose,
-  isOpen,
+  isDrawerOpen,
+  isProjectOpen,
+  isBookmarksOpen,
+  handleProjectsClick,
+  handleBookmarksClick,
 }) => {
   const theme = useTheme();
   const classes = useStyles();
-  const [openProjects, setOpenProjects] = useState(true);
-  const [openBookmarks, setOpenBookmarks] = useState(false);
-
-  const handleProjectsClick = () => {
-    setOpenProjects(!openProjects);
-  };
-
-  const handleBookmarksClick = () => {
-    setOpenBookmarks(!openBookmarks);
-  };
 
   return (
     <Drawer
       variant='permanent'
       className={clsx(classes.drawer, {
-        [classes.drawerOpen]: isOpen,
-        [classes.drawerClose]: !isOpen,
+        [classes.drawerOpen]: isDrawerOpen,
+        [classes.drawerClose]: !isDrawerOpen,
       })}
       classes={{
         paper: clsx({
-          [classes.drawerOpen]: isOpen,
-          [classes.drawerClose]: !isOpen,
+          [classes.drawerOpen]: isDrawerOpen,
+          [classes.drawerClose]: !isDrawerOpen,
         }),
       }}
     >
-      <div className={classes.toolbar}>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'rtl' ? (
-            <ChevronRightIcon />
-          ) : (
-            <ChevronLeftIcon />
-          )}
-        </IconButton>
-      </div>
+      <div className={classes.spacer} />
       <List>
         {['Home', 'Explore'].map((text, index) => (
           <ListItem button key={text}>
@@ -142,9 +125,9 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
             <AccountTreeIcon />
           </ListItemIcon>
           <ListItemText primary={'Projects'} />
-          {openProjects ? <ExpandLess /> : <ExpandMore />}
+          {isProjectOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={openProjects} timeout='auto' unmountOnExit>
+        <Collapse in={isProjectOpen} timeout='auto' unmountOnExit>
           <List component='div' disablePadding>
             <ListItem button className={classes.nested}>
               <ListItemIcon>
@@ -160,9 +143,9 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
             <BookmarksIcon />
           </ListItemIcon>
           <ListItemText primary={'Bookmarks'} />
-          {openBookmarks ? <ExpandLess /> : <ExpandMore />}
+          {isBookmarksOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={openBookmarks} timeout='auto' unmountOnExit>
+        <Collapse in={isBookmarksOpen} timeout='auto' unmountOnExit>
           <List component='div' disablePadding>
             <ListItem button className={classes.nested}>
               <ListItemIcon>

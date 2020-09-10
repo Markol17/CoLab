@@ -72,12 +72,18 @@ export type Category = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createProject: Project;
   deleteProject: Scalars['Boolean'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+};
+
+
+export type MutationCreateProjectArgs = {
+  input: ProjectInput;
 };
 
 
@@ -105,6 +111,11 @@ export type MutationRegisterArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   usernameOrEmail: Scalars['String'];
+};
+
+export type ProjectInput = {
+  name: Scalars['String'];
+  desc: Scalars['String'];
 };
 
 export type UserResponse = {

@@ -4,6 +4,27 @@ import { Layout } from '../components/Layout';
 //import { UpdootSection } from '../components/UpdootSection';
 import { useProjectsQuery, ProjectsQuery } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
+import {
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  makeStyles,
+  Grid,
+  Paper,
+} from '@material-ui/core';
+
+const useStyles = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
+  card: {
+    maxWidth: 345,
+  },
+});
 
 const Index = () => {
   const { data, error, loading, fetchMore, variables } = useProjectsQuery({
@@ -13,6 +34,7 @@ const Index = () => {
     },
     notifyOnNetworkStatusChange: true,
   });
+  const classes = useStyles();
 
   if (!loading && !data) {
     return (
@@ -25,7 +47,49 @@ const Index = () => {
 
   return (
     <Layout>
-      <div />
+      <Grid container className={classes.root}>
+        <Grid item xs={12}>
+          <Grid container justify='center' spacing={4}>
+            {[0, 1, 2].map((value) => (
+              <Grid key={value} item>
+                <Card className={classes.card}>
+                  <CardActionArea>
+                    <CardMedia
+                      component='img'
+                      alt='Test'
+                      height='140'
+                      image=''
+                      title='Test'
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant='h5' component='h2'>
+                        Test
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        color='textSecondary'
+                        component='p'
+                      >
+                        Test Project Test Project Test Project Test Project Test
+                        Project Test Project
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions>
+                    <Button size='small' color='primary'>
+                      Share
+                    </Button>
+                    <Button size='small' color='primary'>
+                      Learn More
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
+
       {/* {!data && loading ? ( 
          <div>loading...</div>
        ) : (

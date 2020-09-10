@@ -3,7 +3,7 @@ import {
   Ctx,
   Field,
   FieldResolver,
-  // InputType,
+  InputType,
   Int,
   Mutation,
   ObjectType,
@@ -19,13 +19,13 @@ import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
 import { Context } from '../types';
 
-// @InputType()
-// class ProjectInput {
-//   @Field()
-//   name: string;
-//   @Field()
-//   desc: string;
-// }
+@InputType()
+class ProjectInput {
+  @Field()
+  name: string;
+  @Field()
+  desc: string;
+}
 
 @ObjectType()
 class PaginatedProjects {
@@ -154,17 +154,17 @@ export class ProjectResolver {
     return Project.findOne(id);
   }
 
-  // @Mutation(() => Project)
-  // @UseMiddleware(isAuth)
-  // async createProject(
-  //   @Arg('input') input: PostInput,
-  //   @Ctx() { req }: Context
-  // ): Promise<Project> {
-  //   return Project.create({
-  //     ...input,
-  //     creatorId: req.session.userId,
-  //   }).save();
-  // }
+  @Mutation(() => Project)
+  @UseMiddleware(isAuth)
+  async createProject(
+    @Arg('input') input: ProjectInput,
+    @Ctx() { req }: Context
+  ): Promise<Project> {
+    return Project.create({
+      ...input,
+      creatorId: req.session.userId,
+    }).save();
+  }
 
   // @Mutation(() => Post, { nullable: true })
   // @UseMiddleware(isAuth)
