@@ -1,27 +1,27 @@
 import {
   Entity,
   BaseEntity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   Column,
+  OneToMany,
 } from 'typeorm';
 import { ObjectType, Field } from 'type-graphql';
-import { User } from './User';
-import { Project } from './Project';
+import { ProjectSkill } from './ProjectSkill';
+import { UserSkill } from './UserSkill';
 
 @ObjectType()
 @Entity()
 export class Skill extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
   @Field()
   @Column({ unique: true })
   type!: string;
 
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @OneToMany(() => UserSkill, (us) => us.skill)
+  userConnection: Promise<UserSkill[]>;
 
-  @ManyToOne(() => User, (user) => user.skills)
-  user: User;
-
-  @ManyToOne(() => Project, (project) => project.skills)
-  project: Project;
+  @OneToMany(() => ProjectSkill, (ps) => ps.skill)
+  projectConnection: Promise<ProjectSkill[]>;
 }

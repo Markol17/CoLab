@@ -1,4 +1,4 @@
-import { ObjectType, Field } from 'type-graphql';
+import { ObjectType, Field, Ctx } from 'type-graphql';
 import {
   Entity,
   Column,
@@ -8,12 +8,13 @@ import {
   BaseEntity,
   ManyToOne,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { User } from './User';
-import { Skill } from './Skill';
 import { Category } from './Category';
+import { ProjectSkill } from './ProjectSkill';
+import { Context } from 'src/types';
+import { ProjectCategory } from './ProjectCategory';
+import { Skill } from './Skill';
 
 @ObjectType()
 @Entity()
@@ -42,14 +43,23 @@ export class Project extends BaseEntity {
   @ManyToOne(() => User, (user) => user.projects)
   creator: User;
 
+  @OneToMany(() => ProjectSkill, (ps) => ps.project)
+  skillConnection: Promise<ProjectSkill[]>;
+
   @Field(() => [Skill])
-  @OneToMany(() => Skill, (skill) => skill.project)
-  skills: Skill[];
+  async skills(@Ctx() { projectSkillsLoader }: Context): Promise<Skill[]> {
+    return projectSkillsLoader.load(this.id);
+  }
+
+  @OneToMany(() => ProjectCategory, (pc) => pc.project)
+  categoryConnection: Promise<ProjectCategory[]>;
 
   @Field(() => [Category])
-  @ManyToMany(() => Category)
-  @JoinTable()
-  categories: Category[];
+  async categories(
+    @Ctx() { projectCategoriesLoader }: Context
+  ): Promise<Category[]> {
+    return projectCategoriesLoader.load(this.id);
+  }
 
   @Field(() => String)
   @CreateDateColumn()

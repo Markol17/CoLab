@@ -123,10 +123,12 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.common.white,
       borderColor: theme.palette.common.white,
       textTransform: 'unset',
+      minWidth: '90px',
     },
     register: {
       color: theme.palette.common.white,
       textTransform: 'unset',
+      minWidth: '90px',
     },
   })
 );

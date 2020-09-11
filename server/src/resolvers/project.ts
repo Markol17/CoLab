@@ -118,15 +118,19 @@ export class ProjectResolver {
 
     const projects = await getConnection().query(
       `
-      select p.*
+      select p.*, s.type, c.name
       from project p
       ${cursor ? `where p."createdAt" < $2` : ''}
+      left join project_skills_skill pss on p.id = pss."projectId"
+      left join skill s on pss."skillId" = s.id
+      left join project_categories_category pcc on p.id = pcc."projectId"
+      left join category c on pcc."categoryId" = c.id 
       order by p."createdAt" DESC
       limit $1
     `,
       replacements
     );
-
+    console.log(projects);
     // const qb = getConnection()
     //   .getRepository(Post)
     //   .createQueryBuilder("p")

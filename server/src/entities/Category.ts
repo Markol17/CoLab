@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
-  ManyToMany,
+  OneToMany,
 } from 'typeorm';
-import { Project } from './Project';
+import { ProjectCategory } from './ProjectCategory';
 
 @ObjectType()
 @Entity()
@@ -26,6 +26,6 @@ export class Category extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => Project)
-  projects: Project[];
+  @OneToMany(() => ProjectCategory, (pc) => pc.category)
+  projectConnection: Promise<ProjectCategory[]>;
 }

@@ -50,42 +50,44 @@ const Index = () => {
       <Grid container className={classes.root}>
         <Grid item xs={12}>
           <Grid container justify='center' spacing={4}>
-            {[0, 1, 2].map((value) => (
-              <Grid key={value} item>
-                <Card className={classes.card}>
-                  <CardActionArea>
-                    <CardMedia
-                      component='img'
-                      alt='Test'
-                      height='140'
-                      image=''
-                      title='Test'
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant='h5' component='h2'>
-                        Test
-                      </Typography>
-                      <Typography
-                        variant='body2'
-                        color='textSecondary'
-                        component='p'
-                      >
-                        Test Project Test Project Test Project Test Project Test
-                        Project Test Project
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions>
-                    <Button size='small' color='primary'>
-                      Share
-                    </Button>
-                    <Button size='small' color='primary'>
-                      Learn More
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map(
+              (value) => (
+                <Grid key={value} item>
+                  <Card className={classes.card}>
+                    <CardActionArea>
+                      <CardMedia
+                        component='img'
+                        alt='Test'
+                        height='140'
+                        image=''
+                        title='Test'
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant='h5' component='h2'>
+                          Test
+                        </Typography>
+                        <Typography
+                          variant='body2'
+                          color='textSecondary'
+                          component='p'
+                        >
+                          Test Project Test Project Test Project Test Project
+                          Test Project Test Project
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Button size='small' color='primary'>
+                        Share
+                      </Button>
+                      <Button size='small' color='primary'>
+                        Learn More
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              )
+            )}
           </Grid>
         </Grid>
       </Grid>
