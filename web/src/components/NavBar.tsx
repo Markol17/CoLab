@@ -1,6 +1,5 @@
 //pierre bélair
 import React from 'react';
-import clsx from 'clsx';
 import {
   createStyles,
   makeStyles,
@@ -34,8 +33,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
-
-const drawerWidth = 240;
+const CoLab = require('../assets/img/CoLab.svg');
 
 interface NavBarProps {}
 
@@ -52,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0.3),
     },
     menuButton: {
-      marginRight: 10,
+      marginRight: 15,
     },
     hide: {
       display: 'none',
@@ -75,8 +73,9 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: fade(theme.palette.common.white, 0.25),
       },
       marginRight: theme.spacing(2),
-      marginLeft: 0,
+      marginLeft: 15,
       width: '100%',
+      cursor: 'pointer',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
         width: '25%',
@@ -308,9 +307,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               <MenuIcon />
             </IconButton>
             <div className={classes.container}>
-              <Typography variant='h6' noWrap>
-                Colab
-              </Typography>
+              <CoLab height={35} />
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />

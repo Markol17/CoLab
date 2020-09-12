@@ -1,10 +1,10 @@
 import DataLoader from 'dataloader';
 import { In } from 'typeorm';
-import { ProjectSkill } from 'src/entities/ProjectSkill';
-import { Skill } from 'src/entities/Skill';
+import { ProjectSkill } from '../entities/ProjectSkill';
+import { Skill } from '../entities/Skill';
 
-const batchSkills = async (projectIds: number[]) => {
-  const skillsProject = await ProjectSkill.find({
+const batchSkills = async (projectIds: readonly number[]) => {
+  const projectSkills = await ProjectSkill.find({
     join: {
       alias: 'projectSkill',
       innerJoinAndSelect: {
@@ -12,7 +12,7 @@ const batchSkills = async (projectIds: number[]) => {
       },
     },
     where: {
-      projectIds: In(projectIds),
+      projectId: In(projectIds),
     },
   });
 
@@ -25,11 +25,11 @@ const batchSkills = async (projectIds: number[]) => {
     __author__: { id: 1, name: 'author1' }
   }
   */
-  skillsProject.forEach((sp) => {
-    if (sp.skillId in projectIdToSkills) {
-      projectIdToSkills[sp.skillId].push((sp as any).__skill__);
+  projectSkills.forEach((ps) => {
+    if (ps.skillId in projectIdToSkills) {
+      projectIdToSkills[ps.skillId].push((ps as any).__skill__);
     } else {
-      projectIdToSkills[sp.skillId] = [(sp as any).__skill__];
+      projectIdToSkills[ps.skillId] = (ps as any).__skill__;
     }
   });
 

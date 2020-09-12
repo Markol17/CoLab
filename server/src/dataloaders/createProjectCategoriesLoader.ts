@@ -1,10 +1,14 @@
+//TODO:
+// 1: fix types in dataloaders
+// 2: generate new migration
+
 import DataLoader from 'dataloader';
 import { In } from 'typeorm';
-import { ProjectCategory } from 'src/entities/ProjectCategory';
-import { Category } from 'src/entities/Category';
+import { ProjectCategory } from '../entities/ProjectCategory';
+import { Category } from '../entities/Category';
 
-const batchCategories = async (projectIds: number[]) => {
-  const categoriesProject = await ProjectCategory.find({
+const batchCategories = async (projectIds: readonly number[]) => {
+  const categoryProjects = await ProjectCategory.find({
     join: {
       alias: 'projectCategory',
       innerJoinAndSelect: {
@@ -12,7 +16,7 @@ const batchCategories = async (projectIds: number[]) => {
       },
     },
     where: {
-      projectIds: In(projectIds),
+      projectId: In(projectIds),
     },
   });
 
@@ -25,7 +29,7 @@ const batchCategories = async (projectIds: number[]) => {
     __author__: { id: 1, name: 'author1' }
   }
   */
-  categoriesProject.forEach((cp) => {
+  categoryProjects.forEach((cp) => {
     if (cp.categoryId in projectIdToCategories) {
       projectIdToCategories[cp.categoryId].push((cp as any).__category__);
     } else {

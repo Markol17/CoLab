@@ -20,6 +20,9 @@ import { createProjectSkillsLoader } from './dataloaders/createProjectSkillsLoad
 import { Category } from './entities/Category';
 import { createProjectCategoriesLoader } from './dataloaders/createProjectCategoriesLoader';
 import { createUserSkillsLoader } from './dataloaders/createUserSkillsLoader';
+import { ProjectCategory } from './entities/ProjectCategory';
+import { ProjectSkill } from './entities/ProjectSkill';
+import { UserSkill } from './entities/UserSkill';
 
 const main = async () => {
   await createConnection({
@@ -30,39 +33,17 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Project, User, Skill, Category],
+    entities: [
+      ProjectSkill,
+      ProjectCategory,
+      User,
+      UserSkill,
+      Skill,
+      Project,
+      Category,
+    ],
   });
-  // example to generate migration: yarn typeorm migration:generate -n setup
   // await conn.runMigrations();
-
-  // const skill = new Skill();
-  // skill.type = 'SWE';
-  // await conn.manager.save(skill);
-
-  // const category = new Category();
-  // category.name = 'Technologie';
-  // await conn.manager.save(category);
-
-  // const project = new Project();
-  // project.name = 'CoLab';
-  // project.desc = 'CoLab is a platform for students to create projects';
-  // project.skills = [skill];
-  // project.categories = [category];
-  // project.creatorId = 1;
-  // project.points = 100;
-  // await conn.manager.save(project);
-  // await getConnection()
-  //   .createQueryBuilder()
-  //   .insert()
-  //   .into(Project)
-  //   .values({
-  //     name: 'Test',
-  //     desc: 'Test Project',
-  //     points: 1,
-  //     creatorId: 1,
-  //   })
-  //   .execute();
-
   const app = express();
 
   const RedisStore = connectRedis(session);

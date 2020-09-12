@@ -1,10 +1,10 @@
 import DataLoader from 'dataloader';
 import { In } from 'typeorm';
-import { Skill } from 'src/entities/Skill';
-import { UserSkill } from 'src/entities/UserSkill';
+import { Skill } from '../entities/Skill';
+import { UserSkill } from '../entities/UserSkill';
 
-const batchSkills = async (userIds: number[]) => {
-  const skillsUser = await UserSkill.find({
+const batchSkills = async (userIds: readonly number[]) => {
+  const skillUsers = await UserSkill.find({
     join: {
       alias: 'userSkill',
       innerJoinAndSelect: {
@@ -12,7 +12,7 @@ const batchSkills = async (userIds: number[]) => {
       },
     },
     where: {
-      userIds: In(userIds),
+      userId: In(userIds),
     },
   });
 
@@ -25,7 +25,7 @@ const batchSkills = async (userIds: number[]) => {
     __author__: { id: 1, name: 'author1' }
   }
   */
-  skillsUser.forEach((su) => {
+  skillUsers.forEach((su) => {
     if (su.skillId in userIdToSkills) {
       userIdToSkills[su.skillId].push((su as any).__skill__);
     } else {
