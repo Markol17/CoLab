@@ -1,3 +1,5 @@
+import { ProjectSkill } from '../entities/ProjectSkill';
+import { Skill } from '../entities/Skill';
 import {
   Arg,
   Ctx,
@@ -164,6 +166,20 @@ export class ProjectResolver {
       ...input,
       creatorId: req.session.userId,
     }).save();
+  }
+
+  @Mutation(() => Skill)
+  async createSkill(@Arg('type') type: string) {
+    return Skill.create({ type }).save();
+  }
+
+  @Mutation(() => Boolean)
+  async addSkillToProject(
+    @Arg('skillId', () => Int) skillId: number,
+    @Arg('projectId', () => Int) projectId: number
+  ) {
+    await ProjectSkill.create({ skillId, projectId }).save;
+    return true;
   }
 
   // @Mutation(() => Post, { nullable: true })

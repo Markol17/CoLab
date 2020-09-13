@@ -1,15 +1,8 @@
-//pierre bélair
 import React from 'react';
-import {
-  createStyles,
-  makeStyles,
-  useTheme,
-  Theme,
-} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import IndexDrawer from './IndexDrawer';
@@ -33,6 +26,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
+import { CreateProjectModal } from './modals/createProjectModal';
 const CoLab = require('../assets/img/CoLab.svg');
 
 interface NavBarProps {}
@@ -73,6 +67,7 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: fade(theme.palette.common.white, 0.25),
       },
       marginRight: theme.spacing(2),
+      boxShadow: '5px 5px 14px 0px rgba(0,0,0,0.88)',
       marginLeft: 15,
       width: '100%',
       cursor: 'pointer',
@@ -123,21 +118,33 @@ const useStyles = makeStyles((theme: Theme) =>
       borderColor: theme.palette.common.white,
       textTransform: 'unset',
       minWidth: '90px',
+      fontWeight: 'bold',
+      borderWidth: '1px',
+      boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.88)',
+      '&:hover': {
+        borderWidth: '1px',
+      },
     },
     register: {
       color: theme.palette.common.white,
       textTransform: 'unset',
       minWidth: '90px',
+      fontWeight: 'bold',
+      borderWidth: '1px',
+      boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.88)',
+      '&:hover': {
+        borderWidth: '1px',
+      },
     },
   })
 );
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [openProjects, setOpenProjects] = React.useState(true);
   const [openBookmarks, setOpenBookmarks] = React.useState(false);
+  const [openCreateModal, setOpenCreateModal] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [
     mobileMoreAnchorEl,
@@ -208,6 +215,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     await logout();
     await apolloClient.resetStore();
     handleMenuClose();
+  };
+
+  const handleCreateModalOpen = () => {
+    setOpenCreateModal(true);
+  };
+
+  const handleCreateModalClose = () => {
+    setOpenCreateModal(false);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -313,7 +328,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                   <SearchIcon />
                 </div>
                 <InputBase
-                  placeholder='Search a project…'
+                  placeholder='Search Projects…'
                   classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,
@@ -354,7 +369,11 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               ) : (
                 /* user logged in */ <>
                   <div className={classes.sectionDesktop}>
-                    <IconButton aria-label='show 4 new mails' color='inherit'>
+                    <IconButton
+                      onClick={handleCreateModalOpen}
+                      aria-label='create project'
+                      color='inherit'
+                    >
                       <Badge badgeContent={null} color='secondary'>
                         <AddIcon />
                       </Badge>
@@ -405,7 +424,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         handleProjectsClick={handleProjectsClick}
         handleBookmarksClick={handleBookmarksClick}
       />
-      <main className={classes.content}></main>
+      <CreateProjectModal
+        isOpen={openCreateModal}
+        onClose={handleCreateModalClose}
+      />
     </div>
   );
 };
