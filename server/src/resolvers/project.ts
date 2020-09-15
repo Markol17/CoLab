@@ -20,6 +20,8 @@ import { Project } from '../entities/Project';
 import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
 import { Context } from '../types';
+import { ProjectCategory } from '../entities/ProjectCategory';
+import { Category } from '../entities/Category';
 
 @InputType()
 class ProjectInput {
@@ -160,17 +162,48 @@ export class ProjectResolver {
   @UseMiddleware(isAuth)
   async createProject(
     @Arg('input') input: ProjectInput,
+    @Arg('skillIds', () => [Int]) skillIds: number[],
+    @Arg('categoryIds', () => [Int]) categoryIds: number[],
     @Ctx() { req }: Context
   ): Promise<Project> {
-    return Project.create({
+    const project = await Project.create({
       ...input,
       creatorId: req.session.userId,
     }).save();
+
+    let sIds: { projectId: number; skillId: number }[] = [];
+    skillIds.forEach((id) => {
+      sIds.push({ projectId: project.id, skillId: skillIds[id] });
+    });
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(ProjectSkill)
+      .values(sIds)
+      .execute();
+
+    let cIds: { projectId: number; categoryId: number }[] = [];
+    categoryIds.forEach((id) => {
+      cIds.push({ projectId: project.id, categoryId: categoryIds[id] });
+    });
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(ProjectCategory)
+      .values(cIds)
+      .execute();
+
+    return project;
   }
 
   @Mutation(() => Skill)
   async createSkill(@Arg('type') type: string) {
     return Skill.create({ type }).save();
+  }
+
+  @Mutation(() => Category)
+  async createCategory(@Arg('name') name: string) {
+    return Category.create({ name }).save();
   }
 
   @Mutation(() => Boolean)

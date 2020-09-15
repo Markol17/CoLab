@@ -1,0 +1,19 @@
+mutation CreateProject(
+  $input: ProjectInput!
+  $skillIds: [Int!]!
+  $categoryIds: [Int!]!
+) {
+  createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds) {
+    id
+    name
+    desc
+    skills {
+      id
+      type
+    }
+    categories {
+      id
+      name
+    }
+  }
+}

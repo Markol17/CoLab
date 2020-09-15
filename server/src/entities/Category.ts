@@ -13,6 +13,7 @@ import { ProjectCategory } from './ProjectCategory';
 @ObjectType()
 @Entity()
 export class Category extends BaseEntity {
+  @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 

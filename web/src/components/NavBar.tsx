@@ -26,7 +26,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
-import { CreateProjectModal } from './modals/createProjectModal';
+import { CreateProjectModal } from './modals/CreateProjectModal';
 const CoLab = require('../assets/img/CoLab.svg');
 
 interface NavBarProps {}
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: fade(theme.palette.common.white, 0.25),
       },
       marginRight: theme.spacing(2),
-      boxShadow: '5px 5px 14px 0px rgba(0,0,0,0.88)',
+      boxShadow: '5px 5px 14px 0px rgba(0,0,0,0.6)',
       marginLeft: 15,
       width: '100%',
       cursor: 'pointer',
@@ -120,7 +120,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: '90px',
       fontWeight: 'bold',
       borderWidth: '1px',
-      boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.88)',
+      boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.6)',
       '&:hover': {
         borderWidth: '1px',
       },
@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: '90px',
       fontWeight: 'bold',
       borderWidth: '1px',
-      boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.88)',
+      boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.6)',
       '&:hover': {
         borderWidth: '1px',
       },

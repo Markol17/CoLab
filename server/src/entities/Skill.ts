@@ -12,6 +12,7 @@ import { UserSkill } from './UserSkill';
 @ObjectType()
 @Entity()
 export class Skill extends BaseEntity {
+  @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 

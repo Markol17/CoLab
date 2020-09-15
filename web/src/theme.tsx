@@ -1,3 +1,4 @@
+// import type '@material-ui/lab/themeAugmentation';
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
