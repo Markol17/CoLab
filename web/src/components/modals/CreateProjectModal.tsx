@@ -62,6 +62,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           categoryIds: values.categoryIds,
         },
         update: (cache: any) => {
+          console.log(cache);
           cache.evict({ fieldName: 'projects:{}' });
         },
       });

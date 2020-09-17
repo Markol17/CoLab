@@ -2,24 +2,7 @@ query Projects($limit: Int!, $cursor: String) {
   paginatedProjects(limit: $limit, cursor: $cursor) {
     hasMore
     projects {
-      id
-      createdAt
-      updatedAt
-      name
-      desc
-      points
-      skills {
-        id
-        type
-      }
-      categories {
-        id
-        name
-      }
-      creator {
-        id
-        username
-      }
+      ...RegularProject
     }
   }
 }

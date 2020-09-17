@@ -13,9 +13,9 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  me?: Maybe<User>;
   paginatedProjects: PaginatedProjects;
   project?: Maybe<Project>;
-  me?: Maybe<User>;
 };
 
 
@@ -29,10 +29,15 @@ export type QueryProjectArgs = {
   id: Scalars['Int'];
 };
 
-export type PaginatedProjects = {
-  __typename?: 'PaginatedProjects';
+export type User = {
+  __typename?: 'User';
+  id: Scalars['Float'];
+  username: Scalars['String'];
+  email: Scalars['String'];
   projects: Array<Project>;
-  hasMore: Scalars['Boolean'];
+  skills: Array<Skill>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Project = {
@@ -49,17 +54,6 @@ export type Project = {
   updatedAt: Scalars['String'];
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['Float'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  projects: Array<Project>;
-  skills: Array<Skill>;
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
 export type Skill = {
   __typename?: 'Skill';
   id: Scalars['Float'];
@@ -72,46 +66,24 @@ export type Category = {
   name: Scalars['String'];
 };
 
+export type PaginatedProjects = {
+  __typename?: 'PaginatedProjects';
+  projects: Array<Project>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  createProject: Project;
-  createSkill: Skill;
-  createCategory: Category;
-  addSkillToProject: Scalars['Boolean'];
-  deleteProject: Scalars['Boolean'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
-};
-
-
-export type MutationCreateProjectArgs = {
-  categoryIds: Array<Scalars['Int']>;
-  skillIds: Array<Scalars['Int']>;
-  input: ProjectInput;
-};
-
-
-export type MutationCreateSkillArgs = {
-  type: Scalars['String'];
-};
-
-
-export type MutationCreateCategoryArgs = {
-  name: Scalars['String'];
-};
-
-
-export type MutationAddSkillToProjectArgs = {
-  projectId: Scalars['Int'];
-  skillId: Scalars['Int'];
-};
-
-
-export type MutationDeleteProjectArgs = {
-  id: Scalars['Int'];
+  createProject: ProjectResponse;
+  createSkill: Skill;
+  createCategory: Category;
+  updatePost?: Maybe<Project>;
+  deleteProject: Scalars['Boolean'];
 };
 
 
@@ -136,9 +108,33 @@ export type MutationLoginArgs = {
   usernameOrEmail: Scalars['String'];
 };
 
-export type ProjectInput = {
+
+export type MutationCreateProjectArgs = {
+  categoryIds: Array<Scalars['Int']>;
+  skillIds: Array<Scalars['Int']>;
+  input: ProjectInput;
+};
+
+
+export type MutationCreateSkillArgs = {
+  type: Scalars['String'];
+};
+
+
+export type MutationCreateCategoryArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationUpdatePostArgs = {
   desc: Scalars['String'];
+  name: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteProjectArgs = {
+  id: Scalars['Int'];
 };
 
 export type UserResponse = {
@@ -159,9 +155,46 @@ export type UsernamePasswordInput = {
   password: Scalars['String'];
 };
 
+export type ProjectResponse = {
+  __typename?: 'ProjectResponse';
+  errors?: Maybe<Array<FieldError>>;
+  project?: Maybe<Project>;
+};
+
+export type ProjectInput = {
+  name: Scalars['String'];
+  desc: Scalars['String'];
+};
+
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
+);
+
+export type RegularProjectFragment = (
+  { __typename?: 'Project' }
+  & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points'>
+  & { skills: Array<(
+    { __typename?: 'Skill' }
+    & Pick<Skill, 'id' | 'type'>
+  )>, categories: Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
+  )>, creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
+);
+
+export type RegularProjectResponseFragment = (
+  { __typename?: 'ProjectResponse' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & RegularErrorFragment
+  )>>, project?: Maybe<(
+    { __typename?: 'Project' }
+    & RegularProjectFragment
+  )> }
 );
 
 export type RegularUserFragment = (
@@ -204,15 +237,8 @@ export type CreateProjectMutationVariables = Exact<{
 export type CreateProjectMutation = (
   { __typename?: 'Mutation' }
   & { createProject: (
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'desc'>
-    & { skills: Array<(
-      { __typename?: 'Skill' }
-      & Pick<Skill, 'id' | 'type'>
-    )>, categories: Array<(
-      { __typename?: 'Category' }
-      & Pick<Category, 'id' | 'name'>
-    )> }
+    { __typename?: 'ProjectResponse' }
+    & RegularProjectResponseFragment
   ) }
 );
 
@@ -291,17 +317,7 @@ export type ProjectQuery = (
   { __typename?: 'Query' }
   & { project?: Maybe<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points'>
-    & { skills: Array<(
-      { __typename?: 'Skill' }
-      & Pick<Skill, 'id' | 'type'>
-    )>, categories: Array<(
-      { __typename?: 'Category' }
-      & Pick<Category, 'id' | 'name'>
-    )>, creator: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
-    ) }
+    & RegularProjectFragment
   )> }
 );
 
@@ -318,17 +334,7 @@ export type ProjectsQuery = (
     & Pick<PaginatedProjects, 'hasMore'>
     & { projects: Array<(
       { __typename?: 'Project' }
-      & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points'>
-      & { skills: Array<(
-        { __typename?: 'Skill' }
-        & Pick<Skill, 'id' | 'type'>
-      )>, categories: Array<(
-        { __typename?: 'Category' }
-        & Pick<Category, 'id' | 'name'>
-      )>, creator: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'username'>
-      ) }
+      & RegularProjectFragment
     )> }
   ) }
 );
@@ -339,6 +345,39 @@ export const RegularErrorFragmentDoc = gql`
   message
 }
     `;
+export const RegularProjectFragmentDoc = gql`
+    fragment RegularProject on Project {
+  id
+  createdAt
+  updatedAt
+  name
+  desc
+  points
+  skills {
+    id
+    type
+  }
+  categories {
+    id
+    name
+  }
+  creator {
+    id
+    username
+  }
+}
+    `;
+export const RegularProjectResponseFragmentDoc = gql`
+    fragment RegularProjectResponse on ProjectResponse {
+  errors {
+    ...RegularError
+  }
+  project {
+    ...RegularProject
+  }
+}
+    ${RegularErrorFragmentDoc}
+${RegularProjectFragmentDoc}`;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -392,20 +431,10 @@ export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePas
 export const CreateProjectDocument = gql`
     mutation CreateProject($input: ProjectInput!, $skillIds: [Int!]!, $categoryIds: [Int!]!) {
   createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds) {
-    id
-    name
-    desc
-    skills {
-      id
-      type
-    }
-    categories {
-      id
-      name
-    }
+    ...RegularProjectResponse
   }
 }
-    `;
+    ${RegularProjectResponseFragmentDoc}`;
 export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
 
 /**
@@ -622,27 +651,10 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const ProjectDocument = gql`
     query Project($id: Int!) {
   project(id: $id) {
-    id
-    createdAt
-    updatedAt
-    name
-    desc
-    points
-    skills {
-      id
-      type
-    }
-    categories {
-      id
-      name
-    }
-    creator {
-      id
-      username
-    }
+    ...RegularProject
   }
 }
-    `;
+    ${RegularProjectFragmentDoc}`;
 
 /**
  * __useProjectQuery__
@@ -674,28 +686,11 @@ export const ProjectsDocument = gql`
   paginatedProjects(limit: $limit, cursor: $cursor) {
     hasMore
     projects {
-      id
-      createdAt
-      updatedAt
-      name
-      desc
-      points
-      skills {
-        id
-        type
-      }
-      categories {
-        id
-        name
-      }
-      creator {
-        id
-        username
-      }
+      ...RegularProject
     }
   }
 }
-    `;
+    ${RegularProjectFragmentDoc}`;
 
 /**
  * __useProjectsQuery__

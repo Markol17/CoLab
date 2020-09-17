@@ -44,7 +44,7 @@ class ProjectResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 
-  @Field(() => Project)
+  @Field(() => Project, { nullable: true })
   project?: Project;
 }
 

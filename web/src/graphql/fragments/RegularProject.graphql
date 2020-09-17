@@ -1,0 +1,20 @@
+fragment RegularProject on Project {
+  id
+  createdAt
+  updatedAt
+  name
+  desc
+  points
+  skills {
+    id
+    type
+  }
+  categories {
+    id
+    name
+  }
+  creator {
+    id
+    username
+  }
+}

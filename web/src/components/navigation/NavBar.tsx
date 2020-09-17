@@ -33,9 +33,6 @@ interface NavBarProps {}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: 'flex',
-    },
     grow: {
       flexGrow: 1,
     },
@@ -88,6 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
+      width: '100%',
       color: 'inherit',
     },
     inputInput: {
@@ -97,7 +95,7 @@ const useStyles = makeStyles((theme: Theme) =>
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
-        width: '20ch',
+        width: '50ch',
       },
     },
     sectionDesktop: {
@@ -307,7 +305,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   );
 
   return (
-    <div className={classes.root}>
+    <div>
       <CssBaseline />
       <Paper elevation={3}>
         <AppBar position='fixed' className={classes.appBar}>
@@ -382,7 +380,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                       aria-label='show 17 new notifications'
                       color='inherit'
                     >
-                      <Badge badgeContent={4} color='secondary'>
+                      <Badge badgeContent={null} color='secondary'>
                         <NotificationsIcon />
                       </Badge>
                     </IconButton>

@@ -4,16 +4,6 @@ mutation CreateProject(
   $categoryIds: [Int!]!
 ) {
   createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds) {
-    id
-    name
-    desc
-    skills {
-      id
-      type
-    }
-    categories {
-      id
-      name
-    }
+    ...RegularProjectResponse
   }
 }

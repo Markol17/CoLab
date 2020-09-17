@@ -44,10 +44,11 @@ const Index = () => {
       </div>
     );
   }
-  console.log(data);
+
   return (
     <Layout>
       {!data && loading ? (
+        //TODO: add skeleton
         <div>loading...</div>
       ) : (
         <Grid container className={classes.root}>

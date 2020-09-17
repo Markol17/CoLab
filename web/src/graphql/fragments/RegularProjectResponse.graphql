@@ -1,0 +1,8 @@
+fragment RegularProjectResponse on ProjectResponse {
+  errors {
+    ...RegularError
+  }
+  project {
+    ...RegularProject
+  }
+}
