@@ -294,10 +294,10 @@ export type ProjectQuery = (
     & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points'>
     & { skills: Array<(
       { __typename?: 'Skill' }
-      & Pick<Skill, 'type'>
+      & Pick<Skill, 'id' | 'type'>
     )>, categories: Array<(
       { __typename?: 'Category' }
-      & Pick<Category, 'name'>
+      & Pick<Category, 'id' | 'name'>
     )>, creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -321,10 +321,10 @@ export type ProjectsQuery = (
       & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points'>
       & { skills: Array<(
         { __typename?: 'Skill' }
-        & Pick<Skill, 'type'>
+        & Pick<Skill, 'id' | 'type'>
       )>, categories: Array<(
         { __typename?: 'Category' }
-        & Pick<Category, 'name'>
+        & Pick<Category, 'id' | 'name'>
       )>, creator: (
         { __typename?: 'User' }
         & Pick<User, 'id' | 'username'>
@@ -629,9 +629,11 @@ export const ProjectDocument = gql`
     desc
     points
     skills {
+      id
       type
     }
     categories {
+      id
       name
     }
     creator {
@@ -679,9 +681,11 @@ export const ProjectsDocument = gql`
       desc
       points
       skills {
+        id
         type
       }
       categories {
+        id
         name
       }
       creator {

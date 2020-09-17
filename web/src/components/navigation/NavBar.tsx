@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import IndexDrawer from './IndexDrawer';
+import IndexDrawer from '../drawers/IndexDrawer';
 import {
   Paper,
   MenuItem,
@@ -18,16 +18,16 @@ import {
 
 import { useApolloClient } from '@apollo/client';
 import NextLink from 'next/link';
-import { useMeQuery, useLogoutMutation } from '../generated/graphql';
-import { isServer } from '../utils/isServer';
+import { useMeQuery, useLogoutMutation } from '../../generated/graphql';
+import { isServer } from '../../utils/isServer';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
-import { CreateProjectModal } from './modals/CreateProjectModal';
-const CoLab = require('../assets/img/CoLab.svg');
+import { CreateProjectModal } from '../modals/CreateProjectModal';
+const CoLab = require('../../assets/img/CoLab.svg');
 
 interface NavBarProps {}
 
@@ -256,8 +256,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label='show 4 new mails' color='inherit'>
+      <MenuItem onClick={handleCreateModalOpen}>
+        <IconButton color='inherit'>
           <Badge badgeContent={null} color='secondary'>
             <AddIcon />
           </Badge>
@@ -265,7 +265,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         <p>Create Project</p>
       </MenuItem>
       <MenuItem>
-        <IconButton aria-label='show 11 new notifications' color='inherit'>
+        <IconButton color='inherit'>
           <Badge badgeContent={null} color='secondary'>
             <NotificationsIcon />
           </Badge>

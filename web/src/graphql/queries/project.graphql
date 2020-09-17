@@ -7,9 +7,11 @@ query Project($id: Int!) {
     desc
     points
     skills {
+      id
       type
     }
     categories {
+      id
       name
     }
     creator {

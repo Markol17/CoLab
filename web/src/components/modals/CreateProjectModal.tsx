@@ -12,6 +12,7 @@ import { Autocomplete } from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { useCreateProjectMutation } from '../../generated/graphql';
+import { useRouter } from 'next/router';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -49,25 +50,46 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 }) => {
   const classes = useStyles();
   const [createProject] = useCreateProjectMutation();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: { name: '', desc: '', skillIds: [], categoryIds: [] },
     onSubmit: async (values) => {
       const { errors } = await createProject({
         variables: {
-          input: values,
+          input: { name: values.name, desc: values.desc },
           skillIds: values.skillIds,
           categoryIds: values.categoryIds,
         },
         update: (cache: any) => {
-          cache.evict({ fieldName: 'posts:{}' });
+          cache.evict({ fieldName: 'projects:{}' });
         },
       });
       if (!errors) {
-        // router.push('/');
+        router.push('/');
       }
     },
   });
+
+  const getSkillsSelected = (
+    _event: any,
+    skills: { id: number; type: string }[]
+  ) => {
+    formik.values.skillIds = [];
+    for (let i = 0; i < skills.length; i++) {
+      formik.values.skillIds.push(skills[i].id);
+    }
+  };
+
+  const getCategoriesSelected = (
+    _event: any,
+    categories: { id: number; name: string }[]
+  ) => {
+    formik.values.categoryIds = [];
+    for (let i = 0; i < categories.length; i++) {
+      formik.values.categoryIds.push(categories[i].id);
+    }
+  };
 
   const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
   const checkedIcon = <CheckBoxIcon fontSize='small' />;
@@ -84,8 +106,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   ];
 
   return (
-    <Dialog open={isOpen} onClose={onClose} aria-labelledby='form-dialog-title'>
-      <DialogTitle id='form-dialog-title'>Create a new project</DialogTitle>
+    <Dialog open={isOpen} onClose={onClose}>
+      <DialogTitle>Create a new project</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <DialogContent>
           <TextField
@@ -114,6 +136,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             options={categories}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
+            onChange={getCategoriesSelected}
             renderOption={(option, { selected }) => (
               <>
                 <Checkbox
@@ -131,6 +154,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 {...params}
                 label='Categories'
                 placeholder='Categories'
+                onChange={formik.handleChange}
               />
             )}
           />
@@ -140,6 +164,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             options={skills}
             disableCloseOnSelect
             getOptionLabel={(option) => option.type}
+            onChange={getSkillsSelected}
             renderOption={(option, { selected }) => (
               <>
                 <Checkbox
@@ -153,7 +178,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             )}
             style={{ width: 500 }}
             renderInput={(params) => (
-              <TextField {...params} label='Skills' placeholder='Skills' />
+              <TextField
+                {...params}
+                label='Skills'
+                placeholder='Skills'
+                onChange={formik.handleChange}
+                value={formik.values.skillIds}
+              />
             )}
           />
         </DialogContent>

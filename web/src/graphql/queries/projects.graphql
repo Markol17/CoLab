@@ -9,9 +9,11 @@ query Projects($limit: Int!, $cursor: String) {
       desc
       points
       skills {
+        id
         type
       }
       categories {
+        id
         name
       }
       creator {

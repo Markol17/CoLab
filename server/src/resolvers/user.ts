@@ -20,7 +20,7 @@ import { v4 } from 'uuid';
 import { getConnection } from 'typeorm';
 
 @ObjectType()
-class FieldError {
+export class FieldError {
   @Field()
   field: string;
   @Field()
@@ -155,7 +155,6 @@ export class UserResolver {
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
-      // User.create({}).save()
       const result = await getConnection()
         .createQueryBuilder()
         .insert()
@@ -169,7 +168,6 @@ export class UserResolver {
         .execute();
       user = result.raw[0];
     } catch (err) {
-      //|| err.detail.includes("already exists")) {
       // duplicate username error
       if (err.code === '23505') {
         return {
@@ -183,9 +181,7 @@ export class UserResolver {
       }
     }
 
-    // store user id session
-    // this will set a cookie on the user
-    // keep them logged in
+    //set a cookie on the user
     req.session.userId = user.id;
 
     return { user };

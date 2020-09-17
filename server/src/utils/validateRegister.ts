@@ -28,11 +28,11 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     ];
   }
 
-  if (options.password.length <= 8) {
+  if (options.password.length < 8) {
     return [
       {
         field: 'password',
-        message: 'length must be greater than 8 characters',
+        message: 'length must be at least 8 characters',
       },
     ];
   }

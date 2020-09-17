@@ -1,6 +1,4 @@
-//TODO:
-// 1: fix types in dataloaders
-// 2: generate new migration
+//FIXME: fix typing in dataloaders
 
 import DataLoader from 'dataloader';
 import { In } from 'typeorm';
@@ -22,18 +20,11 @@ const batchCategories = async (projectIds: readonly number[]) => {
 
   const projectIdToCategories: { [key: number]: Category[] } = {};
 
-  /* example:
-  {
-    authorId: 1,
-    bookId: 1,
-    __author__: { id: 1, name: 'author1' }
-  }
-  */
   categoryProjects.forEach((cp) => {
     if (cp.categoryId in projectIdToCategories) {
-      projectIdToCategories[cp.categoryId].push((cp as any).__category__);
+      projectIdToCategories[cp.projectId].push((cp as any).__category__);
     } else {
-      projectIdToCategories[cp.categoryId] = [(cp as any).__category__];
+      projectIdToCategories[cp.projectId] = [(cp as any).__category__];
     }
   });
 

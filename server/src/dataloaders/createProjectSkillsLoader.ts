@@ -18,22 +18,16 @@ const batchSkills = async (projectIds: readonly number[]) => {
 
   const projectIdToSkills: { [key: number]: Skill[] } = {};
 
-  /* example:
-  {
-    authorId: 1,
-    bookId: 1,
-    __author__: { id: 1, name: 'author1' }
-  }
-  */
   projectSkills.forEach((ps) => {
-    if (ps.skillId in projectIdToSkills) {
-      projectIdToSkills[ps.skillId].push((ps as any).__skill__);
+    if (ps.projectId in projectIdToSkills) {
+      projectIdToSkills[ps.projectId].push((ps as any).__skill__);
     } else {
-      projectIdToSkills[ps.skillId] = (ps as any).__skill__;
+      projectIdToSkills[ps.projectId] = [(ps as any).__skill__];
     }
   });
+  const mapping = projectIds.map((projectId) => projectIdToSkills[projectId]);
 
-  return projectIds.map((projectId) => projectIdToSkills[projectId]);
+  return mapping;
 };
 
 export const createProjectSkillsLoader = () => new DataLoader(batchSkills);
