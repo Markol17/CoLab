@@ -19,10 +19,10 @@ const batchSkills = async (userIds: readonly number[]) => {
   const userIdToSkills: { [key: number]: Skill[] } = {};
 
   skillUsers.forEach((su) => {
-    if (su.skillId in userIdToSkills) {
-      userIdToSkills[su.skillId].push((su as any).__skill__);
+    if (su.userId in userIdToSkills) {
+      userIdToSkills[su.userId].push((su as any).__skill__);
     } else {
-      userIdToSkills[su.skillId] = [(su as any).__skill__];
+      userIdToSkills[su.userId] = [(su as any).__skill__];
     }
   });
 
