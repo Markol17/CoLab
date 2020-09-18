@@ -1,3 +1,4 @@
+//TODO: use lazy loading with React.lazy
 import { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { useProjectsQuery, ProjectsQuery } from '../generated/graphql';

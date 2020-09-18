@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -7,12 +7,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormik } from 'formik';
-import { Checkbox } from '@material-ui/core';
+import { Checkbox, Typography } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { useCreateProjectMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -21,8 +22,14 @@ interface CreateProjectModalProps {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    modal: {
-      padding: theme.spacing(2),
+    modalTitle: {
+      padding: theme.spacing(3, 3, 0, 3),
+    },
+    modalContent: {
+      padding: theme.spacing(0, 3, 2, 3),
+    },
+    modalActions: {
+      padding: theme.spacing(1, 3, 1, 3),
     },
     create: {
       textTransform: 'unset',
@@ -53,6 +60,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 }) => {
   const classes = useStyles();
   const [createProject] = useCreateProjectMutation();
+  const [img, setImg] = useState([]);
   const router = useRouter();
 
   const formik = useFormik({
@@ -95,6 +103,10 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     }
   };
 
+  const handleChange = (files: any) => {
+    setImg(files);
+    console.log(img);
+  };
   const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
   const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
@@ -110,10 +122,14 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   ];
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Create a new project</DialogTitle>
+    <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
+      <DialogTitle className={classes.modalTitle}>
+        Create a new project
+      </DialogTitle>
       <form onSubmit={formik.handleSubmit}>
-        <DialogContent>
+        <DialogContent className={classes.modalContent}>
+          <Typography color='textSecondary'>Project thumbnail: </Typography>
+          <DropzoneArea onChange={handleChange} />
           <TextField
             margin='dense'
             label='Name'
@@ -152,7 +168,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 {option.name}
               </>
             )}
-            style={{ width: 500 }}
+            style={{ width: '100%' }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -180,7 +196,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 {option.type}
               </>
             )}
-            style={{ width: 500 }}
+            style={{ width: '100%' }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -192,7 +208,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             )}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classes.modalActions}>
           <Button onClick={onClose} className={classes.create}>
             Cancel
           </Button>

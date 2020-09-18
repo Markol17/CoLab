@@ -12,7 +12,7 @@ const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [login] = useLoginMutation();
   return (
-    <Wrapper variant='small'>
+    <Wrapper>
       <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {

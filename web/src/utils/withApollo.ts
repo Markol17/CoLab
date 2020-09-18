@@ -1,6 +1,6 @@
 import { createWithApollo } from './createWithApollo';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { PaginatedPosts } from '../generated/graphql';
+import { PaginatedProjects } from '../generated/graphql';
 import { NextPageContext } from 'next';
 
 const createClient = (ctx: NextPageContext) =>
@@ -19,12 +19,15 @@ const createClient = (ctx: NextPageContext) =>
             posts: {
               keyArgs: [],
               merge(
-                existing: PaginatedPosts | undefined,
-                incoming: PaginatedPosts
-              ): PaginatedPosts {
+                existing: PaginatedProjects | undefined,
+                incoming: PaginatedProjects
+              ): PaginatedProjects {
                 return {
                   ...incoming,
-                  posts: [...(existing?.posts || []), ...incoming.posts],
+                  projects: [
+                    ...(existing?.projects || []),
+                    ...incoming.projects,
+                  ],
                 };
               },
             },

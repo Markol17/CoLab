@@ -27,6 +27,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
 import { CreateProjectModal } from '../modals/CreateProjectModal';
+import { RegisterModal } from '../modals/RegisterModal';
+import { LoginModal } from '../modals/LoginModal';
 const CoLab = require('../../assets/img/CoLab.svg');
 
 interface NavBarProps {}
@@ -143,6 +145,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [openProjects, setOpenProjects] = React.useState(true);
   const [openBookmarks, setOpenBookmarks] = React.useState(false);
   const [openCreateModal, setOpenCreateModal] = React.useState(false);
+  const [openRegisterModal, setOpenRegisterModal] = React.useState(false);
+  const [openLoginModal, setOpenLoginModal] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [
     mobileMoreAnchorEl,
@@ -223,6 +227,21 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     setOpenCreateModal(false);
   };
 
+  const handleRegisterModalOpen = () => {
+    setOpenRegisterModal(true);
+  };
+
+  const handleRegisterModalClose = () => {
+    setOpenRegisterModal(false);
+  };
+  const handleLoginModalOpen = () => {
+    setOpenLoginModal(true);
+  };
+
+  const handleLoginModalClose = () => {
+    setOpenLoginModal(false);
+  };
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -295,10 +314,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       open={isUnregisteredMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem onClick={handleLoginModalOpen}>
         <p>Login</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={handleRegisterModalOpen}>
         <p>Register</p>
       </MenuItem>
     </Menu>
@@ -337,20 +356,22 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               {loading ? null /* data loading */ : !data?.me ? (
                 /*user not logged in*/ <>
                   <div className={classes.sectionDesktop}>
-                    <NextLink href='/login'>
-                      <Button className={classes.login} variant='outlined'>
-                        Login
-                      </Button>
-                    </NextLink>
-                    <NextLink href='/register'>
-                      <Button
-                        className={classes.register}
-                        variant='outlined'
-                        color='secondary'
-                      >
-                        Register
-                      </Button>
-                    </NextLink>
+                    <Button
+                      className={classes.login}
+                      variant='outlined'
+                      onClick={handleLoginModalOpen}
+                    >
+                      Login
+                    </Button>
+
+                    <Button
+                      className={classes.register}
+                      variant='outlined'
+                      color='secondary'
+                      onClick={handleRegisterModalOpen}
+                    >
+                      Register
+                    </Button>
                   </div>
                   <div className={classes.sectionMobile}>
                     <IconButton
@@ -426,6 +447,11 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         isOpen={openCreateModal}
         onClose={handleCreateModalClose}
       />
+      <RegisterModal
+        isOpen={openRegisterModal}
+        onClose={handleRegisterModalClose}
+      />
+      <LoginModal isOpen={openLoginModal} onClose={handleLoginModalClose} />
     </div>
   );
 };

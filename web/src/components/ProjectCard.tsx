@@ -20,7 +20,7 @@ interface ProjectCardProps {
 
 const useStyles = makeStyles({
   card: {
-    minWidth: 300,
+    minWidth: 301,
     maxWidth: 300,
     boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
   },
@@ -28,8 +28,11 @@ const useStyles = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     '& > *': {
-      margin: 5,
+      margin: 2,
     },
+  },
+  cardContent: {
+    padding: 10,
   },
 });
 
@@ -41,11 +44,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <CardMedia
           component='img'
           alt='Thumbnail'
-          height='140'
+          height='180'
           image=''
           title='Test'
         />
-        <CardContent>
+        <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant='h5' component='h2'>
             {project.name}
           </Typography>
@@ -56,16 +59,26 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             Categories:
           </Typography>
           <div className={classes.chips}>
-            {project.categories.map((category) => (
-              <Chip variant='outlined' size='small' label={category.name} />
+            {project.categories.map((category, index) => (
+              <Chip
+                key={index}
+                variant='outlined'
+                size='small'
+                label={category.name}
+              />
             ))}
           </div>
           <Typography variant='body2' color='textSecondary' component='p'>
             Skills:
           </Typography>
           <div className={classes.chips}>
-            {project.skills.map((skill) => (
-              <Chip variant='outlined' size='small' label={skill.type} />
+            {project.skills.map((skill, index) => (
+              <Chip
+                key={index}
+                variant='outlined'
+                size='small'
+                label={skill.type}
+              />
             ))}
           </div>
         </CardContent>
