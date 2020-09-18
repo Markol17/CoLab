@@ -21,6 +21,9 @@ interface CreateProjectModalProps {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    modal: {
+      padding: theme.spacing(2),
+    },
     create: {
       textTransform: 'unset',
       minWidth: '90px',
