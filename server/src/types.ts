@@ -4,6 +4,7 @@ import { createUserLoader } from './dataloaders/createUserLoader';
 import { createProjectSkillsLoader } from './dataloaders/createProjectSkillsLoader';
 import { createProjectCategoriesLoader } from './dataloaders/createProjectCategoriesLoader';
 import { createUserSkillsLoader } from './dataloaders/createUserSkillsLoader';
+import { Stream } from 'stream';
 
 export type Context = {
   req: Request & { session: Express.Session };
@@ -14,3 +15,9 @@ export type Context = {
   projectCategoriesLoader: ReturnType<typeof createProjectCategoriesLoader>;
   userSkillsLoader: ReturnType<typeof createUserSkillsLoader>;
 };
+export interface Upload {
+  filename: string;
+  mimetype: string;
+  encoding: string;
+  createReadStream: () => Stream;
+}

@@ -73,6 +73,10 @@ const main = async () => {
       resave: false,
     })
   );
+  app.use(
+    '/projects/thumbnails',
+    express.static(path.join(__dirname, '../uploads/projects/thumbnails'))
+  );
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({

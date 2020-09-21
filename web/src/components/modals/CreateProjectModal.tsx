@@ -60,17 +60,19 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 }) => {
   const classes = useStyles();
   const [createProject] = useCreateProjectMutation();
-  const [img, setImg] = useState([]);
+  const [img, setImg] = useState(null);
   const router = useRouter();
 
   const formik = useFormik({
     initialValues: { name: '', desc: '', skillIds: [], categoryIds: [] },
     onSubmit: async (values) => {
+      console.log(img);
       const { errors } = await createProject({
         variables: {
           input: { name: values.name, desc: values.desc },
           skillIds: values.skillIds,
           categoryIds: values.categoryIds,
+          thumbnail: img,
         },
         update: (cache: any) => {
           console.log(cache);
@@ -103,9 +105,9 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     }
   };
 
-  const handleChange = (files: any) => {
-    setImg(files);
-    console.log(img);
+  const handleChange = (file: any) => {
+    if (file.length === 0) setImg(null);
+    setImg(file[0]);
   };
   const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
   const checkedIcon = <CheckBoxIcon fontSize='small' />;
@@ -129,7 +131,16 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       <form onSubmit={formik.handleSubmit}>
         <DialogContent className={classes.modalContent}>
           <Typography color='textSecondary'>Project thumbnail: </Typography>
-          <DropzoneArea onChange={handleChange} />
+          <DropzoneArea
+            acceptedFiles={['image/*']}
+            filesLimit={1}
+            dropzoneText={'Drag and drop an image here or click'}
+            onChange={handleChange}
+            showPreviews={true}
+            showPreviewsInDropzone={false}
+            previewGridProps={{ container: { spacing: 1, direction: 'row' } }}
+            previewText='Selected Image:'
+          />
           <TextField
             margin='dense'
             label='Name'

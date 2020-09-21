@@ -20,7 +20,7 @@ const Post = ({}) => {
     return <div>{error.message}</div>;
   }
 
-  if (!data?.post) {
+  if (!data?.project) {
     return (
       <Layout>
         <Box>could not find post</Box>
@@ -30,11 +30,11 @@ const Post = ({}) => {
 
   return (
     <Layout>
-      <Box mb={4}>{data.post.title}</Box>
-      <Box mb={4}>{data.post.text}</Box>
+      <Box mb={4}>{data.project.name}</Box>
+      <Box mb={4}>{data.project.desc}</Box>
       <EditDeletePostButtons
-        id={data.post.id}
-        creatorId={data.post.creator.id}
+        id={data.project.id}
+        creatorId={data.project.creator.id}
       />
     </Layout>
   );

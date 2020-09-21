@@ -6,22 +6,24 @@ import {
   CardContent,
   CardMedia,
   Chip,
-  createStyles,
   makeStyles,
-  Theme,
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { Project } from '../generated/graphql';
+import { Category, Skill } from '../generated/graphql';
 
 interface ProjectCardProps {
-  project: Project;
+  name: string;
+  desc: string;
+  categories: Category[];
+  skills: Skill[];
+  img: string;
 }
 
 const useStyles = makeStyles({
   card: {
-    minWidth: 301,
-    maxWidth: 300,
+    minWidth: 310,
+    maxWidth: 310,
     boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
   },
   chips: {
@@ -36,30 +38,44 @@ const useStyles = makeStyles({
   },
 });
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({
+  name,
+  desc,
+  categories,
+  skills,
+  img,
+}) => {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        <CardMedia
-          component='img'
-          alt='Thumbnail'
-          height='180'
-          image=''
-          title='Test'
-        />
+        {!!img ? (
+          <CardMedia
+            component='img'
+            alt='Thumbnail'
+            height='180'
+            src={`http://localhost:4000/projects/thumbnails/${img}`}
+          />
+        ) : (
+          <CardMedia
+            component='img'
+            alt='Thumbnail'
+            height='180'
+            src={`http://localhost:4000/projects/thumbnails/placeholder.jpg`}
+          />
+        )}
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant='h5' component='h2'>
-            {project.name}
+            {name}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
-            {project.desc}
+            {desc}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
             Categories:
           </Typography>
           <div className={classes.chips}>
-            {project.categories.map((category, index) => (
+            {categories.map((category: Category, index: number) => (
               <Chip
                 key={index}
                 variant='outlined'
@@ -72,7 +88,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             Skills:
           </Typography>
           <div className={classes.chips}>
-            {project.skills.map((skill, index) => (
+            {skills.map((skill: Skill, index: number) => (
               <Chip
                 key={index}
                 variant='outlined'

@@ -68,4 +68,8 @@ export class Project extends BaseEntity {
   @Field(() => String)
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  thumbnail: string;
 }

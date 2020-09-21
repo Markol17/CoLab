@@ -2,8 +2,14 @@ mutation CreateProject(
   $input: ProjectInput!
   $skillIds: [Int!]!
   $categoryIds: [Int!]!
+  $thumbnail: Upload!
 ) {
-  createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds) {
+  createProject(
+    input: $input
+    skillIds: $skillIds
+    categoryIds: $categoryIds
+    filename: $thumbnail
+  ) {
     ...RegularProjectResponse
   }
 }

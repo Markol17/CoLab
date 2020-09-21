@@ -1,7 +1,7 @@
 //TODO: use lazy loading with React.lazy
 import { useState } from 'react';
 import { Layout } from '../components/Layout';
-import { useProjectsQuery, ProjectsQuery } from '../generated/graphql';
+import { useProjectsQuery, ProjectsQuery, Project } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 import { makeStyles, Grid } from '@material-ui/core';
 import { ProjectCard } from '../components/ProjectCard';
@@ -43,11 +43,19 @@ const Index = () => {
         <Grid container className={classes.root}>
           <Grid item xs={12}>
             <Grid container justify='center' spacing={4}>
-              {data!.paginatedProjects.projects.map((project, index) => (
-                <Grid key={index} item>
-                  <ProjectCard project={project} />
-                </Grid>
-              ))}
+              {data!.paginatedProjects.projects.map(
+                (project, index: number) => (
+                  <Grid key={index} item>
+                    <ProjectCard
+                      name={project.name}
+                      desc={project.desc}
+                      categories={project.categories}
+                      skills={project.skills}
+                      img={project.thumbnail}
+                    />
+                  </Grid>
+                )
+              )}
             </Grid>
           </Grid>
         </Grid>

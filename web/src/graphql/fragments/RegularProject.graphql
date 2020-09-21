@@ -5,6 +5,7 @@ fragment RegularProject on Project {
   name
   desc
   points
+  thumbnail
   skills {
     id
     type

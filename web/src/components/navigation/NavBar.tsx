@@ -175,6 +175,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     setMobileMoreAnchorEl(null);
     setUnregisteredMobileMoreAnchorEl(null);
   };
+
   const handleUnregisteredMobileMenuClose = () => {
     setUnregisteredMobileMoreAnchorEl(null);
   };

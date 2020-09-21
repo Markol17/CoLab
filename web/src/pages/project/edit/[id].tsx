@@ -3,23 +3,20 @@ import { Button, Box, Input } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { Layout } from '../../../components/Layout';
-import {
-  usePostQuery,
-  useUpdatePostMutation,
-} from '../../../generated/graphql';
+import { useProjectQuery } from '../../../generated/graphql';
 import { useGetIntId } from '../../../utils/useGetIntId';
 import { withApollo } from '../../../utils/withApollo';
 
 const EditPost = ({}) => {
   const router = useRouter();
   const intId = useGetIntId();
-  const { data, loading } = usePostQuery({
+  const { data, loading } = useProjectQuery({
     skip: intId === -1,
     variables: {
       id: intId,
     },
   });
-  const [updatePost] = useUpdatePostMutation();
+  // const [updateProject] = useUpdateProjectMutation();
   if (loading) {
     return (
       <Layout>
@@ -28,7 +25,7 @@ const EditPost = ({}) => {
     );
   }
 
-  if (!data?.post) {
+  if (!data?.project) {
     return (
       <Layout>
         <Box>could not find post</Box>
@@ -37,27 +34,27 @@ const EditPost = ({}) => {
   }
 
   return (
-    <Layout variant='small'>
+    <Layout>
       <Formik
-        initialValues={{ title: data.post.title, text: data.post.text }}
+        initialValues={{ name: data.project.name, desc: data.project.desc }}
         onSubmit={async (values) => {
-          await updatePost({ variables: { id: intId, ...values } });
+          // await updateProject({ variables: { id: intId, ...values } });
           router.back();
         }}
       >
         {(props) => (
           <Form>
             <Input
-              name='title'
-              placeholder='title'
-              value={props.values.title}
+              name='name'
+              placeholder=''
+              value={props.values.name}
               onChange={props.handleChange}
             />
             <Box mt={4}>
               <Input
-                name='text'
+                name='desc'
                 placeholder='text...'
-                value={props.values.text}
+                value={props.values.desc}
                 onChange={props.handleChange}
               />
             </Box>

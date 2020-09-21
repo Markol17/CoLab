@@ -9,6 +9,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type Query = {
@@ -52,6 +54,7 @@ export type Project = {
   categories: Array<Category>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  thumbnail: Scalars['String'];
 };
 
 export type Skill = {
@@ -82,7 +85,7 @@ export type Mutation = {
   createProject: ProjectResponse;
   createSkill: Skill;
   createCategory: Category;
-  updatePost?: Maybe<Project>;
+  updateProject?: Maybe<Project>;
   deleteProject: Scalars['Boolean'];
 };
 
@@ -110,6 +113,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationCreateProjectArgs = {
+  filename: Scalars['Upload'];
   categoryIds: Array<Scalars['Int']>;
   skillIds: Array<Scalars['Int']>;
   input: ProjectInput;
@@ -126,7 +130,7 @@ export type MutationCreateCategoryArgs = {
 };
 
 
-export type MutationUpdatePostArgs = {
+export type MutationUpdateProjectArgs = {
   desc: Scalars['String'];
   name: Scalars['String'];
   id: Scalars['Int'];
@@ -161,6 +165,7 @@ export type ProjectResponse = {
   project?: Maybe<Project>;
 };
 
+
 export type ProjectInput = {
   name: Scalars['String'];
   desc: Scalars['String'];
@@ -173,7 +178,7 @@ export type RegularErrorFragment = (
 
 export type RegularProjectFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points'>
+  & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points' | 'thumbnail'>
   & { skills: Array<(
     { __typename?: 'Skill' }
     & Pick<Skill, 'id' | 'type'>
@@ -231,6 +236,7 @@ export type CreateProjectMutationVariables = Exact<{
   input: ProjectInput;
   skillIds: Array<Scalars['Int']>;
   categoryIds: Array<Scalars['Int']>;
+  thumbnail: Scalars['Upload'];
 }>;
 
 
@@ -353,6 +359,7 @@ export const RegularProjectFragmentDoc = gql`
   name
   desc
   points
+  thumbnail
   skills {
     id
     type
@@ -429,8 +436,8 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateProjectDocument = gql`
-    mutation CreateProject($input: ProjectInput!, $skillIds: [Int!]!, $categoryIds: [Int!]!) {
-  createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds) {
+    mutation CreateProject($input: ProjectInput!, $skillIds: [Int!]!, $categoryIds: [Int!]!, $thumbnail: Upload!) {
+  createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds, filename: $thumbnail) {
     ...RegularProjectResponse
   }
 }
@@ -453,6 +460,7 @@ export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutat
  *      input: // value for 'input'
  *      skillIds: // value for 'skillIds'
  *      categoryIds: // value for 'categoryIds'
+ *      thumbnail: // value for 'thumbnail'
  *   },
  * });
  */
