@@ -23,9 +23,9 @@ import { ProjectCategory } from '../entities/ProjectCategory';
 import { Category } from '../entities/Category';
 import { validateCreateProject } from '../utils/validateCreateProject';
 import { FieldError } from './user';
-import { GraphQLUpload } from 'apollo-server-express';
 import { createWriteStream } from 'fs';
 import path from 'path';
+import { GraphQLUpload } from 'apollo-server-express';
 
 @InputType()
 export class ProjectInput {
@@ -160,11 +160,10 @@ export class ProjectResolver {
     @Arg('input') input: ProjectInput,
     @Arg('skillIds', () => [Int]) skillIds: number[],
     @Arg('categoryIds', () => [Int]) categoryIds: number[],
-    @Arg('filename', () => GraphQLUpload) file: Upload,
+    @Arg('filename', () => GraphQLUpload, { nullable: true })
+    file: Upload,
     @Ctx() { req }: Context
   ): Promise<ProjectResponse> {
-    console.log(file);
-    const { createReadStream, filename } = file;
     const errors = validateCreateProject(input, skillIds, categoryIds);
     if (errors) {
       return { errors };
@@ -172,7 +171,7 @@ export class ProjectResolver {
 
     const project = await Project.create({
       ...input,
-      thumbnail: filename,
+      thumbnail: file !== undefined ? file.filename : undefined,
       creatorId: req.session.userId,
     }).save();
 
@@ -198,16 +197,23 @@ export class ProjectResolver {
       .values(cIds)
       .execute();
 
-    await new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(
-          createWriteStream(
-            path.join(__dirname, '../../uploads/projects/thumbnails', filename)
+    if (!!file) {
+      await new Promise(async (resolve, reject) =>
+        file
+          .createReadStream()
+          .pipe(
+            createWriteStream(
+              path.join(
+                __dirname,
+                '../../uploads/projects/thumbnails',
+                file.filename
+              )
+            )
           )
-        )
-        .on('finish', () => resolve(true))
-        .on('error', () => reject(false))
-    );
+          .on('finish', () => resolve(true))
+          .on('error', () => reject(false))
+      );
+    }
 
     return { project };
   }

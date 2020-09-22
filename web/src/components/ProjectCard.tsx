@@ -25,6 +25,10 @@ const useStyles = makeStyles({
     minWidth: 310,
     maxWidth: 310,
     boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
+    transition: 'transform 0.2s',
+    '&:hover': {
+      transform: 'scale(1.05)',
+    },
   },
   chips: {
     display: 'flex',
@@ -54,14 +58,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             component='img'
             alt='Thumbnail'
             height='180'
-            src={`http://localhost:4000/projects/thumbnails/${img}`}
+            src={process.env.PUBLIC_PROJECT_THUMBNAILS_URL + img}
           />
         ) : (
           <CardMedia
             component='img'
             alt='Thumbnail'
-            height='180'
-            src={`http://localhost:4000/projects/thumbnails/placeholder.jpg`}
+            height='200'
+            src={`${process.env.PUBLIC_PROJECT_THUMBNAILS_URL}placeholder.jpg`}
           />
         )}
         <CardContent className={classes.cardContent}>

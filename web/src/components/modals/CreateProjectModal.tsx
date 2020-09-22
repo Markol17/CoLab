@@ -14,6 +14,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { useCreateProjectMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { DropzoneArea } from 'material-ui-dropzone';
+import { toErrorMap } from '../../utils/toErrorMap';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -65,9 +66,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
   const formik = useFormik({
     initialValues: { name: '', desc: '', skillIds: [], categoryIds: [] },
-    onSubmit: async (values) => {
-      console.log(img);
-      const { errors } = await createProject({
+    onSubmit: async (values, { setErrors }) => {
+      const response = await createProject({
         variables: {
           input: { name: values.name, desc: values.desc },
           skillIds: values.skillIds,
@@ -79,7 +79,10 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           cache.evict({ fieldName: 'projects:{}' });
         },
       });
-      if (!errors) {
+      if (response.data?.createProject.errors) {
+        setErrors(toErrorMap(response.data.createProject.errors));
+      } else if (response.data?.createProject.project) {
+        onClose();
         router.push('/');
       }
     },
@@ -142,6 +145,9 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             previewText='Selected Image:'
           />
           <TextField
+            error={!!formik.errors.name}
+            helperText={formik.errors.name}
+            variant='outlined'
             margin='dense'
             label='Name'
             type='text'
@@ -152,6 +158,9 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             value={formik.values.name}
           />
           <TextField
+            error={!!formik.errors.desc}
+            helperText={formik.errors.desc}
+            variant='outlined'
             margin='dense'
             label='Description'
             type='text'
@@ -163,6 +172,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           />
           <Autocomplete
             multiple
+            size='small'
             id='categories'
             options={categories}
             disableCloseOnSelect
@@ -179,10 +189,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 {option.name}
               </>
             )}
-            style={{ width: '100%' }}
+            style={{ width: '100%', marginTop: '8px' }}
             renderInput={(params) => (
               <TextField
                 {...params}
+                error={!!formik.errors.categoryIds}
+                helperText={formik.errors.categoryIds}
+                variant='outlined'
                 label='Categories'
                 placeholder='Categories'
                 onChange={formik.handleChange}
@@ -191,6 +204,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           />
           <Autocomplete
             multiple
+            size='small'
             id='skills'
             options={skills}
             disableCloseOnSelect
@@ -207,10 +221,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 {option.type}
               </>
             )}
-            style={{ width: '100%' }}
+            style={{ width: '100%', marginTop: '12px' }}
             renderInput={(params) => (
               <TextField
                 {...params}
+                error={!!formik.errors.skillIds}
+                helperText={formik.errors.skillIds}
+                variant='outlined'
                 label='Skills'
                 placeholder='Skills'
                 onChange={formik.handleChange}

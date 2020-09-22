@@ -54,7 +54,7 @@ export type Project = {
   categories: Array<Category>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  thumbnail: Scalars['String'];
+  thumbnail?: Maybe<Scalars['String']>;
 };
 
 export type Skill = {
@@ -113,7 +113,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationCreateProjectArgs = {
-  filename: Scalars['Upload'];
+  filename?: Maybe<Scalars['Upload']>;
   categoryIds: Array<Scalars['Int']>;
   skillIds: Array<Scalars['Int']>;
   input: ProjectInput;
@@ -236,7 +236,7 @@ export type CreateProjectMutationVariables = Exact<{
   input: ProjectInput;
   skillIds: Array<Scalars['Int']>;
   categoryIds: Array<Scalars['Int']>;
-  thumbnail: Scalars['Upload'];
+  thumbnail?: Maybe<Scalars['Upload']>;
 }>;
 
 
@@ -436,7 +436,7 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateProjectDocument = gql`
-    mutation CreateProject($input: ProjectInput!, $skillIds: [Int!]!, $categoryIds: [Int!]!, $thumbnail: Upload!) {
+    mutation CreateProject($input: ProjectInput!, $skillIds: [Int!]!, $categoryIds: [Int!]!, $thumbnail: Upload) {
   createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds, filename: $thumbnail) {
     ...RegularProjectResponse
   }

@@ -174,7 +174,7 @@ export class UserResolver {
           errors: [
             {
               field: 'username',
-              message: 'username already taken',
+              message: 'Username already taken',
             },
           ],
         };
@@ -193,34 +193,33 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { req }: Context
   ): Promise<UserResponse> {
+    let errorCount = 0;
     const user = await User.findOne(
       usernameOrEmail.includes('@')
         ? { where: { email: usernameOrEmail } }
         : { where: { username: usernameOrEmail } }
     );
     if (!user) {
+      errorCount++;
+    }
+    if (!!user) {
+      const valid = await argon2.verify(user.password, password);
+      if (!valid) {
+        errorCount++;
+      }
+    }
+
+    if (errorCount !== 0) {
       return {
         errors: [
           {
             field: 'usernameOrEmail',
-            message: "that username doesn't exist",
+            message: 'Incorrect password and email/username combination',
           },
         ],
       };
     }
-    const valid = await argon2.verify(user.password, password);
-    if (!valid) {
-      return {
-        errors: [
-          {
-            field: 'password',
-            message: 'incorrect password',
-          },
-        ],
-      };
-    }
-    req.session.userId = user.id;
-    console.log(req.session);
+    req.session.userId = user!.id;
 
     return {
       user,

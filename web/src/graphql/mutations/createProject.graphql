@@ -2,7 +2,7 @@ mutation CreateProject(
   $input: ProjectInput!
   $skillIds: [Int!]!
   $categoryIds: [Int!]!
-  $thumbnail: Upload!
+  $thumbnail: Upload
 ) {
   createProject(
     input: $input

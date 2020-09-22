@@ -1,41 +1,37 @@
 import { UsernamePasswordInput } from '../resolvers/UsernamePasswordInput';
 
 export const validateRegister = (options: UsernamePasswordInput) => {
+  let errors = [];
   if (!options.email.includes('@')) {
-    return [
-      {
-        field: 'email',
-        message: 'invalid email',
-      },
-    ];
+    errors.push({
+      field: 'email',
+      message: 'Invalid email',
+    });
   }
 
   if (options.username.length <= 2) {
-    return [
-      {
-        field: 'username',
-        message: 'length must be greater than 2',
-      },
-    ];
+    errors.push({
+      field: 'username',
+      message: 'Length must be greater than 2',
+    });
   }
 
   if (options.username.includes('@')) {
-    return [
-      {
-        field: 'username',
-        message: 'cannot include an @',
-      },
-    ];
+    errors.push({
+      field: 'username',
+      message: 'Cannot include an @',
+    });
   }
 
   if (options.password.length < 8) {
-    return [
-      {
-        field: 'password',
-        message: 'length must be at least 8 characters',
-      },
-    ];
+    errors.push({
+      field: 'password',
+      message: 'Length must be at least 8 characters',
+    });
   }
 
+  if (errors.length !== 0) {
+    return errors;
+  }
   return null;
 };

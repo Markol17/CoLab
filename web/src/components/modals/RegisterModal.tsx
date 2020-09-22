@@ -82,7 +82,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
       if (response.data?.register.errors) {
         setErrors(toErrorMap(response.data.register.errors));
       } else if (response.data?.register.user) {
-        // worked
+        onClose();
         router.push('/');
       }
     },
@@ -94,6 +94,9 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
       <form onSubmit={formik.handleSubmit}>
         <DialogContent className={classes.modalContent}>
           <TextField
+            error={!!formik.errors.email}
+            helperText={formik.errors.email}
+            variant='outlined'
             margin='dense'
             label='Email'
             type='email'
@@ -104,6 +107,9 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
             value={formik.values.email}
           />
           <TextField
+            error={!!formik.errors.username}
+            helperText={formik.errors.username}
+            variant='outlined'
             margin='dense'
             label='Username'
             type='text'
@@ -114,6 +120,9 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
             value={formik.values.username}
           />
           <TextField
+            error={!!formik.errors.password}
+            helperText={formik.errors.password}
+            variant='outlined'
             margin='dense'
             label='Password'
             type='password'

@@ -29,6 +29,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { CreateProjectModal } from '../modals/CreateProjectModal';
 import { RegisterModal } from '../modals/RegisterModal';
 import { LoginModal } from '../modals/LoginModal';
+import { useRouter } from 'next/router';
 const CoLab = require('../../assets/img/CoLab.svg');
 
 interface NavBarProps {}
@@ -162,6 +163,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     skip: isServer(),
   });
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
+  const router = useRouter();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -215,9 +217,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   };
 
   const logoutUser = async () => {
+    handleMenuClose();
     await logout();
     await apolloClient.resetStore();
-    handleMenuClose();
+    router.push('/');
   };
 
   const handleCreateModalOpen = () => {

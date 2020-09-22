@@ -12,6 +12,8 @@ import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 
 import { toErrorMap } from '../../utils/toErrorMap';
+import { Snackbar } from '@material-ui/core';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -49,12 +51,29 @@ const useStyles = makeStyles((theme: Theme) =>
         borderWidth: '2px',
       },
     },
+    errorMessage: {
+      color: theme.palette.error.main,
+      backgroundColor: 'transparent',
+      border: `1px solid ${theme.palette.error.main}`,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '40px',
+      borderRadius: '4px',
+      marginBottom: 20,
+      fontSize: 16,
+    },
   })
 );
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const [login] = useLoginMutation();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
 
   const formik = useFormik({
@@ -75,23 +94,44 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       });
       if (response.data?.login.errors) {
         setErrors(toErrorMap(response.data.login.errors));
+        setSnackbarOpen(true);
       } else if (response.data?.login.user) {
         if (typeof router.query.next === 'string') {
           router.push(router.query.next);
         } else {
-          // worked
+          onClose();
           router.push('/');
         }
       }
     },
   });
 
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
       <DialogTitle className={classes.modalTitle}>Login</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <DialogContent className={classes.modalContent}>
+          <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            open={snackbarOpen && !!formik.errors.usernameOrEmail}
+            autoHideDuration={5000}
+            onClose={handleClose}
+          >
+            <Alert onClose={handleClose} severity='error'>
+              {formik.errors.usernameOrEmail}
+            </Alert>
+          </Snackbar>
           <TextField
+            error={!!formik.errors.usernameOrEmail}
+            variant='outlined'
             margin='dense'
             label='Username Or Email'
             type='text'
@@ -102,6 +142,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             value={formik.values.usernameOrEmail}
           />
           <TextField
+            error={!!formik.errors.usernameOrEmail}
+            variant='outlined'
             margin='dense'
             label='Password'
             type='password'
