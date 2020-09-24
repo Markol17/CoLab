@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 3, 2, 3),
     },
     modalActions: {
-      padding: theme.spacing(1, 3, 1, 3),
+      padding: theme.spacing(1, 3, 2, 3),
     },
     create: {
       textTransform: 'unset',
@@ -42,8 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     cancel: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(1),
       borderColor: theme.palette.error.main,
+      color: theme.palette.error.main,
       textTransform: 'unset',
       minWidth: '90px',
       fontWeight: 'bold',
@@ -75,7 +76,6 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           thumbnail: img,
         },
         update: (cache: any) => {
-          console.log(cache);
           cache.evict({ fieldName: 'projects:{}' });
         },
       });
@@ -237,7 +237,11 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           />
         </DialogContent>
         <DialogActions className={classes.modalActions}>
-          <Button onClick={onClose} className={classes.create}>
+          <Button
+            onClick={onClose}
+            variant='outlined'
+            className={classes.cancel}
+          >
             Cancel
           </Button>
           <Button

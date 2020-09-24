@@ -12,6 +12,7 @@ import { Project } from './Project';
 import { Skill } from './Skill';
 import { UserSkill } from './UserSkill';
 import { Context } from 'src/types';
+import { UserProject } from './UserProject';
 
 @ObjectType()
 @Entity()
@@ -31,17 +32,23 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @Field(() => [Project])
-  @OneToMany(() => Project, (project) => project.creator)
-  projects: Project[];
-
-  @OneToMany(() => UserSkill, (us) => us.project)
+  @OneToMany(() => UserSkill, (us) => us.skill)
   skillConnection: Promise<UserSkill[]>;
 
   @Field(() => [Skill])
   async skills(@Ctx() { userSkillsLoader }: Context): Promise<Skill[]> {
     return userSkillsLoader.load(this.id);
   }
+
+  @OneToMany(() => UserProject, (up) => up.project)
+  projectConnection: Promise<UserProject[]>;
+
+  @Field(() => [Project])
+  projects: Project[];
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  avatar: string;
 
   @Field(() => String)
   @CreateDateColumn()

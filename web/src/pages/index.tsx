@@ -47,6 +47,7 @@ const Index = () => {
                 (project, index: number) => (
                   <Grid key={index} item>
                     <ProjectCard
+                      id={project.id}
                       name={project.name}
                       desc={project.desc}
                       categories={project.categories}

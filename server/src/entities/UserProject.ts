@@ -5,26 +5,26 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { Skill } from './Skill';
+import { Project } from './Project';
 import { User } from './User';
 
 @Entity()
-export class UserSkill extends BaseEntity {
+export class UserProject extends BaseEntity {
   @PrimaryColumn()
   userId: number;
 
   @PrimaryColumn()
-  skillId: number;
+  projectId: number;
 
-  @ManyToOne(() => User, (user) => user.skillConnection, {
+  @ManyToOne(() => User, (user) => user.projectConnection, {
     primary: true,
   })
   @JoinColumn({ name: 'userId' })
   user: Promise<User>;
 
-  @ManyToOne(() => Skill, (skill) => skill.userConnection, {
+  @ManyToOne(() => Project, (project) => project.userConnection, {
     primary: true,
   })
-  @JoinColumn({ name: 'skillId' })
-  skill: Promise<Skill>;
+  @JoinColumn({ name: 'projectId' })
+  project: Promise<Project>;
 }

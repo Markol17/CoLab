@@ -30,6 +30,7 @@ import { CreateProjectModal } from '../modals/CreateProjectModal';
 import { RegisterModal } from '../modals/RegisterModal';
 import { LoginModal } from '../modals/LoginModal';
 import { useRouter } from 'next/router';
+import { ContactSupportOutlined } from '@material-ui/icons';
 const CoLab = require('../../assets/img/CoLab.svg');
 
 interface NavBarProps {}
@@ -441,6 +442,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         {renderMenu}
       </Paper>
       <IndexDrawer
+        isUserConnected={!!data?.me}
+        projects={data?.me?.projects}
         isDrawerOpen={open}
         isProjectOpen={openProjects}
         isBookmarksOpen={openBookmarks}

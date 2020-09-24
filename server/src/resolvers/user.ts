@@ -8,6 +8,7 @@ import {
   Query,
   FieldResolver,
   Root,
+  Int,
 } from 'type-graphql';
 import { Context } from '../types';
 import { User } from '../entities/User';
@@ -18,6 +19,8 @@ import { validateRegister } from '../utils/validateRegister';
 import { sendEmail } from '../utils/sendEmail';
 import { v4 } from 'uuid';
 import { getConnection } from 'typeorm';
+import { Project } from '../entities/Project';
+import { UserProject } from '../entities/UserProject';
 
 @ObjectType()
 export class FieldError {
@@ -46,6 +49,34 @@ export class UserResolver {
     }
     // current user wants to see someone elses email
     return '';
+  }
+
+  @FieldResolver(() => [Project])
+  async projects(@Root() user: User, @Ctx() { req }: Context) {
+    // this is the current user and its ok to show them their own email
+    if (req.session.userId === user.id) {
+      const userProjects = await UserProject.find({
+        join: {
+          alias: 'userProject',
+          innerJoinAndSelect: {
+            project: 'userProject.project',
+          },
+        },
+        where: {
+          userId: user.id,
+        },
+      });
+
+      const userIdToProject: Project[] = [];
+
+      userProjects.forEach((us) => {
+        userIdToProject.push((us as any).__project__);
+      });
+
+      return userIdToProject;
+    }
+    // current user wants to see someone elses email
+    return [];
   }
 
   @Mutation(() => UserResponse)
@@ -129,6 +160,25 @@ export class UserResolver {
       `<a href="http://localhost:3000/change-password/${token}">Reset Password</a>`
     );
 
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async joinProject(
+    @Ctx() { req }: Context,
+    @Arg('projectId', () => Int) projectId: number
+  ) {
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(UserProject)
+      .values([
+        {
+          userId: req.session.userId,
+          projectId,
+        },
+      ])
+      .execute();
     return true;
   }
 
@@ -216,6 +266,10 @@ export class UserResolver {
             field: 'usernameOrEmail',
             message: 'Incorrect password and email/username combination',
           },
+          {
+            field: 'password',
+            message: 'Incorrect password and email/username combination',
+          },
         ],
       };
     }
@@ -232,7 +286,6 @@ export class UserResolver {
       req.session.destroy((err) => {
         res.clearCookie(COOKIE_NAME);
         if (err) {
-          console.log(err);
           resolve(false);
           return;
         }

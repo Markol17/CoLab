@@ -15,6 +15,7 @@ import { ProjectSkill } from './ProjectSkill';
 import { Context } from 'src/types';
 import { ProjectCategory } from './ProjectCategory';
 import { Skill } from './Skill';
+import { UserProject } from './UserProject';
 
 @ObjectType()
 @Entity()
@@ -60,6 +61,9 @@ export class Project extends BaseEntity {
   ): Promise<Category[]> {
     return projectCategoriesLoader.load(this.id);
   }
+
+  @OneToMany(() => UserProject, (up) => up.project)
+  userConnection: Promise<UserProject[]>;
 
   @Field(() => String)
   @CreateDateColumn()

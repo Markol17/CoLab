@@ -36,10 +36,17 @@ export type User = {
   id: Scalars['Float'];
   username: Scalars['String'];
   email: Scalars['String'];
-  projects: Array<Project>;
   skills: Array<Skill>;
+  projects: Array<Project>;
+  avatar?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+};
+
+export type Skill = {
+  __typename?: 'Skill';
+  id: Scalars['Float'];
+  type: Scalars['String'];
 };
 
 export type Project = {
@@ -55,12 +62,6 @@ export type Project = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   thumbnail?: Maybe<Scalars['String']>;
-};
-
-export type Skill = {
-  __typename?: 'Skill';
-  id: Scalars['Float'];
-  type: Scalars['String'];
 };
 
 export type Category = {
@@ -79,6 +80,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
+  joinProject: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -98,6 +100,11 @@ export type MutationChangePasswordArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationJoinProjectArgs = {
+  projectId: Scalars['Int'];
 };
 
 
@@ -205,6 +212,10 @@ export type RegularProjectResponseFragment = (
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username'>
+  & { projects: Array<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'name' | 'thumbnail'>
+  )> }
 );
 
 export type RegularUserResponseFragment = (
@@ -266,6 +277,16 @@ export type ForgotPasswordMutationVariables = Exact<{
 export type ForgotPasswordMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'forgotPassword'>
+);
+
+export type JoinProjectMutationVariables = Exact<{
+  projectId: Scalars['Int'];
+}>;
+
+
+export type JoinProjectMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'joinProject'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -389,6 +410,11 @@ export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
   username
+  projects {
+    id
+    name
+    thumbnail
+  }
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -530,6 +556,36 @@ export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
 export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+export const JoinProjectDocument = gql`
+    mutation joinProject($projectId: Int!) {
+  joinProject(projectId: $projectId)
+}
+    `;
+export type JoinProjectMutationFn = Apollo.MutationFunction<JoinProjectMutation, JoinProjectMutationVariables>;
+
+/**
+ * __useJoinProjectMutation__
+ *
+ * To run a mutation, you first call `useJoinProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinProjectMutation, { data, loading, error }] = useJoinProjectMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useJoinProjectMutation(baseOptions?: Apollo.MutationHookOptions<JoinProjectMutation, JoinProjectMutationVariables>) {
+        return Apollo.useMutation<JoinProjectMutation, JoinProjectMutationVariables>(JoinProjectDocument, baseOptions);
+      }
+export type JoinProjectMutationHookResult = ReturnType<typeof useJoinProjectMutation>;
+export type JoinProjectMutationResult = Apollo.MutationResult<JoinProjectMutation>;
+export type JoinProjectMutationOptions = Apollo.BaseMutationOptions<JoinProjectMutation, JoinProjectMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {

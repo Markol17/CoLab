@@ -10,14 +10,15 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { Category, Skill } from '../generated/graphql';
+import { Category, Skill, useJoinProjectMutation } from '../generated/graphql';
 
 interface ProjectCardProps {
+  id: number;
   name: string;
   desc: string;
   categories: Category[];
   skills: Skill[];
-  img: string;
+  img: string | null | undefined;
 }
 
 const useStyles = makeStyles({
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
     boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
     transition: 'transform 0.2s',
     '&:hover': {
-      transform: 'scale(1.05)',
+      transform: 'scale(1.03)',
     },
   },
   chips: {
@@ -40,9 +41,23 @@ const useStyles = makeStyles({
   cardContent: {
     padding: 10,
   },
+  img: {
+    minHeight: 200,
+    maxHeight: 200,
+  },
+  join: {
+    textTransform: 'unset',
+    minWidth: '100%',
+    borderWidth: '2px',
+    fontWeight: 'bold',
+    '&:hover': {
+      borderWidth: '2px',
+    },
+  },
 });
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
+  id,
   name,
   desc,
   categories,
@@ -50,24 +65,28 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   img,
 }) => {
   const classes = useStyles();
+  const [joinProject] = useJoinProjectMutation();
+
+  const handleJoin = async () => {
+    const response = await joinProject({
+      variables: { projectId: id },
+    });
+  };
+
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        {!!img ? (
-          <CardMedia
-            component='img'
-            alt='Thumbnail'
-            height='180'
-            src={process.env.PUBLIC_PROJECT_THUMBNAILS_URL + img}
-          />
-        ) : (
-          <CardMedia
-            component='img'
-            alt='Thumbnail'
-            height='200'
-            src={`${process.env.PUBLIC_PROJECT_THUMBNAILS_URL}placeholder.jpg`}
-          />
-        )}
+        <CardMedia
+          className={classes.img}
+          component='img'
+          alt='Thumbnail'
+          src={
+            !!img
+              ? process.env.PUBLIC_PROJECT_THUMBNAILS_URL + img
+              : `${process.env.PUBLIC_PROJECT_THUMBNAILS_URL}placeholder.jpg`
+          }
+        />
+
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant='h5' component='h2'>
             {name}
@@ -104,11 +123,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size='small' color='secondary'>
+        <Button
+          className={classes.join}
+          variant='outlined'
+          color='secondary'
+          onClick={handleJoin}
+        >
           Join
-        </Button>
-        <Button size='small' color='primary'>
-          Learn More
         </Button>
       </CardActions>
     </Card>

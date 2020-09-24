@@ -12,8 +12,6 @@ import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 
 import { toErrorMap } from '../../utils/toErrorMap';
-import { Snackbar } from '@material-ui/core';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -29,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 3, 2, 3),
     },
     modalActions: {
-      padding: theme.spacing(1, 3, 1, 3),
+      padding: theme.spacing(1, 3, 2, 3),
     },
     login: {
       textTransform: 'unset',
@@ -41,8 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     cancel: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(1),
       borderColor: theme.palette.error.main,
+      color: theme.palette.error.main,
       textTransform: 'unset',
       minWidth: '90px',
       fontWeight: 'bold',
@@ -50,30 +49,25 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         borderWidth: '2px',
       },
-    },
-    errorMessage: {
-      color: theme.palette.error.main,
-      backgroundColor: 'transparent',
-      border: `1px solid ${theme.palette.error.main}`,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '40px',
-      borderRadius: '4px',
-      marginBottom: 20,
-      fontSize: 16,
+      errorMessage: {
+        color: theme.palette.error.main,
+        backgroundColor: 'transparent',
+        border: `1px solid ${theme.palette.error.main}`,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '40px',
+        borderRadius: '4px',
+        marginBottom: 20,
+        fontSize: 16,
+      },
     },
   })
 );
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant='filled' {...props} />;
-}
-
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const [login] = useLoginMutation();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
 
   const formik = useFormik({
@@ -89,12 +83,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               me: data?.login.user,
             },
           });
-          cache.evict({ fieldName: 'posts:{}' });
+          cache.evict({ fieldName: 'projects:{}' });
         },
       });
       if (response.data?.login.errors) {
         setErrors(toErrorMap(response.data.login.errors));
-        setSnackbarOpen(true);
       } else if (response.data?.login.user) {
         if (typeof router.query.next === 'string') {
           router.push(router.query.next);
@@ -106,31 +99,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     },
   });
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setSnackbarOpen(false);
-  };
-
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
       <DialogTitle className={classes.modalTitle}>Login</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <DialogContent className={classes.modalContent}>
-          <Snackbar
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-            open={snackbarOpen && !!formik.errors.usernameOrEmail}
-            autoHideDuration={5000}
-            onClose={handleClose}
-          >
-            <Alert onClose={handleClose} severity='error'>
-              {formik.errors.usernameOrEmail}
-            </Alert>
-          </Snackbar>
           <TextField
             error={!!formik.errors.usernameOrEmail}
+            helperText={formik.errors.usernameOrEmail}
             variant='outlined'
             margin='dense'
             label='Username Or Email'
@@ -142,7 +118,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             value={formik.values.usernameOrEmail}
           />
           <TextField
-            error={!!formik.errors.usernameOrEmail}
+            error={!!formik.errors.password}
+            helperText={formik.errors.password}
             variant='outlined'
             margin='dense'
             label='Password'
@@ -155,7 +132,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           />
         </DialogContent>
         <DialogActions className={classes.modalActions}>
-          <Button onClick={onClose} className={classes.login}>
+          <Button
+            onClick={onClose}
+            variant='outlined'
+            className={classes.cancel}
+          >
             Cancel
           </Button>
           <Button

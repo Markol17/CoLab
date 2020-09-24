@@ -23,6 +23,7 @@ import { createUserSkillsLoader } from './dataloaders/createUserSkillsLoader';
 import { ProjectCategory } from './entities/ProjectCategory';
 import { ProjectSkill } from './entities/ProjectSkill';
 import { UserSkill } from './entities/UserSkill';
+import { UserProject } from './entities/UserProject';
 
 const main = async () => {
   await createConnection({
@@ -41,6 +42,7 @@ const main = async () => {
       Skill,
       Project,
       Category,
+      UserProject,
     ],
   });
   // await conn.runMigrations();

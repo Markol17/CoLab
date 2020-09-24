@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 3, 2, 3),
     },
     modalActions: {
-      padding: theme.spacing(1, 3, 1, 3),
+      padding: theme.spacing(1, 3, 2, 3),
     },
     register: {
       textTransform: 'unset',
@@ -43,8 +43,9 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     cancel: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(1),
       borderColor: theme.palette.error.main,
+      color: theme.palette.error.main,
       textTransform: 'unset',
       minWidth: '90px',
       fontWeight: 'bold',
@@ -134,7 +135,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
           />
         </DialogContent>
         <DialogActions className={classes.modalActions}>
-          <Button onClick={onClose} className={classes.register}>
+          <Button
+            onClick={onClose}
+            variant='outlined'
+            className={classes.cancel}
+          >
             Cancel
           </Button>
           <Button
