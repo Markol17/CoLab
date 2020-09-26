@@ -82,11 +82,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           alt='Thumbnail'
           src={
             !!img
-              ? process.env.PUBLIC_PROJECT_THUMBNAILS_URL + img
-              : `${process.env.PUBLIC_PROJECT_THUMBNAILS_URL}placeholder.jpg`
+              ? `http://localhost:4000/projects/thumbnails/${img}`
+              : `http://localhost:4000/projects/thumbnails/placeholder.jpg`
           }
         />
-
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant='h5' component='h2'>
             {name}
