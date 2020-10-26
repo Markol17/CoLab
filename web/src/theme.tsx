@@ -15,6 +15,21 @@ const theme = createMuiTheme({
       paper: '#292929',
     }
   },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '*::-webkit-scrollbar': {
+          width: '0.7em'
+        },
+        '*::-webkit-scrollbar-track': {
+          background: '#303030'
+        },
+        '*::-webkit-scrollbar-thumb': {
+          background: '#6b6b6b' 
+        }
+      }
+    }
+  }
 });
 
 export default theme;
