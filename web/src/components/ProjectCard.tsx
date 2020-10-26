@@ -6,9 +6,12 @@ import {
   CardContent,
   CardMedia,
   Chip,
+  createStyles,
   makeStyles,
+  Theme,
   Typography,
 } from '@material-ui/core';
+import { createVerify } from 'crypto';
 import React from 'react';
 import { Category, Skill, useJoinProjectMutation } from '../generated/graphql';
 
@@ -21,40 +24,55 @@ interface ProjectCardProps {
   img: string | null | undefined;
 }
 
-const useStyles = makeStyles({
-  card: {
-    minWidth: 310,
-    maxWidth: 310,
-    boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
-    transition: 'transform 0.2s',
-    '&:hover': {
-      transform: 'scale(1.03)',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    card: {
+      minWidth: 310,
+      maxWidth: 310,
+      boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
+      transition: 'transform 0.2s',
+      '&:hover': {
+        transform: 'scale(1.03)',
+      },
     },
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: 2,
+    chips: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      '& > *': {
+        margin: 2,
+      },
     },
-  },
-  cardContent: {
-    padding: 10,
-  },
-  img: {
-    minHeight: 200,
-    maxHeight: 200,
-  },
-  join: {
-    textTransform: 'unset',
-    minWidth: '100%',
-    borderWidth: '2px',
-    fontWeight: 'bold',
-    '&:hover': {
-      borderWidth: '2px',
+    cardContent: {
+      padding: 10,
+      paddingBottom: 0,
     },
-  },
-});
+    img: {
+      minHeight: 200,
+      maxHeight: 200,
+    },
+    cardActionMedia: {
+      cursor: 'pointer',
+    },
+    learnMore: {
+      minWidth: '47%',
+      margin: 'auto',
+      borderColor: theme.palette.common.white,
+      color: theme.palette.common.white,
+      textTransform: 'unset',
+      fontWeight: 'bold',
+      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+    },
+    join: {
+      minWidth: '47%',
+      margin: 'auto',
+      textTransform: 'unset',
+      color: theme.palette.common.white,
+      fontWeight: 'bold',
+      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+
+    },
+  })
+);
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   id,
@@ -75,7 +93,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   return (
     <Card className={classes.card}>
-      <CardActionArea>
+      <div className={classes.cardActionMedia}>
         <CardMedia
           className={classes.img}
           component='img'
@@ -83,14 +101,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           src={
             !!img
               ? `http://localhost:4000/projects/thumbnails/${img}`
-              : `http://localhost:4000/projects/thumbnails/placeholder.jpg`
+              : `http://localhost:4000/projects/thumbnails/CoLab.png`
           }
         />
         <CardContent className={classes.cardContent}>
-          <Typography gutterBottom variant='h5' component='h2'>
+          <Typography noWrap variant='h5' component='h2'>
             {name}
           </Typography>
-          <Typography variant='body2' color='textSecondary' component='p'>
+          <Typography
+            gutterBottom
+            variant='body1'
+            color='textSecondary'
+            component='p'
+          >
             {desc}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
@@ -107,7 +130,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             ))}
           </div>
           <Typography variant='body2' color='textSecondary' component='p'>
-            Skills:
+            Skills needed:
           </Typography>
           <div className={classes.chips}>
             {skills.map((skill: Skill, index: number) => (
@@ -120,7 +143,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             ))}
           </div>
         </CardContent>
-      </CardActionArea>
+      </div>
       <CardActions>
         <Button
           className={classes.join}
@@ -129,6 +152,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           onClick={handleJoin}
         >
           Join
+        </Button>
+        <Button className={classes.learnMore} variant='outlined'>
+          Learn more
         </Button>
       </CardActions>
     </Card>

@@ -31,36 +31,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     login: {
       textTransform: 'unset',
+      color: theme.palette.common.white,
       minWidth: '90px',
-      borderWidth: '2px',
+      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
       fontWeight: 'bold',
-      '&:hover': {
-        borderWidth: '2px',
-      },
     },
     cancel: {
       marginRight: theme.spacing(1),
-      borderColor: theme.palette.error.main,
-      color: theme.palette.error.main,
+      borderColor: theme.palette.common.white,
       textTransform: 'unset',
       minWidth: '90px',
+      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
       fontWeight: 'bold',
-      borderWidth: '2px',
-      '&:hover': {
-        borderWidth: '2px',
-      },
-      errorMessage: {
-        color: theme.palette.error.main,
-        backgroundColor: 'transparent',
-        border: `1px solid ${theme.palette.error.main}`,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '40px',
-        borderRadius: '4px',
-        marginBottom: 20,
-        fontSize: 16,
-      },
     },
   })
 );

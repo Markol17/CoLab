@@ -53,7 +53,6 @@ export class UserResolver {
 
   @FieldResolver(() => [Project])
   async projects(@Root() user: User, @Ctx() { req }: Context) {
-    // this is the current user and its ok to show them their own email
     if (req.session.userId === user.id) {
       const userProjects = await UserProject.find({
         join: {

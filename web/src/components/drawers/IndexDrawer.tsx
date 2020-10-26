@@ -5,9 +5,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import Drawer from '@material-ui/core/Drawer';
+import NextLink from 'next/link';
 import clsx from 'clsx';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Avatar, CircularProgress } from '@material-ui/core';
+import { Avatar, CircularProgress, Typography } from '@material-ui/core';
 import Collapse from '@material-ui/core/Collapse';
 
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -39,6 +40,15 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
       flexShrink: 0,
       whiteSpace: 'nowrap',
+      '&::-webkit-scrollbar': {
+        width: '0.2em'
+      },
+      '&::-webkit-scrollbar-track': {
+        background: '#f1f1f1'
+      },
+      '&::-webkit-scrollbar-thumb': {
+        background: '#888' 
+      }
     },
     drawerOpen: {
       width: drawerWidth,
@@ -99,10 +109,12 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
       <div className={classes.spacer} />
       <List>
         {['Home', 'Explore'].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={index}>
             <ListItemIcon>
               {index === 0 ? (
+                <NextLink href='/'>
                 <HomeIcon />
+                </NextLink>
               ) : index === 1 ? (
                 <ExploreIcon />
               ) : null}
@@ -142,11 +154,11 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
                             src={
                               !!project.thumbnail
                                 ? `http://localhost:4000/projects/thumbnails/${project.thumbnail}`
-                                : `http://localhost:4000/projects/thumbnails/placeholder.jpg`
+                                : `http://localhost:4000/projects/thumbnails/Colab.png`
                             }
                           />
                         </ListItemIcon>
-                        <ListItemText primary={project.name} />
+                        <Typography noWrap>{project.name}</Typography>
                       </ListItem>
                     )
                   )

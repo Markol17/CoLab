@@ -23,7 +23,7 @@ const Post = ({}) => {
   if (!data?.project) {
     return (
       <Layout>
-        <Box>could not find post</Box>
+        <Box>Could not find project</Box>
       </Layout>
     );
   }

@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: fade(theme.palette.common.white, 0.25),
       },
       marginRight: theme.spacing(2),
-      boxShadow: '5px 5px 14px 0px rgba(0,0,0,0.6)',
+      boxShadow: '3px 3px 10px 0px rgba(0,0,0,0.6)',
       marginLeft: 15,
       width: '100%',
       cursor: 'pointer',
@@ -160,6 +160,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   ] = React.useState<null | HTMLElement>(null);
 
   const apolloClient = useApolloClient();
+
+  //add to context
   const { data, loading } = useMeQuery({
     skip: isServer(),
   });
@@ -204,6 +206,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     if (open) {
       setOpenProjects(false);
       setOpenBookmarks(false);
+    }else{
+      setOpenProjects(true);
     }
   };
 
@@ -350,7 +354,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                   <SearchIcon />
                 </div>
                 <InputBase
-                  placeholder='Search Projects…'
+                  placeholder='Search projects by name, category, skills needed…'
                   classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,

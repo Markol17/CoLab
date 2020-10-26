@@ -1,10 +1,11 @@
 //TODO: use lazy loading with React.lazy
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { useProjectsQuery, ProjectsQuery, Project } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
-import { makeStyles, Grid } from '@material-ui/core';
+import { makeStyles, Grid, Box, List, CircularProgress } from '@material-ui/core';
 import { ProjectCard } from '../components/ProjectCard';
+import React from 'react';
 
 const useStyles = makeStyles({
   root: {
@@ -25,6 +26,44 @@ const Index = () => {
   });
   const classes = useStyles();
 
+  useEffect(() => {
+    window.addEventListener('scroll', loadMore);
+    return () => window.removeEventListener('scroll', loadMore);
+  }, []);
+
+  const loadMore = () => {
+    const isBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
+    if(isBottom){
+      fetchMore({
+        variables: {
+          limit: variables?.limit,
+          cursor:
+            data?.paginatedProjects.projects[data.paginatedProjects.projects.length - 1].createdAt,
+        },
+                    updateQuery: (
+                  previousValue,
+                  { fetchMoreResult }
+                ): ProjectsQuery => {
+                  if (!fetchMoreResult) {
+                    return previousValue as ProjectsQuery;
+                  }
+
+                  return {
+                    __typename: "Query",
+                    paginatedProjects: {
+                      __typename: "PaginatedProjects",
+                      hasMore: (fetchMoreResult as ProjectsQuery).paginatedProjects.hasMore,
+                      projects: [
+                        ...(previousValue as ProjectsQuery).paginatedProjects.projects,
+                        ...(fetchMoreResult as ProjectsQuery).paginatedProjects.projects,
+                      ],
+                    },
+                  };
+                },
+        })  
+      }   
+    }
+
   if (!loading && !data) {
     return (
       <div>
@@ -40,9 +79,10 @@ const Index = () => {
         //TODO: add skeleton
         <div>loading...</div>
       ) : (
+        <>
         <Grid container className={classes.root}>
           <Grid item xs={12}>
-            <Grid container justify='center' spacing={4}>
+            <Grid container justify='center' spacing={4} >
               {data!.paginatedProjects.projects.map(
                 (project, index: number) => (
                   <Grid key={index} item>
@@ -60,7 +100,11 @@ const Index = () => {
             </Grid>
           </Grid>
         </Grid>
+        </>
       )}
+           {loading &&
+          ( <Box m="auto"><CircularProgress color="secondary" /></Box>) 
+        }
     </Layout>
   );
 };

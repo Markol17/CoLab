@@ -35,24 +35,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     register: {
       textTransform: 'unset',
+      color: theme.palette.common.white,
       minWidth: '90px',
-      borderWidth: '2px',
       fontWeight: 'bold',
-      '&:hover': {
-        borderWidth: '2px',
-      },
+      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
     },
     cancel: {
       marginRight: theme.spacing(1),
-      borderColor: theme.palette.error.main,
-      color: theme.palette.error.main,
+      borderColor: theme.palette.common.white,
       textTransform: 'unset',
       minWidth: '90px',
       fontWeight: 'bold',
-      borderWidth: '2px',
-      '&:hover': {
-        borderWidth: '2px',
-      },
+      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
     },
   })
 );

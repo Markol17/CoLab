@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormik } from 'formik';
-import { Checkbox, Typography } from '@material-ui/core';
+import { Checkbox, TextareaAutosize, Typography } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
@@ -34,24 +34,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     create: {
       textTransform: 'unset',
+      color: theme.palette.common.white,
       minWidth: '90px',
-      borderWidth: '2px',
       fontWeight: 'bold',
-      '&:hover': {
-        borderWidth: '2px',
-      },
     },
     cancel: {
       marginRight: theme.spacing(1),
-      borderColor: theme.palette.error.main,
-      color: theme.palette.error.main,
+      borderColor: theme.palette.common.white,
       textTransform: 'unset',
       minWidth: '90px',
       fontWeight: 'bold',
-      borderWidth: '2px',
-      '&:hover': {
-        borderWidth: '2px',
-      },
     },
   })
 );
@@ -169,6 +161,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             placeholder='Description'
             onChange={formik.handleChange}
             value={formik.values.desc}
+            multiline
           />
           <Autocomplete
             multiple
