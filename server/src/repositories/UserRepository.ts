@@ -1,5 +1,5 @@
 import { User } from '../entities/User';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, getConnection, Repository } from 'typeorm';
 import { Project } from '../entities/Project';
 import { UserProject } from '../entities/UserProject';
 import { Skill } from '../entities/Skill';
@@ -77,5 +77,35 @@ export class UserRepository extends Repository<User> {
 				return;
 			}
 		}
+	}
+
+	async getUserByUsernameOrEmail(usernameOrEmail: string): Promise<User | undefined> {
+		return await this.findOne(
+			usernameOrEmail.includes('@') ? { where: { email: usernameOrEmail } } : { where: { username: usernameOrEmail } }
+		);
+	}
+
+	async getUserByEmail(email: string): Promise<User | undefined> {
+		return await this.findOne({ where: { email } });
+	}
+
+	async getUserById(id: number): Promise<User | undefined> {
+		return this.findOne(id);
+	}
+
+	async updateUserPassword(id: number, password: string): Promise<User> {
+		const user = await getConnection()
+			.createQueryBuilder()
+			.update(User)
+			.set({
+				password,
+			})
+			.where('id = :id', { id })
+			.returning('*')
+			.execute()
+			.then((response) => {
+				return response.raw[0];
+			});
+		return user;
 	}
 }
