@@ -143,9 +143,9 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
                             alt='Project Avatar'
                             className={classes.projectAvatar}
                             src={
-                              !!project.thumbnail
-                                ? `http://localhost:4000/projects/thumbnails/${project.thumbnail}`
-                                : `http://localhost:4000/projects/thumbnails/Colab.png`
+                              // !!project.thumbnail
+                              //   ? `http://localhost:4000/projects/thumbnails/${project.thumbnail}`
+                                 `http://localhost:4000/projects/thumbnails/placeholder.jpg`
                             }
                           />
                         </ListItemIcon>

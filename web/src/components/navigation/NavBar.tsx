@@ -14,6 +14,7 @@ import {
   InputBase,
   fade,
   Button,
+  Typography,
 } from '@material-ui/core';
 
 import { useApolloClient } from '@apollo/client';
@@ -348,13 +349,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               <MenuIcon />
             </IconButton>
             <div className={classes.container}>
-              <CoLab height={35} />
+              {/* <CoLab height={35} /> */}
+              <Typography>SAPE</Typography>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
                 </div>
                 <InputBase
-                  placeholder='Search projects by name, category, skills needed…'
+                  placeholder='Search projects by name, faculty, category, class…'
                   classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,

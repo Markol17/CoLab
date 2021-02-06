@@ -1,13 +1,13 @@
 import { ObjectType, Field, Ctx } from 'type-graphql';
 import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  BaseEntity,
-  ManyToOne,
-  OneToMany,
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	CreateDateColumn,
+	UpdateDateColumn,
+	BaseEntity,
+	ManyToOne,
+	OneToMany,
 } from 'typeorm';
 import { User } from './User';
 import { Category } from './Category';
@@ -20,60 +20,58 @@ import { UserProject } from './UserProject';
 @ObjectType()
 @Entity()
 export class Project extends BaseEntity {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+	@Field()
+	@PrimaryGeneratedColumn()
+	id!: number;
 
-  @Field()
-  @Column()
-  name!: string;
+	@Field()
+	@Column()
+	name!: string;
 
-  @Field()
-  @Column()
-  desc!: string;
+	@Field()
+	@Column()
+	desc!: string;
 
-  @Field()
-  @Column({ type: 'int', default: 0 })
-  points: number;
+	@Field()
+	@Column({ type: 'int', default: 0 })
+	points: number;
 
-  @Field()
-  @Column()
-  creatorId: number;
+	@Field({ nullable: true })
+	@Column({ nullable: true })
+	thumbnail?: string;
 
-  @Field()
-  @ManyToOne(() => User, (user) => user.projects)
-  creator: User;
+	@Field()
+	@Column()
+	creatorId: number;
 
-  @OneToMany(() => ProjectSkill, (ps) => ps.project)
-  skillConnection: Promise<ProjectSkill[]>;
+	@Field()
+	@ManyToOne(() => User, (user) => user.projects)
+	creator: User;
 
-  @Field(() => [Skill])
-  async skills(@Ctx() { projectSkillsLoader }: Context): Promise<Skill[]> {
-    return projectSkillsLoader.load(this.id);
-  }
+	@OneToMany(() => ProjectSkill, (ps) => ps.project)
+	skillConnection: Promise<ProjectSkill[]>;
 
-  @OneToMany(() => ProjectCategory, (pc) => pc.project)
-  categoryConnection: Promise<ProjectCategory[]>;
+	@Field(() => [Skill])
+	async skills(@Ctx() { projectSkillsLoader }: Context): Promise<Skill[]> {
+		return projectSkillsLoader.load(this.id);
+	}
 
-  @Field(() => [Category])
-  async categories(
-    @Ctx() { projectCategoriesLoader }: Context
-  ): Promise<Category[]> {
-    return projectCategoriesLoader.load(this.id);
-  }
+	@OneToMany(() => ProjectCategory, (pc) => pc.project)
+	categoryConnection: Promise<ProjectCategory[]>;
 
-  @OneToMany(() => UserProject, (up) => up.project)
-  userConnection: Promise<UserProject[]>;
+	@Field(() => [Category])
+	async categories(@Ctx() { projectCategoriesLoader }: Context): Promise<Category[]> {
+		return projectCategoriesLoader.load(this.id);
+	}
 
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt: Date;
+	@OneToMany(() => UserProject, (up) => up.project)
+	userConnection: Promise<UserProject[]>;
 
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt: Date;
+	@Field(() => String)
+	@CreateDateColumn()
+	createdAt: Date;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  thumbnail: string;
+	@Field(() => String)
+	@UpdateDateColumn()
+	updatedAt: Date;
 }

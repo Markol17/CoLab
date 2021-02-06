@@ -20,7 +20,7 @@ const Index = () => {
   const { data, error, loading, fetchMore, variables } = useProjectsQuery({
     variables: {
       limit: 15,
-      cursor: null,
+      offset: 0,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -37,13 +37,9 @@ const Index = () => {
       fetchMore({
         variables: {
           limit: variables?.limit,
-          cursor:
-            data?.paginatedProjects.projects[data.paginatedProjects.projects.length - 1].createdAt,
+          offset: (data!.paginatedProjects.projects.length % 14),
         },
-                    updateQuery: (
-                  previousValue,
-                  { fetchMoreResult }
-                ): ProjectsQuery => {
+          updateQuery: (previousValue, { fetchMoreResult }): ProjectsQuery => {
                   if (!fetchMoreResult) {
                     return previousValue as ProjectsQuery;
                   }

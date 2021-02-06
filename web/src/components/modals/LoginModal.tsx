@@ -36,6 +36,14 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
       fontWeight: 'bold',
     },
+    login2: {
+      textTransform: 'unset',
+      color: theme.palette.common.white,
+      minWidth: '90px',
+      marginTop: '10px',
+      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+      fontWeight: 'bold',
+    },
     cancel: {
       marginRight: theme.spacing(1),
       borderColor: theme.palette.common.white,
@@ -112,6 +120,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             onChange={formik.handleChange}
             value={formik.values.password}
           />
+               <Button
+          disabled={formik.isSubmitting}
+          className={classes.login2}
+          color='secondary'
+          variant='outlined'
+          >
+            Login with uOttawa
+          </Button>
         </DialogContent>
         <DialogActions className={classes.modalActions}>
           <Button

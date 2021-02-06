@@ -99,9 +99,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           component='img'
           alt='Thumbnail'
           src={
-            !!img
-              ? `http://localhost:4000/projects/thumbnails/${img}`
-              : `http://localhost:4000/projects/thumbnails/CoLab.png`
+            // !!img
+            //   ? `http://localhost:4000/projects/thumbnails/${img}`
+               `http://localhost:4000/projects/thumbnails/placeholder.jpg`
           }
         />
         <CardContent className={classes.cardContent}>
@@ -117,7 +117,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             {desc}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
-            Categories:
+            Class:
           </Typography>
           <div className={classes.chips}>
             {categories.map((category: Category, index: number) => (
@@ -130,7 +130,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             ))}
           </div>
           <Typography variant='body2' color='textSecondary' component='p'>
-            Skills needed:
+            Language:
           </Typography>
           <div className={classes.chips}>
             {skills.map((skill: Skill, index: number) => (
@@ -151,7 +151,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           color='secondary'
           onClick={handleJoin}
         >
-          Join
+          Request join
         </Button>
         <Button className={classes.learnMore} variant='outlined'>
           Learn more
