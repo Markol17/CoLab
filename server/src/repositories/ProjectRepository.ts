@@ -4,6 +4,7 @@ import { EntityRepository, getConnection, Repository } from 'typeorm';
 import { Project } from '../entities/Project';
 import { ProjectSkill } from '../entities/ProjectSkill';
 import { ProjectCategory } from '../entities/ProjectCategory';
+import { UserProject } from '../entities/UserProject';
 
 @EntityRepository(Project)
 export class ProjectRepository extends Repository<Project> {
@@ -22,6 +23,10 @@ export class ProjectRepository extends Repository<Project> {
 
 	async getProjectById(id: number): Promise<Project | undefined> {
 		return this.findOne(id);
+	}
+
+	async getProjectMemberIdsById(id: number): Promise<UserProject[]> {
+		return await UserProject.find({ where: { projectId: id } });
 	}
 
 	async createAndSaveProject(inputs: CreateProjectInput, { req }: Context): Promise<Project> {

@@ -5,7 +5,7 @@ import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
 import { Context } from '../types';
 import { ProjectService } from '../services/ProjectService';
-import { PaginatedProjects, ProjectResponse } from './ResponseTypes/ProjectResponse';
+import { JoinProjectResponse, PaginatedProjects, ProjectResponse } from './ResponseTypes/ProjectResponse';
 import { CreateProjectInput } from './InputTypes/ProjectInput';
 
 @Resolver(Project)
@@ -30,11 +30,23 @@ export class ProjectResolver {
 		return await projectService.getProject(id);
 	}
 
+	@Mutation(() => Boolean)
+	async joinProject(
+		@Ctx() context: Context,
+		@Arg('projectId', () => Int) projectId: number
+	): Promise<JoinProjectResponse> {
+		const projectService = new ProjectService();
+		return await projectService.joinProject(projectId, context);
+	}
+
 	@Mutation(() => ProjectResponse)
 	@UseMiddleware(isAuth)
-	async createProject(@Arg('input') inputs: CreateProjectInput, @Ctx() context: Context): Promise<ProjectResponse> {
+	async createProject(
+		@Arg('attributes') attributes: CreateProjectInput,
+		@Ctx() context: Context
+	): Promise<ProjectResponse> {
 		const projectService = new ProjectService();
-		return await projectService.createProject(inputs, context);
+		return await projectService.createProject(attributes, context);
 	}
 
 	//TODO: support updating skills and categories

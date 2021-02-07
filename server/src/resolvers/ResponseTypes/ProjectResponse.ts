@@ -18,3 +18,12 @@ export class ProjectResponse {
 	@Field(() => Project, { nullable: true })
 	project?: Project;
 }
+
+@ObjectType()
+export class JoinProjectResponse {
+	@Field(() => [FieldError], { nullable: true })
+	errors?: FieldError[];
+
+	@Field(() => Boolean)
+	joined?: Boolean;
+}

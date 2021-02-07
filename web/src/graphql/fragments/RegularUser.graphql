@@ -1,9 +1,13 @@
 fragment RegularUser on User {
-  id
-  username
-  projects {
-    id
-    name
-    thumbnail
-  }
+	id
+	username
+	email
+	projects {
+		id
+		name
+		thumbnail
+	}
+	skills {
+		type
+	}
 }

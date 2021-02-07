@@ -108,4 +108,24 @@ export class UserRepository extends Repository<User> {
 			});
 		return user;
 	}
+
+	async saveUserProjectId(projectId: number, userId: number): Promise<Boolean> {
+		const isJoined = await getConnection()
+			.createQueryBuilder()
+			.insert()
+			.into(UserProject)
+			.values([
+				{
+					userId: userId,
+					projectId,
+				},
+			])
+			.returning('*')
+			.execute()
+			.then((response) => {
+				return response.raw[0];
+			});
+
+		return isJoined;
+	}
 }

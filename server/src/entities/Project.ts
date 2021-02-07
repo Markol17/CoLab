@@ -1,4 +1,4 @@
-import { ObjectType, Field, Ctx } from 'type-graphql';
+import { ObjectType, Field, Ctx, Int } from 'type-graphql';
 import {
 	Entity,
 	Column,
@@ -32,13 +32,17 @@ export class Project extends BaseEntity {
 	@Column()
 	desc!: string;
 
-	@Field()
+	@Field(() => Int)
 	@Column({ type: 'int', default: 0 })
 	points: number;
 
 	@Field({ nullable: true })
 	@Column({ nullable: true })
 	thumbnail?: string;
+
+	@Field(() => Int)
+	@Column({ default: 30 })
+	limit: number;
 
 	@Field()
 	@Column()
