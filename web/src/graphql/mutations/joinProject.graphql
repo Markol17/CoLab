@@ -1,3 +1,5 @@
 mutation joinProject($projectId: Int!) {
-  joinProject(projectId: $projectId)
+	joinProject(projectId: $projectId) {
+		...JoinProjectResponse
+	}
 }

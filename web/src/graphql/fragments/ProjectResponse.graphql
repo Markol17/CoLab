@@ -1,0 +1,8 @@
+fragment ProjectResponse on ProjectResponse {
+	errors {
+		...Error
+	}
+	project {
+		...Project
+	}
+}

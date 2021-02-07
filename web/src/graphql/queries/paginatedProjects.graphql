@@ -1,0 +1,8 @@
+query Projects($offset: Int!, $limit: Int!) {
+	paginatedProjects(limit: $limit, offset: $offset) {
+		hasMore
+		projects {
+			...Project
+		}
+	}
+}

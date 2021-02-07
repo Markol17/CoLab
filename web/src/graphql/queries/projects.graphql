@@ -1,8 +1,0 @@
-query Projects($limit: Int!, $cursor: String) {
-  paginatedProjects(limit: $limit, cursor: $cursor) {
-    hasMore
-    projects {
-      ...RegularProject
-    }
-  }
-}

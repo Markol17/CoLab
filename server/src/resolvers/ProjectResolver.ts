@@ -30,7 +30,7 @@ export class ProjectResolver {
 		return await projectService.getProject(id);
 	}
 
-	@Mutation(() => Boolean)
+	@Mutation(() => JoinProjectResponse)
 	async joinProject(
 		@Ctx() context: Context,
 		@Arg('projectId', () => Int) projectId: number

@@ -15,20 +15,43 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  me?: Maybe<User>;
   paginatedProjects: PaginatedProjects;
   project?: Maybe<Project>;
+  currentUser?: Maybe<User>;
 };
 
 
 export type QueryPaginatedProjectsArgs = {
-  cursor?: Maybe<Scalars['String']>;
+  offset: Scalars['Int'];
   limit: Scalars['Int'];
 };
 
 
 export type QueryProjectArgs = {
   id: Scalars['Int'];
+};
+
+export type PaginatedProjects = {
+  __typename?: 'PaginatedProjects';
+  projects: Array<Project>;
+  hasMore: Scalars['Boolean'];
+};
+
+export type Project = {
+  __typename?: 'Project';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  desc: Scalars['String'];
+  points: Scalars['Int'];
+  thumbnail?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  creatorId: Scalars['Float'];
+  creator: User;
+  skills: Array<Skill>;
+  categories: Array<Category>;
+  members: Array<User>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type User = {
@@ -49,57 +72,23 @@ export type Skill = {
   type: Scalars['String'];
 };
 
-export type Project = {
-  __typename?: 'Project';
-  id: Scalars['Float'];
-  name: Scalars['String'];
-  desc: Scalars['String'];
-  points: Scalars['Float'];
-  creatorId: Scalars['Float'];
-  creator: User;
-  skills: Array<Skill>;
-  categories: Array<Category>;
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  thumbnail?: Maybe<Scalars['String']>;
-};
-
 export type Category = {
   __typename?: 'Category';
   id: Scalars['Float'];
   name: Scalars['String'];
 };
 
-export type PaginatedProjects = {
-  __typename?: 'PaginatedProjects';
-  projects: Array<Project>;
-  hasMore: Scalars['Boolean'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
+  joinProject: JoinProjectResponse;
+  createProject: ProjectResponse;
+  updateProject?: Maybe<Project>;
+  deleteProject: Scalars['Boolean'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
-  joinProject: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  createProject: ProjectResponse;
-  createSkill: Skill;
-  createCategory: Category;
-  updateProject?: Maybe<Project>;
-  deleteProject: Scalars['Boolean'];
-};
-
-
-export type MutationChangePasswordArgs = {
-  newPassword: Scalars['String'];
-  token: Scalars['String'];
-};
-
-
-export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
 };
 
 
@@ -108,32 +97,8 @@ export type MutationJoinProjectArgs = {
 };
 
 
-export type MutationRegisterArgs = {
-  options: UsernamePasswordInput;
-};
-
-
-export type MutationLoginArgs = {
-  password: Scalars['String'];
-  usernameOrEmail: Scalars['String'];
-};
-
-
 export type MutationCreateProjectArgs = {
-  filename?: Maybe<Scalars['Upload']>;
-  categoryIds: Array<Scalars['Int']>;
-  skillIds: Array<Scalars['Int']>;
-  input: ProjectInput;
-};
-
-
-export type MutationCreateSkillArgs = {
-  type: Scalars['String'];
-};
-
-
-export type MutationCreateCategoryArgs = {
-  name: Scalars['String'];
+  attributes: CreateProjectInput;
 };
 
 
@@ -148,10 +113,30 @@ export type MutationDeleteProjectArgs = {
   id: Scalars['Int'];
 };
 
-export type UserResponse = {
-  __typename?: 'UserResponse';
+
+export type MutationChangePasswordArgs = {
+  attributes: ChangePasswordInput;
+};
+
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationRegisterArgs = {
+  attributes: RegisterInput;
+};
+
+
+export type MutationLoginArgs = {
+  attributes: LoginInput;
+};
+
+export type JoinProjectResponse = {
+  __typename?: 'JoinProjectResponse';
   errors?: Maybe<Array<FieldError>>;
-  user?: Maybe<User>;
+  joined: Scalars['Boolean'];
 };
 
 export type FieldError = {
@@ -160,30 +145,58 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
-export type UsernamePasswordInput = {
-  email: Scalars['String'];
-  username: Scalars['String'];
-  password: Scalars['String'];
-};
-
 export type ProjectResponse = {
   __typename?: 'ProjectResponse';
   errors?: Maybe<Array<FieldError>>;
   project?: Maybe<Project>;
 };
 
-
-export type ProjectInput = {
+export type CreateProjectInput = {
   name: Scalars['String'];
   desc: Scalars['String'];
+  skillIds: Array<Scalars['Int']>;
+  categoryIds: Array<Scalars['Int']>;
+  thumbnail?: Maybe<Scalars['Upload']>;
 };
 
-export type RegularErrorFragment = (
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  errors?: Maybe<Array<FieldError>>;
+  user?: Maybe<User>;
+};
+
+export type ChangePasswordInput = {
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
+export type RegisterInput = {
+  email: Scalars['String'];
+  username: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type LoginInput = {
+  usernameOrEmail: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type ErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
 );
 
-export type RegularProjectFragment = (
+export type JoinProjectResponseFragment = (
+  { __typename?: 'JoinProjectResponse' }
+  & Pick<JoinProjectResponse, 'joined'>
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  )>> }
+);
+
+export type ProjectFragment = (
   { __typename?: 'Project' }
   & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points' | 'thumbnail'>
   & { skills: Array<(
@@ -198,40 +211,42 @@ export type RegularProjectFragment = (
   ) }
 );
 
-export type RegularProjectResponseFragment = (
+export type ProjectResponseFragment = (
   { __typename?: 'ProjectResponse' }
   & { errors?: Maybe<Array<(
     { __typename?: 'FieldError' }
-    & RegularErrorFragment
+    & ErrorFragment
   )>>, project?: Maybe<(
     { __typename?: 'Project' }
-    & RegularProjectFragment
+    & ProjectFragment
   )> }
 );
 
-export type RegularUserFragment = (
+export type UserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username'>
+  & Pick<User, 'id' | 'username' | 'email'>
   & { projects: Array<(
     { __typename?: 'Project' }
     & Pick<Project, 'id' | 'name' | 'thumbnail'>
+  )>, skills: Array<(
+    { __typename?: 'Skill' }
+    & Pick<Skill, 'type'>
   )> }
 );
 
-export type RegularUserResponseFragment = (
+export type UserResponseFragment = (
   { __typename?: 'UserResponse' }
   & { errors?: Maybe<Array<(
     { __typename?: 'FieldError' }
-    & RegularErrorFragment
+    & ErrorFragment
   )>>, user?: Maybe<(
     { __typename?: 'User' }
-    & RegularUserFragment
+    & UserFragment
   )> }
 );
 
 export type ChangePasswordMutationVariables = Exact<{
-  token: Scalars['String'];
-  newPassword: Scalars['String'];
+  attributes: ChangePasswordInput;
 }>;
 
 
@@ -239,15 +254,12 @@ export type ChangePasswordMutation = (
   { __typename?: 'Mutation' }
   & { changePassword: (
     { __typename?: 'UserResponse' }
-    & RegularUserResponseFragment
+    & UserResponseFragment
   ) }
 );
 
 export type CreateProjectMutationVariables = Exact<{
-  input: ProjectInput;
-  skillIds: Array<Scalars['Int']>;
-  categoryIds: Array<Scalars['Int']>;
-  thumbnail?: Maybe<Scalars['Upload']>;
+  attributes: CreateProjectInput;
 }>;
 
 
@@ -255,7 +267,7 @@ export type CreateProjectMutation = (
   { __typename?: 'Mutation' }
   & { createProject: (
     { __typename?: 'ProjectResponse' }
-    & RegularProjectResponseFragment
+    & ProjectResponseFragment
   ) }
 );
 
@@ -286,12 +298,14 @@ export type JoinProjectMutationVariables = Exact<{
 
 export type JoinProjectMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'joinProject'>
+  & { joinProject: (
+    { __typename?: 'JoinProjectResponse' }
+    & JoinProjectResponseFragment
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
-  usernameOrEmail: Scalars['String'];
-  password: Scalars['String'];
+  attributes: LoginInput;
 }>;
 
 
@@ -299,7 +313,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: (
     { __typename?: 'UserResponse' }
-    & RegularUserResponseFragment
+    & UserResponseFragment
   ) }
 );
 
@@ -312,7 +326,7 @@ export type LogoutMutation = (
 );
 
 export type RegisterMutationVariables = Exact<{
-  options: UsernamePasswordInput;
+  attributes: RegisterInput;
 }>;
 
 
@@ -320,19 +334,37 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
     { __typename?: 'UserResponse' }
-    & RegularUserResponseFragment
+    & UserResponseFragment
   ) }
 );
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = (
+export type CurrentUserQuery = (
   { __typename?: 'Query' }
-  & { me?: Maybe<(
+  & { currentUser?: Maybe<(
     { __typename?: 'User' }
-    & RegularUserFragment
+    & UserFragment
   )> }
+);
+
+export type ProjectsQueryVariables = Exact<{
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
+
+
+export type ProjectsQuery = (
+  { __typename?: 'Query' }
+  & { paginatedProjects: (
+    { __typename?: 'PaginatedProjects' }
+    & Pick<PaginatedProjects, 'hasMore'>
+    & { projects: Array<(
+      { __typename?: 'Project' }
+      & ProjectFragment
+    )> }
+  ) }
 );
 
 export type ProjectQueryVariables = Exact<{
@@ -344,36 +376,26 @@ export type ProjectQuery = (
   { __typename?: 'Query' }
   & { project?: Maybe<(
     { __typename?: 'Project' }
-    & RegularProjectFragment
+    & ProjectFragment
   )> }
 );
 
-export type ProjectsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  cursor?: Maybe<Scalars['String']>;
-}>;
-
-
-export type ProjectsQuery = (
-  { __typename?: 'Query' }
-  & { paginatedProjects: (
-    { __typename?: 'PaginatedProjects' }
-    & Pick<PaginatedProjects, 'hasMore'>
-    & { projects: Array<(
-      { __typename?: 'Project' }
-      & RegularProjectFragment
-    )> }
-  ) }
-);
-
-export const RegularErrorFragmentDoc = gql`
-    fragment RegularError on FieldError {
+export const ErrorFragmentDoc = gql`
+    fragment Error on FieldError {
   field
   message
 }
     `;
-export const RegularProjectFragmentDoc = gql`
-    fragment RegularProject on Project {
+export const JoinProjectResponseFragmentDoc = gql`
+    fragment JoinProjectResponse on JoinProjectResponse {
+  errors {
+    ...Error
+  }
+  joined
+}
+    ${ErrorFragmentDoc}`;
+export const ProjectFragmentDoc = gql`
+    fragment Project on Project {
   id
   createdAt
   updatedAt
@@ -395,46 +417,50 @@ export const RegularProjectFragmentDoc = gql`
   }
 }
     `;
-export const RegularProjectResponseFragmentDoc = gql`
-    fragment RegularProjectResponse on ProjectResponse {
+export const ProjectResponseFragmentDoc = gql`
+    fragment ProjectResponse on ProjectResponse {
   errors {
-    ...RegularError
+    ...Error
   }
   project {
-    ...RegularProject
+    ...Project
   }
 }
-    ${RegularErrorFragmentDoc}
-${RegularProjectFragmentDoc}`;
-export const RegularUserFragmentDoc = gql`
-    fragment RegularUser on User {
+    ${ErrorFragmentDoc}
+${ProjectFragmentDoc}`;
+export const UserFragmentDoc = gql`
+    fragment User on User {
   id
   username
+  email
   projects {
     id
     name
     thumbnail
   }
+  skills {
+    type
+  }
 }
     `;
-export const RegularUserResponseFragmentDoc = gql`
-    fragment RegularUserResponse on UserResponse {
+export const UserResponseFragmentDoc = gql`
+    fragment UserResponse on UserResponse {
   errors {
-    ...RegularError
+    ...Error
   }
   user {
-    ...RegularUser
+    ...User
   }
 }
-    ${RegularErrorFragmentDoc}
-${RegularUserFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${UserFragmentDoc}`;
 export const ChangePasswordDocument = gql`
-    mutation ChangePassword($token: String!, $newPassword: String!) {
-  changePassword(token: $token, newPassword: $newPassword) {
-    ...RegularUserResponse
+    mutation ChangePassword($attributes: ChangePasswordInput!) {
+  changePassword(attributes: $attributes) {
+    ...UserResponse
   }
 }
-    ${RegularUserResponseFragmentDoc}`;
+    ${UserResponseFragmentDoc}`;
 export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
 
 /**
@@ -450,8 +476,7 @@ export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMut
  * @example
  * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
  *   variables: {
- *      token: // value for 'token'
- *      newPassword: // value for 'newPassword'
+ *      attributes: // value for 'attributes'
  *   },
  * });
  */
@@ -462,12 +487,12 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateProjectDocument = gql`
-    mutation CreateProject($input: ProjectInput!, $skillIds: [Int!]!, $categoryIds: [Int!]!, $thumbnail: Upload) {
-  createProject(input: $input, skillIds: $skillIds, categoryIds: $categoryIds, filename: $thumbnail) {
-    ...RegularProjectResponse
+    mutation CreateProject($attributes: CreateProjectInput!) {
+  createProject(attributes: $attributes) {
+    ...ProjectResponse
   }
 }
-    ${RegularProjectResponseFragmentDoc}`;
+    ${ProjectResponseFragmentDoc}`;
 export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
 
 /**
@@ -483,10 +508,7 @@ export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutat
  * @example
  * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
  *   variables: {
- *      input: // value for 'input'
- *      skillIds: // value for 'skillIds'
- *      categoryIds: // value for 'categoryIds'
- *      thumbnail: // value for 'thumbnail'
+ *      attributes: // value for 'attributes'
  *   },
  * });
  */
@@ -558,9 +580,11 @@ export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordM
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const JoinProjectDocument = gql`
     mutation joinProject($projectId: Int!) {
-  joinProject(projectId: $projectId)
+  joinProject(projectId: $projectId) {
+    ...JoinProjectResponse
+  }
 }
-    `;
+    ${JoinProjectResponseFragmentDoc}`;
 export type JoinProjectMutationFn = Apollo.MutationFunction<JoinProjectMutation, JoinProjectMutationVariables>;
 
 /**
@@ -587,12 +611,12 @@ export type JoinProjectMutationHookResult = ReturnType<typeof useJoinProjectMuta
 export type JoinProjectMutationResult = Apollo.MutationResult<JoinProjectMutation>;
 export type JoinProjectMutationOptions = Apollo.BaseMutationOptions<JoinProjectMutation, JoinProjectMutationVariables>;
 export const LoginDocument = gql`
-    mutation Login($usernameOrEmail: String!, $password: String!) {
-  login(usernameOrEmail: $usernameOrEmail, password: $password) {
-    ...RegularUserResponse
+    mutation Login($attributes: LoginInput!) {
+  login(attributes: $attributes) {
+    ...UserResponse
   }
 }
-    ${RegularUserResponseFragmentDoc}`;
+    ${UserResponseFragmentDoc}`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -608,8 +632,7 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
- *      usernameOrEmail: // value for 'usernameOrEmail'
- *      password: // value for 'password'
+ *      attributes: // value for 'attributes'
  *   },
  * });
  */
@@ -649,12 +672,12 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
-    mutation Register($options: UsernamePasswordInput!) {
-  register(options: $options) {
-    ...RegularUserResponse
+    mutation Register($attributes: RegisterInput!) {
+  register(attributes: $attributes) {
+    ...UserResponse
   }
 }
-    ${RegularUserResponseFragmentDoc}`;
+    ${UserResponseFragmentDoc}`;
 export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
@@ -670,7 +693,7 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  * @example
  * const [registerMutation, { data, loading, error }] = useRegisterMutation({
  *   variables: {
- *      options: // value for 'options'
+ *      attributes: // value for 'attributes'
  *   },
  * });
  */
@@ -680,45 +703,82 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const MeDocument = gql`
-    query Me {
-  me {
-    ...RegularUser
+export const CurrentUserDocument = gql`
+    query CurrentUser {
+  currentUser {
+    ...User
   }
 }
-    ${RegularUserFragmentDoc}`;
+    ${UserFragmentDoc}`;
 
 /**
- * __useMeQuery__
+ * __useCurrentUserQuery__
  *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMeQuery({
+ * const { data, loading, error } = useCurrentUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
       }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
         }
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
-export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
-export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const ProjectsDocument = gql`
+    query Projects($offset: Int!, $limit: Int!) {
+  paginatedProjects(limit: $limit, offset: $offset) {
+    hasMore
+    projects {
+      ...Project
+    }
+  }
+}
+    ${ProjectFragmentDoc}`;
+
+/**
+ * __useProjectsQuery__
+ *
+ * To run a query within a React component, call `useProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
+        return Apollo.useQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+      }
+export function useProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+        }
+export type ProjectsQueryHookResult = ReturnType<typeof useProjectsQuery>;
+export type ProjectsLazyQueryHookResult = ReturnType<typeof useProjectsLazyQuery>;
+export type ProjectsQueryResult = Apollo.QueryResult<ProjectsQuery, ProjectsQueryVariables>;
 export const ProjectDocument = gql`
     query Project($id: Int!) {
   project(id: $id) {
-    ...RegularProject
+    ...Project
   }
 }
-    ${RegularProjectFragmentDoc}`;
+    ${ProjectFragmentDoc}`;
 
 /**
  * __useProjectQuery__
@@ -745,40 +805,3 @@ export function useProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProjectQueryHookResult = ReturnType<typeof useProjectQuery>;
 export type ProjectLazyQueryHookResult = ReturnType<typeof useProjectLazyQuery>;
 export type ProjectQueryResult = Apollo.QueryResult<ProjectQuery, ProjectQueryVariables>;
-export const ProjectsDocument = gql`
-    query Projects($limit: Int!, $cursor: String) {
-  paginatedProjects(limit: $limit, cursor: $cursor) {
-    hasMore
-    projects {
-      ...RegularProject
-    }
-  }
-}
-    ${RegularProjectFragmentDoc}`;
-
-/**
- * __useProjectsQuery__
- *
- * To run a query within a React component, call `useProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectsQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      cursor: // value for 'cursor'
- *   },
- * });
- */
-export function useProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
-        return Apollo.useQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
-      }
-export function useProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
-          return Apollo.useLazyQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
-        }
-export type ProjectsQueryHookResult = ReturnType<typeof useProjectsQuery>;
-export type ProjectsLazyQueryHookResult = ReturnType<typeof useProjectsLazyQuery>;
-export type ProjectsQueryResult = Apollo.QueryResult<ProjectsQuery, ProjectsQueryVariables>;

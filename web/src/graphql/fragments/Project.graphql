@@ -1,0 +1,21 @@
+fragment Project on Project {
+	id
+	createdAt
+	updatedAt
+	name
+	desc
+	points
+	thumbnail
+	skills {
+		id
+		type
+	}
+	categories {
+		id
+		name
+	}
+	creator {
+		id
+		username
+	}
+}

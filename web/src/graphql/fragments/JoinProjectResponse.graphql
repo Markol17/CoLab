@@ -1,0 +1,6 @@
+fragment JoinProjectResponse on JoinProjectResponse {
+	errors {
+		...Error
+	}
+	joined
+}
