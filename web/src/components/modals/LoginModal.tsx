@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormik } from 'formik';
 
-import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
+import { CurrentUserDocument, CurrentUserQuery, useLoginMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 
 import { toErrorMap } from '../../utils/toErrorMap';
@@ -36,14 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
       fontWeight: 'bold',
     },
-    login2: {
-      textTransform: 'unset',
-      color: theme.palette.common.white,
-      minWidth: '90px',
-      marginTop: '10px',
-      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
-      fontWeight: 'bold',
-    },
     cancel: {
       marginRight: theme.spacing(1),
       borderColor: theme.palette.common.white,
@@ -64,13 +56,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     initialValues: { usernameOrEmail: '', password: '' },
     onSubmit: async (values, { setErrors }) => {
       const response = await login({
-        variables: values,
+        variables: { attributes: values },
         update: (cache, { data }) => {
-          cache.writeQuery<MeQuery>({
-            query: MeDocument,
+          cache.writeQuery<CurrentUserQuery>({
+            query: CurrentUserDocument,
             data: {
               __typename: 'Query',
-              me: data?.login.user,
+              currentUser: data?.login.user,
             },
           });
           cache.evict({ fieldName: 'projects:{}' });
@@ -120,14 +112,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             onChange={formik.handleChange}
             value={formik.values.password}
           />
-               <Button
-          disabled={formik.isSubmitting}
-          className={classes.login2}
-          color='secondary'
-          variant='outlined'
-          >
-            Login with uOttawa
-          </Button>
         </DialogContent>
         <DialogActions className={classes.modalActions}>
           <Button

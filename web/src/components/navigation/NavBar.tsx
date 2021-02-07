@@ -19,7 +19,7 @@ import {
 
 import { useApolloClient } from '@apollo/client';
 import NextLink from 'next/link';
-import { useMeQuery, useLogoutMutation } from '../../generated/graphql';
+import { useLogoutMutation, useCurrentUserQuery } from '../../generated/graphql';
 import { isServer } from '../../utils/isServer';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -163,7 +163,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const apolloClient = useApolloClient();
 
   //add to context
-  const { data, loading } = useMeQuery({
+  const { data, loading } = useCurrentUserQuery({
     skip: isServer(),
   });
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
@@ -349,8 +349,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               <MenuIcon />
             </IconButton>
             <div className={classes.container}>
-              {/* <CoLab height={35} /> */}
-              <Typography>SAPE</Typography>
+              <CoLab height={35} />
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
@@ -364,7 +363,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </div>
-              {loading ? null /* data loading */ : !data?.me ? (
+              {loading ? null /* data loading */ : !data?.currentUser ? (
                 /*user not logged in*/ <>
                   <div className={classes.sectionDesktop}>
                     <Button
@@ -448,8 +447,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         {renderMenu}
       </Paper>
       <IndexDrawer
-        isUserConnected={!!data?.me}
-        projects={data?.me?.projects}
+        isUserConnected={!!data?.currentUser}
+        projects={data?.currentUser?.projects}
         isDrawerOpen={open}
         isProjectOpen={openProjects}
         isBookmarksOpen={openBookmarks}

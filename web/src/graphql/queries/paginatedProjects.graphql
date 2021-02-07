@@ -1,4 +1,4 @@
-query Projects($offset: Int!, $limit: Int!) {
+query PaginatedProjects($offset: Int!, $limit: Int!) {
 	paginatedProjects(limit: $limit, offset: $offset) {
 		hasMore
 		projects {

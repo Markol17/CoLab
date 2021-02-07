@@ -99,9 +99,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           component='img'
           alt='Thumbnail'
           src={
-            // !!img
-            //   ? `http://localhost:4000/projects/thumbnails/${img}`
-               `http://localhost:4000/projects/thumbnails/placeholder.jpg`
+            !!img ? `http://localhost:4000/projects/thumbnails/${img}` : `http://localhost:4000/projects/thumbnails/placeholder.jpg`
           }
         />
         <CardContent className={classes.cardContent}>

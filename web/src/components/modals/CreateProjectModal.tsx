@@ -61,11 +61,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     initialValues: { name: '', desc: '', skillIds: [], categoryIds: [] },
     onSubmit: async (values, { setErrors }) => {
       const response = await createProject({
-        variables: {
-          input: { name: values.name, desc: values.desc },
+        variables: {attributes:{
+          name: values.name, 
+          desc: values.desc,
           skillIds: values.skillIds,
           categoryIds: values.categoryIds,
           thumbnail: img,
+        }
         },
         update: (cache: any) => {
           cache.evict({ fieldName: 'projects:{}' });

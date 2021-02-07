@@ -9,8 +9,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormik } from 'formik';
 
 import {
-  MeDocument,
-  MeQuery,
+  CurrentUserDocument,
+  CurrentUserQuery,
   useRegisterMutation,
 } from '../../generated/graphql';
 import { useRouter } from 'next/router';
@@ -40,14 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold',
       boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
     },
-    login2: {
-      textTransform: 'unset',
-      color: theme.palette.common.white,
-      minWidth: '90px',
-      marginTop: '10px',
-      boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
-      fontWeight: 'bold',
-    },
     cancel: {
       marginRight: theme.spacing(1),
       borderColor: theme.palette.common.white,
@@ -71,13 +63,13 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
     initialValues: { email: '', username: '', password: '' },
     onSubmit: async (values, { setErrors }) => {
       const response = await register({
-        variables: { options: values },
+        variables: { attributes: values },
         update: (cache, { data }) => {
-          cache.writeQuery<MeQuery>({
-            query: MeDocument,
+          cache.writeQuery<CurrentUserQuery>({
+            query: CurrentUserDocument,
             data: {
               __typename: 'Query',
-              me: data?.register.user,
+              currentUser: data?.register.user,
             },
           });
         },
@@ -135,14 +127,6 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
             onChange={formik.handleChange}
             value={formik.values.password}
           />
-                <Button
-          disabled={formik.isSubmitting}
-          className={classes.login2}
-          color='secondary'
-          variant='outlined'
-          >
-            Register with uOttawa
-          </Button>
         </DialogContent>
         <DialogActions className={classes.modalActions}>
           <Button

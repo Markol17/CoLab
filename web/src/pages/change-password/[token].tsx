@@ -6,8 +6,8 @@ import { toErrorMap } from '../../utils/toErrorMap';
 import { Button, Box, Input, Link } from '@material-ui/core';
 import {
   useChangePasswordMutation,
-  MeDocument,
-  MeQuery,
+  CurrentUserQuery,
+  CurrentUserDocument,
 } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
@@ -23,19 +23,20 @@ const ChangePassword: NextPage = () => {
         initialValues={{ newPassword: '' }}
         onSubmit={async (values, { setErrors }) => {
           const response = await changePassword({
-            variables: {
+            variables: {attributes:{
               newPassword: values.newPassword,
               token:
                 typeof router.query.token === 'string'
                   ? router.query.token
                   : '',
+            }
             },
             update: (cache, { data }) => {
-              cache.writeQuery<MeQuery>({
-                query: MeDocument,
+              cache.writeQuery<CurrentUserQuery>({
+                query: CurrentUserDocument,
                 data: {
                   __typename: 'Query',
-                  me: data?.changePassword.user,
+                  currentUser: data?.changePassword.user,
                 },
               });
             },

@@ -5,7 +5,7 @@ import { useGetProjectFromUrl } from '../../utils/useGetProjectFromUrl';
 import { EditDeletePostButtons } from '../../components/EditDeletePostButtons';
 import { withApollo } from '../../utils/withApollo';
 
-const Post = ({}) => {
+const Project = ({}) => {
   const { data, error, loading } = useGetProjectFromUrl();
 
   if (loading) {
@@ -40,4 +40,4 @@ const Post = ({}) => {
   );
 };
 
-export default withApollo({ ssr: true })(Post);
+export default withApollo({ ssr: true })(Project);

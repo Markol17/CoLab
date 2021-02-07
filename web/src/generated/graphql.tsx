@@ -349,13 +349,13 @@ export type CurrentUserQuery = (
   )> }
 );
 
-export type ProjectsQueryVariables = Exact<{
+export type PaginatedProjectsQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];
 }>;
 
 
-export type ProjectsQuery = (
+export type PaginatedProjectsQuery = (
   { __typename?: 'Query' }
   & { paginatedProjects: (
     { __typename?: 'PaginatedProjects' }
@@ -735,8 +735,8 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
-export const ProjectsDocument = gql`
-    query Projects($offset: Int!, $limit: Int!) {
+export const PaginatedProjectsDocument = gql`
+    query PaginatedProjects($offset: Int!, $limit: Int!) {
   paginatedProjects(limit: $limit, offset: $offset) {
     hasMore
     projects {
@@ -747,31 +747,31 @@ export const ProjectsDocument = gql`
     ${ProjectFragmentDoc}`;
 
 /**
- * __useProjectsQuery__
+ * __usePaginatedProjectsQuery__
  *
- * To run a query within a React component, call `useProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePaginatedProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaginatedProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectsQuery({
+ * const { data, loading, error } = usePaginatedProjectsQuery({
  *   variables: {
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
-        return Apollo.useQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+export function usePaginatedProjectsQuery(baseOptions?: Apollo.QueryHookOptions<PaginatedProjectsQuery, PaginatedProjectsQueryVariables>) {
+        return Apollo.useQuery<PaginatedProjectsQuery, PaginatedProjectsQueryVariables>(PaginatedProjectsDocument, baseOptions);
       }
-export function useProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
-          return Apollo.useLazyQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+export function usePaginatedProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaginatedProjectsQuery, PaginatedProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<PaginatedProjectsQuery, PaginatedProjectsQueryVariables>(PaginatedProjectsDocument, baseOptions);
         }
-export type ProjectsQueryHookResult = ReturnType<typeof useProjectsQuery>;
-export type ProjectsLazyQueryHookResult = ReturnType<typeof useProjectsLazyQuery>;
-export type ProjectsQueryResult = Apollo.QueryResult<ProjectsQuery, ProjectsQueryVariables>;
+export type PaginatedProjectsQueryHookResult = ReturnType<typeof usePaginatedProjectsQuery>;
+export type PaginatedProjectsLazyQueryHookResult = ReturnType<typeof usePaginatedProjectsLazyQuery>;
+export type PaginatedProjectsQueryResult = Apollo.QueryResult<PaginatedProjectsQuery, PaginatedProjectsQueryVariables>;
 export const ProjectDocument = gql`
     query Project($id: Int!) {
   project(id: $id) {

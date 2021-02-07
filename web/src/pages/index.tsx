@@ -1,7 +1,7 @@
 //TODO: use lazy loading with React.lazy
 import { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
-import { useProjectsQuery, ProjectsQuery, Project } from '../generated/graphql';
+import { PaginatedProjectsQuery, usePaginatedProjectsQuery } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 import { makeStyles, Grid, Box, List, CircularProgress } from '@material-ui/core';
 import { ProjectCard } from '../components/ProjectCard';
@@ -17,13 +17,14 @@ const useStyles = makeStyles({
 });
 
 const Index = () => {
-  const { data, error, loading, fetchMore, variables } = useProjectsQuery({
-    variables: {
-      limit: 15,
-      offset: 0,
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+  const { data, error, loading, fetchMore, variables } = usePaginatedProjectsQuery({
+       variables: {
+          offset: 0,
+          limit: 15,
+       },
+       notifyOnNetworkStatusChange: true,
+     });
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -39,19 +40,19 @@ const Index = () => {
           limit: variables?.limit,
           offset: (data!.paginatedProjects.projects.length % 14),
         },
-          updateQuery: (previousValue, { fetchMoreResult }): ProjectsQuery => {
+          updateQuery: (previousValue, { fetchMoreResult }): PaginatedProjectsQuery => {
                   if (!fetchMoreResult) {
-                    return previousValue as ProjectsQuery;
+                    return previousValue as PaginatedProjectsQuery;
                   }
 
                   return {
                     __typename: "Query",
                     paginatedProjects: {
                       __typename: "PaginatedProjects",
-                      hasMore: (fetchMoreResult as ProjectsQuery).paginatedProjects.hasMore,
+                      hasMore: (fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.hasMore,
                       projects: [
-                        ...(previousValue as ProjectsQuery).paginatedProjects.projects,
-                        ...(fetchMoreResult as ProjectsQuery).paginatedProjects.projects,
+                        ...(previousValue as PaginatedProjectsQuery).paginatedProjects.projects,
+                        ...(fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.projects,
                       ],
                     },
                   };

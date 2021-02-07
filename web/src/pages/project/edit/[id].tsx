@@ -7,7 +7,7 @@ import { useProjectQuery } from '../../../generated/graphql';
 import { useGetIntId } from '../../../utils/useGetIntId';
 import { withApollo } from '../../../utils/withApollo';
 
-const EditPost = ({}) => {
+const EditProject = ({}) => {
   const router = useRouter();
   const intId = useGetIntId();
   const { data, loading } = useProjectQuery({
@@ -68,4 +68,4 @@ const EditPost = ({}) => {
   );
 };
 
-export default withApollo({ ssr: false })(EditPost);
+export default withApollo({ ssr: false })(EditProject);
