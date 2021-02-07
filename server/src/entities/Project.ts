@@ -69,7 +69,12 @@ export class Project extends BaseEntity {
 	}
 
 	@OneToMany(() => UserProject, (up) => up.project)
-	userConnection: Promise<UserProject[]>;
+	memberConnection: Promise<UserProject[]>;
+
+	@Field(() => [User])
+	async members(@Ctx() { projectMembersLoader }: Context): Promise<User[]> {
+		return projectMembersLoader.load(this.id);
+	}
 
 	@Field(() => String)
 	@CreateDateColumn()

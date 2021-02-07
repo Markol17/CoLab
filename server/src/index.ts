@@ -23,6 +23,7 @@ import { ProjectCategory } from './entities/ProjectCategory';
 import { ProjectSkill } from './entities/ProjectSkill';
 import { UserSkill } from './entities/UserSkill';
 import { UserProject } from './entities/UserProject';
+import { createProjectMembersLoader } from './dataloaders/projectMembersLoader';
 
 const main = async () => {
 	await createConnection({
@@ -79,6 +80,7 @@ const main = async () => {
 			userLoader: createUserLoader(),
 			projectSkillsLoader: createProjectSkillsLoader(),
 			projectCategoriesLoader: createProjectCategoriesLoader(),
+			projectMembersLoader: createProjectMembersLoader(),
 		}),
 	});
 
