@@ -67,12 +67,11 @@ export class ProjectService {
 			await this.projectRepository.saveProjectCategoryIds(cIds);
 
 			if (!!thumbnail) {
-				await new Promise(async (resolve, reject) =>
-					thumbnail
-						.createReadStream()
-						.pipe(createWriteStream(path.join(__dirname, '../../uploads/projects/thumbnails', thumbnail.filename)))
-						.on('finish', () => resolve(true))
-						.on('error', () => reject(false))
+				const { createReadStream, filename } = await thumbnail;
+				await new Promise((res) =>
+					createReadStream()
+						.pipe(createWriteStream(path.join(__dirname, '../../uploads/projects/thumbnails', filename)))
+						.on('close', () => res)
 				);
 			}
 		}

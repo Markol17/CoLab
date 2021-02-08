@@ -112,13 +112,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
   const categories = [
-    { id: 3, name: 'SEG 3501' },
-    { id: 4, name: 'SEG 2910' },
+    { id: 1, name: 'Tech' },
+    { id: 2, name: 'Science' },
   ];
 
   const skills = [
-    { id: 4, type: 'Fr' },
-    { id: 5, type: 'En' },
+    { id: 1, type: 'SWE' },
+    { id: 2, type: 'Comm' },
   ];
 
   return (
@@ -192,8 +192,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 error={!!formik.errors.categoryIds}
                 helperText={formik.errors.categoryIds}
                 variant='outlined'
-                label='Class(es)'
-                placeholder='Class(es)'
+                label='Category(ies)'
+                placeholder='Category(ies)'
                 onChange={formik.handleChange}
               />
             )}
@@ -224,8 +224,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 error={!!formik.errors.skillIds}
                 helperText={formik.errors.skillIds}
                 variant='outlined'
-                label='Language(s)'
-                placeholder='Language(s)'
+                label='Skill(s)'
+                placeholder='Skill(s)'
                 onChange={formik.handleChange}
                 value={formik.values.skillIds}
               />

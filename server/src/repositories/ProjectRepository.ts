@@ -29,12 +29,12 @@ export class ProjectRepository extends Repository<Project> {
 		return await UserProject.find({ where: { projectId: id } });
 	}
 
-	async createAndSaveProject(inputs: CreateProjectInput, { req }: Context): Promise<Project> {
-		const { name, desc, thumbnail } = inputs;
+	async createAndSaveProject(attributes: CreateProjectInput, { req }: Context): Promise<Project> {
+		const { name, desc, thumbnail } = attributes;
 		const project = new Project();
 		project.name = name;
 		project.desc = desc;
-		project.thumbnail = thumbnail !== null ? thumbnail.filename : undefined;
+		project.thumbnail = !!thumbnail ? thumbnail.filename : undefined;
 		project.creatorId = req.session.userId;
 
 		return await this.save(project);
