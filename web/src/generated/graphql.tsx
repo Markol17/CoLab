@@ -136,7 +136,7 @@ export type MutationLoginArgs = {
 export type JoinProjectResponse = {
   __typename?: 'JoinProjectResponse';
   errors?: Maybe<Array<FieldError>>;
-  joined: Scalars['Boolean'];
+  joined?: Maybe<Scalars['Boolean']>;
 };
 
 export type FieldError = {

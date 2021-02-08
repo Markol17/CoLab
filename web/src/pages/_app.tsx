@@ -1,10 +1,9 @@
 import React from 'react';
-import { useEffect } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../theme';
 import Head from 'next/head';
-import { StateProvider } from '../utils/store';
+// import UserContextProvider from '../utils/contexts/UserContext';
 
 function CoLab({ Component, pageProps }: any) {
   React.useEffect(() => {
@@ -24,12 +23,12 @@ function CoLab({ Component, pageProps }: any) {
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
       </Head>
-      {/* <StateProvider> */}
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-      {/* </StateProvider> */}
+      {/* <UserContextProvider> */}
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      {/* </UserContextProvider> */}
     </>
   );
 }

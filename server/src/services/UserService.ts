@@ -9,6 +9,8 @@ import { validateRegister } from '../utils/validateRegister';
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from '../constants';
 import { sendEmail } from '../utils/sendEmail';
 import { v4 } from 'uuid';
+import { Project } from '../entities/Project';
+import { Skill } from '../entities/Skill';
 
 export class UserService {
 	userRepository: UserRepository;
@@ -29,8 +31,8 @@ export class UserService {
 		const projects: any = [];
 		if (context.req.session.userId === userId) {
 			const userProjects = await this.userRepository.getProjectsByUserId(userId);
-			userProjects.forEach((us: any) => {
-				projects.push((us as any).__project__);
+			userProjects.forEach((project: Project) => {
+				projects.push(project);
 			});
 		}
 
@@ -41,8 +43,8 @@ export class UserService {
 		const skills: any = [];
 		if (context.req.session.userId === userId) {
 			const userSkills = await this.userRepository.getSkillsByUserId(userId);
-			userSkills.forEach((us: any) => {
-				skills.push((us as any).__project__);
+			userSkills.forEach((skill: Skill) => {
+				skills.push(skill);
 			});
 		}
 

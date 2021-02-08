@@ -88,6 +88,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const ProjectDrawer: React.FC<ProjectDrawerProps> = ({}) => {
   const theme = useTheme();
+  //@ts-ignore
   const classes = useStyles();
   return (
     <Drawer

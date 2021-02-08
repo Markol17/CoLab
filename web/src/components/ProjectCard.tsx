@@ -11,11 +11,11 @@ import {
   Theme,
   Typography,
 } from '@material-ui/core';
-import { createVerify } from 'crypto';
 import React from 'react';
-import { Category, Skill, useJoinProjectMutation } from '../generated/graphql';
+import { Category, Project, Skill, useJoinProjectMutation } from '../generated/graphql';
 
 interface ProjectCardProps {
+  userProjects: any,
   id: number;
   name: string;
   desc: string;
@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
+  userProjects,
   id,
   name,
   desc,
@@ -90,6 +91,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       variables: { projectId: id },
     });
   };
+
+  const userAlreadyJoined = () => {
+    if(userProjects === null || userProjects === undefined){
+      return false;
+    }
+    let userAlreadyJoined = false;
+    userProjects.forEach((project: Project) => {
+      if(id === project.id){
+        userAlreadyJoined = true;
+      }
+    });
+    
+    return userAlreadyJoined;
+  }
 
   return (
     <Card className={classes.card}>
@@ -115,7 +130,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             {desc}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
-            Class:
+            Categories:
           </Typography>
           <div className={classes.chips}>
             {categories.map((category: Category, index: number) => (
@@ -128,7 +143,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             ))}
           </div>
           <Typography variant='body2' color='textSecondary' component='p'>
-            Language:
+            Skills:
           </Typography>
           <div className={classes.chips}>
             {skills.map((skill: Skill, index: number) => (
@@ -142,7 +157,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </CardContent>
       </div>
-      <CardActions>
+      <CardActions>{!userAlreadyJoined() &&
         <Button
           className={classes.join}
           variant='outlined'
@@ -151,6 +166,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         >
           Request join
         </Button>
+}
         <Button className={classes.learnMore} variant='outlined'>
           Learn more
         </Button>

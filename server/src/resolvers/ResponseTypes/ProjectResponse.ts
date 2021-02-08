@@ -24,6 +24,6 @@ export class JoinProjectResponse {
 	@Field(() => [FieldError], { nullable: true })
 	errors?: FieldError[];
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { nullable: true })
 	joined?: Boolean;
 }

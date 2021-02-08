@@ -25,7 +25,6 @@ export class UserResolver {
 	}
 
 	@Query(() => User, { nullable: true })
-	@UseMiddleware(isAuth)
 	async currentUser(@Ctx() context: Context) {
 		const userService = new UserService();
 		return await userService.getUser(context);

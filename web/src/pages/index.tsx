@@ -1,11 +1,13 @@
 //TODO: use lazy loading with React.lazy
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Layout } from '../components/Layout';
-import { PaginatedProjectsQuery, usePaginatedProjectsQuery } from '../generated/graphql';
+import { PaginatedProjectsQuery, useCurrentUserQuery, usePaginatedProjectsQuery } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 import { makeStyles, Grid, Box, List, CircularProgress } from '@material-ui/core';
 import { ProjectCard } from '../components/ProjectCard';
 import React from 'react';
+import { UserContext } from '../utils/contexts/UserContext';
+import { isServer } from '../utils/isServer';
 
 const useStyles = makeStyles({
   root: {
@@ -17,6 +19,9 @@ const useStyles = makeStyles({
 });
 
 const Index = () => {
+  const { data: userData, loading: userLoading } = useCurrentUserQuery({
+    skip: isServer(),
+  });
   const { data, error, loading, fetchMore, variables } = usePaginatedProjectsQuery({
        variables: {
           offset: 0,
@@ -84,6 +89,7 @@ const Index = () => {
                 (project, index: number) => (
                   <Grid key={index} item>
                     <ProjectCard
+                      userProjects={userData === undefined || userData === null ? undefined : userData.currentUser?.projects}
                       id={project.id}
                       name={project.name}
                       desc={project.desc}

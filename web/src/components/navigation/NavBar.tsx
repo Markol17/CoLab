@@ -31,7 +31,6 @@ import { CreateProjectModal } from '../modals/CreateProjectModal';
 import { RegisterModal } from '../modals/RegisterModal';
 import { LoginModal } from '../modals/LoginModal';
 import { useRouter } from 'next/router';
-import { ContactSupportOutlined } from '@material-ui/icons';
 const CoLab = require('../../assets/img/CoLab.svg');
 
 interface NavBarProps {}
@@ -161,8 +160,6 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   ] = React.useState<null | HTMLElement>(null);
 
   const apolloClient = useApolloClient();
-
-  //add to context
   const { data, loading } = useCurrentUserQuery({
     skip: isServer(),
   });

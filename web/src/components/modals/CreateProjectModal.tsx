@@ -88,6 +88,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   ) => {
     formik.values.skillIds = [];
     for (let i = 0; i < skills.length; i++) {
+      //@ts-ignore
       formik.values.skillIds.push(skills[i].id);
     }
   };
@@ -98,6 +99,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   ) => {
     formik.values.categoryIds = [];
     for (let i = 0; i < categories.length; i++) {
+      //@ts-ignore
       formik.values.categoryIds.push(categories[i].id);
     }
   };

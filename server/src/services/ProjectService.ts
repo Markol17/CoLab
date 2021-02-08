@@ -131,7 +131,6 @@ export class ProjectService {
 				],
 			};
 		}
-
 		const joined = await this.userRepository.saveUserProjectId(projectId, req.session.userId);
 		if (joined) {
 			return { joined };

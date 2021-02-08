@@ -126,6 +126,6 @@ export class UserRepository extends Repository<User> {
 				return response.raw[0];
 			});
 
-		return isJoined;
+		return !!isJoined;
 	}
 }
