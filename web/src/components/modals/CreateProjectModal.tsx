@@ -11,13 +11,12 @@ import { Checkbox, CircularProgress, TextareaAutosize, Typography } from '@mater
 import { Autocomplete } from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import { CurrentUserDocument, useCategoriesQuery, useCreateProjectMutation, useCurrentUserQuery, useSkillsQuery } from '../../generated/graphql';
+import { CurrentUserDocument, useCategoriesQuery, useCreateProjectMutation, useSkillsQuery } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { DropzoneArea } from 'material-ui-dropzone';
 import { toErrorMap } from '../../utils/toErrorMap';
 
 interface CreateProjectModalProps {
-  userId: number | undefined;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -50,7 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
-  userId,
   isOpen,
   onClose,
 }) => {
@@ -167,7 +165,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             size='small'
             id='categories'
             //@ts-ignore
-            options={categoriesData!.categories!.categories}
+            options={categoriesData?.categories?.categories}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
             onChange={getCategoriesSelected}
@@ -203,7 +201,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             size='small'
             id='skills'
             //@ts-ignore
-            options={skillsData!.skills!.skills}
+            options={skillsData?.skills?.skills}
             disableCloseOnSelect
             getOptionLabel={(option) => option.type}
             onChange={getSkillsSelected}

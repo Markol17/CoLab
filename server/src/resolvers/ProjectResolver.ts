@@ -31,6 +31,7 @@ export class ProjectResolver {
 	}
 
 	@Mutation(() => JoinProjectResponse)
+	@UseMiddleware(isAuth)
 	async joinProject(
 		@Ctx() context: Context,
 		@Arg('projectId', () => Int) projectId: number

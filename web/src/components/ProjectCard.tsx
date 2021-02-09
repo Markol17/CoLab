@@ -13,7 +13,7 @@ import {
   withStyles,
 } from '@material-ui/core';
 import React from 'react';
-import { Category, Project, Skill, useJoinProjectMutation } from '../generated/graphql';
+import { Category, CurrentUserDocument, Project, Skill, useJoinProjectMutation } from '../generated/graphql';
 
 interface ProjectCardProps {
   userProjects: any,
@@ -77,12 +77,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const StyledChip = withStyles({
   root: {
-    "&&:hover": {
-      backgroundColor: "#6596e6"
+    "&&": {
+      borderColor: "#6596e6"
     },
-    "&&:focus": {
-      backgroundColor: "green"
-    }
   }
 })(Chip);
 
@@ -96,13 +93,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   img,
 }) => {
   const classes = useStyles();
-  const [joinProject] = useJoinProjectMutation();
-
-  const handleJoin = async () => {
-    const response = await joinProject({
-      variables: { projectId: id },
-    });
-  };
+  const [joinProjectMutation, { error }] = useJoinProjectMutation();
 
   const userAlreadyJoined = () => {
     if(userProjects === null || userProjects === undefined){
@@ -117,6 +108,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     
     return userAlreadyJoined;
   }
+
+  const handleJoin = async () => {
+    console.log(error)
+    if(!error){
+      //open login modal
+      return 
+    }
+    await joinProjectMutation({
+      variables: { projectId: id },
+      refetchQueries: [{
+        query: CurrentUserDocument,
+      }]
+    });
+  };
 
   return (
     <Card className={classes.card}>
@@ -169,7 +174,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </CardContent>
       </div>
-      <CardActions>{!userAlreadyJoined() &&
+      <CardActions>{!userAlreadyJoined() && 
         <Button
           className={classes.join}
           variant='outlined'

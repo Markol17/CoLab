@@ -469,7 +469,6 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         handleBookmarksClick={handleBookmarksClick}
       />
       <CreateProjectModal
-        userId={data?.currentUser?.id}
         isOpen={openCreateModal}
         onClose={handleCreateModalClose}
       />

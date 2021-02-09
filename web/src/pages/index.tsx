@@ -88,7 +88,7 @@ const Index = () => {
                 (project, index: number) => (
                   <Grid key={index} item>
                     <ProjectCard
-                      userProjects={userData === undefined || userData === null ? undefined : userData.currentUser!.projects}
+                      userProjects={userData === undefined || userData === null ? undefined : userData.currentUser?.projects}
                       id={project.id}
                       name={project.name}
                       desc={project.desc}
