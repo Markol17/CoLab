@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -32,6 +32,7 @@ import { CreateProjectModal } from '../modals/CreateProjectModal';
 import { RegisterModal } from '../modals/RegisterModal';
 import { LoginModal } from '../modals/LoginModal';
 import { useRouter } from 'next/router';
+import {ModalsContext, TOGGLE_LOGIN, TOGGLE_REGISTER } from '../../utils/contexts/ModalsContext';
 const CoLab = require('../../assets/img/CoLab.svg');
 
 interface NavBarProps {}
@@ -152,8 +153,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [openProjects, setOpenProjects] = React.useState(true);
   const [openBookmarks, setOpenBookmarks] = React.useState(false);
   const [openCreateModal, setOpenCreateModal] = React.useState(false);
-  const [openRegisterModal, setOpenRegisterModal] = React.useState(false);
-  const [openLoginModal, setOpenLoginModal] = React.useState(false);
+  const { login, register, dispatch } = useContext(ModalsContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [
     mobileMoreAnchorEl,
@@ -239,19 +239,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     setOpenCreateModal(false);
   };
 
-  const handleRegisterModalOpen = () => {
-    setOpenRegisterModal(true);
+  const handleRegisterModal = () => {
+    dispatch({type: TOGGLE_REGISTER});
   };
 
-  const handleRegisterModalClose = () => {
-    setOpenRegisterModal(false);
-  };
-  const handleLoginModalOpen = () => {
-    setOpenLoginModal(true);
-  };
-
-  const handleLoginModalClose = () => {
-    setOpenLoginModal(false);
+  const handleLoginModal = () => {
+    dispatch({type: TOGGLE_LOGIN});
   };
 
   const menuId = 'primary-search-account-menu';
@@ -326,10 +319,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       open={isUnregisteredMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleLoginModalOpen}>
+      <MenuItem onClick={handleLoginModal}>
         <p>Login</p>
       </MenuItem>
-      <MenuItem onClick={handleRegisterModalOpen}>
+      <MenuItem onClick={handleRegisterModal}>
         <p>Register</p>
       </MenuItem>
     </Menu>
@@ -382,7 +375,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                     <Button
                       className={classes.login}
                       variant='outlined'
-                      onClick={handleLoginModalOpen}
+                      onClick={handleLoginModal}
                     >
                       Login
                     </Button>
@@ -391,7 +384,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                       className={classes.register}
                       variant='outlined'
                       color='secondary'
-                      onClick={handleRegisterModalOpen}
+                      onClick={handleRegisterModal}
                     >
                       Register
                     </Button>
@@ -473,10 +466,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         onClose={handleCreateModalClose}
       />
       <RegisterModal
-        isOpen={openRegisterModal}
-        onClose={handleRegisterModalClose}
+        isOpen={register}
+        onClose={handleRegisterModal}
       />
-      <LoginModal isOpen={openLoginModal} onClose={handleLoginModalClose} />
+      <LoginModal isOpen={login} onClose={handleLoginModal} />
     </div>
   );
 };

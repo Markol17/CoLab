@@ -12,8 +12,9 @@ import {
   Typography,
   withStyles,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Category, CurrentUserDocument, Project, Skill, useJoinProjectMutation } from '../generated/graphql';
+import { ModalsContext, TOGGLE_LOGIN } from '../utils/contexts/ModalsContext';
 
 interface ProjectCardProps {
   userProjects: any,
@@ -93,6 +94,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   img,
 }) => {
   const classes = useStyles();
+  const { dispatch } = useContext(ModalsContext);
   const [joinProjectMutation, { error }] = useJoinProjectMutation();
 
   const userAlreadyJoined = () => {
@@ -110,9 +112,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   }
 
   const handleJoin = async () => {
-    console.log(error)
     if(!error){
-      //open login modal
+      dispatch({type: TOGGLE_LOGIN})
       return 
     }
     await joinProjectMutation({

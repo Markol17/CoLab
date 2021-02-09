@@ -2,6 +2,7 @@ import React from 'react';
 import { Wrapper } from './Wrapper';
 import { NavBar } from './navigation/NavBar';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import ModalsContextProvider from '../utils/contexts/ModalsContext';
 
 interface LayoutProps {}
 
@@ -17,8 +18,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <NavBar />
-      <Wrapper>{children}</Wrapper>
+      <ModalsContextProvider>
+        <NavBar />
+        <Wrapper>{children}</Wrapper>
+      </ModalsContextProvider>
     </div>
   );
 };
