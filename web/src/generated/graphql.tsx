@@ -18,6 +18,8 @@ export type Query = {
   paginatedProjects: PaginatedProjects;
   project?: Maybe<Project>;
   currentUser?: Maybe<User>;
+  skills?: Maybe<SkillsResponse>;
+  categories?: Maybe<CategoriesResponse>;
 };
 
 
@@ -70,12 +72,32 @@ export type Skill = {
   __typename?: 'Skill';
   id: Scalars['Float'];
   type: Scalars['String'];
+  color: Scalars['String'];
 };
 
 export type Category = {
   __typename?: 'Category';
   id: Scalars['Float'];
   name: Scalars['String'];
+  color: Scalars['String'];
+};
+
+export type SkillsResponse = {
+  __typename?: 'SkillsResponse';
+  errors?: Maybe<Array<FieldError>>;
+  skills?: Maybe<Array<Skill>>;
+};
+
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type CategoriesResponse = {
+  __typename?: 'CategoriesResponse';
+  errors?: Maybe<Array<FieldError>>;
+  categories?: Maybe<Array<Category>>;
 };
 
 export type Mutation = {
@@ -139,12 +161,6 @@ export type JoinProjectResponse = {
   joined?: Maybe<Scalars['Boolean']>;
 };
 
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
-};
-
 export type ProjectResponse = {
   __typename?: 'ProjectResponse';
   errors?: Maybe<Array<FieldError>>;
@@ -182,6 +198,17 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
+export type CategoriesResponseFragment = (
+  { __typename?: 'CategoriesResponse' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  )>>, categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
+  )>> }
+);
+
 export type ErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
@@ -201,10 +228,10 @@ export type ProjectFragment = (
   & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points' | 'thumbnail'>
   & { skills: Array<(
     { __typename?: 'Skill' }
-    & Pick<Skill, 'id' | 'type'>
+    & Pick<Skill, 'id' | 'type' | 'color'>
   )>, categories: Array<(
     { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name'>
+    & Pick<Category, 'id' | 'name' | 'color'>
   )>, creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -220,6 +247,17 @@ export type ProjectResponseFragment = (
     { __typename?: 'Project' }
     & ProjectFragment
   )> }
+);
+
+export type SkillsResponseFragment = (
+  { __typename?: 'SkillsResponse' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  )>>, skills?: Maybe<Array<(
+    { __typename?: 'Skill' }
+    & Pick<Skill, 'id' | 'type'>
+  )>> }
 );
 
 export type UserFragment = (
@@ -338,6 +376,17 @@ export type RegisterMutation = (
   ) }
 );
 
+export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoriesQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<(
+    { __typename?: 'CategoriesResponse' }
+    & CategoriesResponseFragment
+  )> }
+);
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -380,12 +429,34 @@ export type ProjectQuery = (
   )> }
 );
 
+export type SkillsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SkillsQuery = (
+  { __typename?: 'Query' }
+  & { skills?: Maybe<(
+    { __typename?: 'SkillsResponse' }
+    & SkillsResponseFragment
+  )> }
+);
+
 export const ErrorFragmentDoc = gql`
     fragment Error on FieldError {
   field
   message
 }
     `;
+export const CategoriesResponseFragmentDoc = gql`
+    fragment CategoriesResponse on CategoriesResponse {
+  errors {
+    ...Error
+  }
+  categories {
+    id
+    name
+  }
+}
+    ${ErrorFragmentDoc}`;
 export const JoinProjectResponseFragmentDoc = gql`
     fragment JoinProjectResponse on JoinProjectResponse {
   errors {
@@ -406,10 +477,12 @@ export const ProjectFragmentDoc = gql`
   skills {
     id
     type
+    color
   }
   categories {
     id
     name
+    color
   }
   creator {
     id
@@ -428,6 +501,17 @@ export const ProjectResponseFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${ProjectFragmentDoc}`;
+export const SkillsResponseFragmentDoc = gql`
+    fragment SkillsResponse on SkillsResponse {
+  errors {
+    ...Error
+  }
+  skills {
+    id
+    type
+  }
+}
+    ${ErrorFragmentDoc}`;
 export const UserFragmentDoc = gql`
     fragment User on User {
   id
@@ -703,6 +787,38 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CategoriesDocument = gql`
+    query Categories {
+  categories {
+    ...CategoriesResponse
+  }
+}
+    ${CategoriesResponseFragmentDoc}`;
+
+/**
+ * __useCategoriesQuery__
+ *
+ * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+        return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, baseOptions);
+      }
+export function useCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+          return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, baseOptions);
+        }
+export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
+export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
+export type CategoriesQueryResult = Apollo.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
@@ -805,3 +921,35 @@ export function useProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProjectQueryHookResult = ReturnType<typeof useProjectQuery>;
 export type ProjectLazyQueryHookResult = ReturnType<typeof useProjectLazyQuery>;
 export type ProjectQueryResult = Apollo.QueryResult<ProjectQuery, ProjectQueryVariables>;
+export const SkillsDocument = gql`
+    query Skills {
+  skills {
+    ...SkillsResponse
+  }
+}
+    ${SkillsResponseFragmentDoc}`;
+
+/**
+ * __useSkillsQuery__
+ *
+ * To run a query within a React component, call `useSkillsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSkillsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSkillsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSkillsQuery(baseOptions?: Apollo.QueryHookOptions<SkillsQuery, SkillsQueryVariables>) {
+        return Apollo.useQuery<SkillsQuery, SkillsQueryVariables>(SkillsDocument, baseOptions);
+      }
+export function useSkillsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SkillsQuery, SkillsQueryVariables>) {
+          return Apollo.useLazyQuery<SkillsQuery, SkillsQueryVariables>(SkillsDocument, baseOptions);
+        }
+export type SkillsQueryHookResult = ReturnType<typeof useSkillsQuery>;
+export type SkillsLazyQueryHookResult = ReturnType<typeof useSkillsLazyQuery>;
+export type SkillsQueryResult = Apollo.QueryResult<SkillsQuery, SkillsQueryVariables>;

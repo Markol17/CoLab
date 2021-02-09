@@ -1,0 +1,9 @@
+fragment SkillsResponse on SkillsResponse {
+	errors {
+		...Error
+	}
+	skills {
+		id
+		type
+	}
+}

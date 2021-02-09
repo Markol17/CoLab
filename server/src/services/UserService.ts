@@ -11,6 +11,7 @@ import { sendEmail } from '../utils/sendEmail';
 import { v4 } from 'uuid';
 import { Project } from '../entities/Project';
 import { Skill } from '../entities/Skill';
+import { User } from '../entities/User';
 
 export class UserService {
 	userRepository: UserRepository;
@@ -19,12 +20,16 @@ export class UserService {
 		this.userRepository = getCustomRepository(UserRepository);
 	}
 
-	async getUser(context: Context) {
+	async getUser(context: Context): Promise<User | null> {
 		const { req } = context;
 		if (!req.session.userId) {
 			return null;
 		}
-		return await this.userRepository.getUserById(req.session.userId);
+		const user = await this.userRepository.getUserById(req.session.userId);
+		if (!user) {
+			return null;
+		}
+		return user;
 	}
 
 	async getProjects(userId: number, @Ctx() context: Context): Promise<UserProjectsResponse> {

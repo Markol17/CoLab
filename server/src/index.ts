@@ -24,6 +24,8 @@ import { ProjectSkill } from './entities/ProjectSkill';
 import { UserSkill } from './entities/UserSkill';
 import { UserProject } from './entities/UserProject';
 import { createProjectMembersLoader } from './dataloaders/projectMembersLoader';
+import { SkillResolver } from './resolvers/SkillResolver';
+import { CategoryResolver } from './resolvers/categoryResolver';
 
 const main = async () => {
 	await createConnection({
@@ -70,7 +72,7 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [ProjectResolver, UserResolver],
+			resolvers: [ProjectResolver, UserResolver, SkillResolver, CategoryResolver],
 			validate: false,
 		}),
 		context: ({ req, res }) => ({

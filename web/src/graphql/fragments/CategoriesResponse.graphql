@@ -1,0 +1,9 @@
+fragment CategoriesResponse on CategoriesResponse {
+	errors {
+		...Error
+	}
+	categories {
+		id
+		name
+	}
+}

@@ -10,6 +10,7 @@ import {
   makeStyles,
   Theme,
   Typography,
+  withStyles,
 } from '@material-ui/core';
 import React from 'react';
 import { Category, Project, Skill, useJoinProjectMutation } from '../generated/graphql';
@@ -74,6 +75,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const StyledChip = withStyles({
+  root: {
+    "&&:hover": {
+      backgroundColor: "#6596e6"
+    },
+    "&&:focus": {
+      backgroundColor: "green"
+    }
+  }
+})(Chip);
+
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   userProjects,
   id,
@@ -134,7 +146,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </Typography>
           <div className={classes.chips}>
             {categories.map((category: Category, index: number) => (
-              <Chip
+              <StyledChip
                 key={index}
                 variant='outlined'
                 size='small'
@@ -147,7 +159,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </Typography>
           <div className={classes.chips}>
             {skills.map((skill: Skill, index: number) => (
-              <Chip
+              <StyledChip
                 key={index}
                 variant='outlined'
                 size='small'

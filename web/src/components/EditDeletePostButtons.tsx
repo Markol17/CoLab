@@ -17,7 +17,7 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
   const { data } = useCurrentUserQuery();
   const [deleteProject] = useDeleteProjectMutation();
 
-  if (data?.currentUser?.id !== creatorId) {
+  if (data!.currentUser!.id !== creatorId) {
     return null;
   }
 

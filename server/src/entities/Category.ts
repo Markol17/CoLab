@@ -1,32 +1,36 @@
 import { ObjectType, Field } from 'type-graphql';
 import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  BaseEntity,
-  OneToMany,
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	CreateDateColumn,
+	UpdateDateColumn,
+	BaseEntity,
+	OneToMany,
 } from 'typeorm';
 import { ProjectCategory } from './ProjectCategory';
 
 @ObjectType()
 @Entity()
 export class Category extends BaseEntity {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+	@Field()
+	@PrimaryGeneratedColumn()
+	id!: number;
 
-  @Field()
-  @Column()
-  name!: string;
+	@Field()
+	@Column()
+	name!: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+	@Field()
+	@Column()
+	color!: string;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+	@CreateDateColumn()
+	createdAt: Date;
 
-  @OneToMany(() => ProjectCategory, (pc) => pc.category)
-  projectConnection: Promise<ProjectCategory[]>;
+	@UpdateDateColumn()
+	updatedAt: Date;
+
+	@OneToMany(() => ProjectCategory, (pc) => pc.category)
+	projectConnection: Promise<ProjectCategory[]>;
 }

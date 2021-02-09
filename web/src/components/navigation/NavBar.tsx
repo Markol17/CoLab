@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import TuneIcon from '@material-ui/icons/Tune';
 import IndexDrawer from '../drawers/IndexDrawer';
 import {
   Paper,
@@ -60,6 +61,11 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    searchContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     search: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
@@ -70,12 +76,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
       boxShadow: '3px 3px 10px 0px rgba(0,0,0,0.6)',
       marginLeft: 15,
-      width: '100%',
       cursor: 'pointer',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
         width: '25%',
-        minWidth: '300px',
+        minWidth: '415px',
         justifyContent: 'center',
       },
     },
@@ -347,12 +352,13 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             </IconButton>
             <div className={classes.container}>
               <CoLab height={35} />
+              <div className={classes.searchContainer}>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
                 </div>
                 <InputBase
-                  placeholder='Search projects by name, faculty, category, class…'
+                  placeholder='Search projects by name, category(ies), skill(s)…'
                   classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,
@@ -360,6 +366,16 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </div>
+              <IconButton
+              color='inherit'
+              aria-label='filter'
+              // onClick={toggleDrawer}
+              edge='end'
+              className={classes.menuButton}
+            >
+              <TuneIcon />
+            </IconButton>
+            </div>
               {loading ? null /* data loading */ : !data?.currentUser ? (
                 /*user not logged in*/ <>
                   <div className={classes.sectionDesktop}>
@@ -453,6 +469,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         handleBookmarksClick={handleBookmarksClick}
       />
       <CreateProjectModal
+        userId={data?.currentUser?.id}
         isOpen={openCreateModal}
         onClose={handleCreateModalClose}
       />

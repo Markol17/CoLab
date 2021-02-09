@@ -25,7 +25,7 @@ export class UserResolver {
 	}
 
 	@Query(() => User, { nullable: true })
-	async currentUser(@Ctx() context: Context) {
+	async currentUser(@Ctx() context: Context): Promise<User | null> {
 		const userService = new UserService();
 		return await userService.getUser(context);
 	}

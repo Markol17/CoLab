@@ -7,16 +7,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormik } from 'formik';
-import { Checkbox, TextareaAutosize, Typography } from '@material-ui/core';
+import { Checkbox, CircularProgress, TextareaAutosize, Typography } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import { useCreateProjectMutation } from '../../generated/graphql';
+import { CurrentUserDocument, useCategoriesQuery, useCreateProjectMutation, useCurrentUserQuery, useSkillsQuery } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { DropzoneArea } from 'material-ui-dropzone';
 import { toErrorMap } from '../../utils/toErrorMap';
 
 interface CreateProjectModalProps {
+  userId: number | undefined;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
+  userId,
   isOpen,
   onClose,
 }) => {
@@ -56,6 +58,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   const [createProject] = useCreateProjectMutation();
   const [img, setImg] = useState(null);
   const router = useRouter();
+  const { data: skillsData, loading: skillsLoading } = useSkillsQuery();
+  const { data: categoriesData, loading: categoriesLoading } = useCategoriesQuery();
 
   const formik = useFormik({
     initialValues: { name: '', desc: '', skillIds: [], categoryIds: [] },
@@ -69,9 +73,9 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           thumbnail: img,
         }
         },
-        update: (cache: any) => {
-          cache.evict({ fieldName: 'projects:{}' });
-        },
+        refetchQueries: [{
+          query: CurrentUserDocument,
+        }]
       });
       if (response.data?.createProject.errors) {
         setErrors(toErrorMap(response.data.createProject.errors));
@@ -110,16 +114,6 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   };
   const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
   const checkedIcon = <CheckBoxIcon fontSize='small' />;
-
-  const categories = [
-    { id: 1, name: 'Tech' },
-    { id: 2, name: 'Science' },
-  ];
-
-  const skills = [
-    { id: 1, type: 'SWE' },
-    { id: 2, type: 'Comm' },
-  ];
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
@@ -166,11 +160,14 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             value={formik.values.desc}
             multiline
           />
-          <Autocomplete
+          {categoriesLoading ?
+          ( <CircularProgress color="secondary" />) :
+          (<Autocomplete
             multiple
             size='small'
             id='categories'
-            options={categories}
+            //@ts-ignore
+            options={categoriesData!.categories!.categories}
             disableCloseOnSelect
             getOptionLabel={(option) => option.name}
             onChange={getCategoriesSelected}
@@ -197,12 +194,16 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 onChange={formik.handleChange}
               />
             )}
-          />
-          <Autocomplete
+          />)
+        }
+         {skillsLoading ?
+          ( <CircularProgress color="secondary" />) :
+          (<Autocomplete
             multiple
             size='small'
             id='skills'
-            options={skills}
+            //@ts-ignore
+            options={skillsData!.skills!.skills}
             disableCloseOnSelect
             getOptionLabel={(option) => option.type}
             onChange={getSkillsSelected}
@@ -231,6 +232,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
               />
             )}
           />
+          )
+        }
         </DialogContent>
         <DialogActions className={classes.modalActions}>
           <Button

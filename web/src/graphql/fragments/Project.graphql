@@ -9,10 +9,12 @@ fragment Project on Project {
 	skills {
 		id
 		type
+		color
 	}
 	categories {
 		id
 		name
+		color
 	}
 	creator {
 		id

@@ -76,6 +76,7 @@ export class ProjectService {
 			}
 		}
 
+		await this.joinProject(project.id, context);
 		return { project };
 	}
 
