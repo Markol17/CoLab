@@ -66,6 +66,7 @@ export class ProjectService {
 			await this.projectRepository.saveProjectSkillIds(sIds);
 			await this.projectRepository.saveProjectCategoryIds(cIds);
 
+			//TODO: fix this shit
 			if (!!thumbnail) {
 				const { createReadStream, filename } = await thumbnail;
 				await new Promise((res) =>

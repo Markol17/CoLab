@@ -65,7 +65,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               currentUser: data?.login.user,
             },
           });
-          cache.evict({ fieldName: 'projects:{}' });
         },
       });
       if (response.data?.login.errors) {

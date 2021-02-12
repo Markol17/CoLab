@@ -15,6 +15,9 @@ const useStyles = makeStyles({
   card: {
     maxWidth: 345,
   },
+  loadingContainer: {
+    height: '10%',
+  }
 });
 
 const Index = () => {
@@ -38,7 +41,7 @@ const Index = () => {
 
   const loadMore = () => {
     const isBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
-    if(isBottom){
+    if(isBottom && data?.paginatedProjects.hasMore){
       fetchMore({
         variables: {
           limit: variables?.limit,
@@ -78,7 +81,9 @@ const Index = () => {
     <Layout>
       {!data && loading ? (
         //TODO: add skeleton
-        <div>loading...</div>
+        <>
+          <Grid justify="center" container><CircularProgress color="secondary" /></Grid>
+        </>
       ) : (
         <>
         <Grid container className={classes.root}>
@@ -105,7 +110,7 @@ const Index = () => {
         </>
       )}
            {loading &&
-          ( <Box m="auto"><CircularProgress color="secondary" /></Box>) 
+          ( <Grid justify="center" alignItems='center' className={classes.loadingContainer} container><CircularProgress color="secondary" /></Grid>) 
         }
     </Layout>
   );

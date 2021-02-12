@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
@@ -10,7 +9,6 @@ import {
   makeStyles,
   Theme,
   Typography,
-  withStyles,
 } from '@material-ui/core';
 import React, { useContext } from 'react';
 import { Category, CurrentUserDocument, Project, Skill, useJoinProjectMutation } from '../generated/graphql';
@@ -31,6 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
     card: {
       minWidth: 310,
       maxWidth: 310,
+      minHeight: '100%',
+      maxHeight: '100%',
       boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
       transition: 'transform 0.2s',
       '&:hover': {
@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     cardContent: {
       padding: 10,
-      paddingBottom: 0,
     },
     img: {
       minHeight: 200,
@@ -75,14 +74,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const StyledChip = withStyles({
-  root: {
-    "&&": {
-      borderColor: "#6596e6"
-    },
-  }
-})(Chip);
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   userProjects,
@@ -136,38 +127,38 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           }
         />
         <CardContent className={classes.cardContent}>
-          <Typography noWrap variant='h5' component='h2'>
+          <Typography noWrap variant='h5' >
             {name}
           </Typography>
           <Typography
             gutterBottom
-            variant='body1'
+            variant='body2'
             color='textSecondary'
-            component='p'
+            noWrap
           >
             {desc}
           </Typography>
-          <Typography variant='body2' color='textSecondary' component='p'>
+          <Typography variant='subtitle1' color='textSecondary'>
             Categories:
           </Typography>
           <div className={classes.chips}>
             {categories.map((category: Category, index: number) => (
-              <StyledChip
+              <Chip
+                style={{backgroundColor: category.color, fontWeight: 'bold'}}
                 key={index}
-                variant='outlined'
                 size='small'
                 label={category.name}
               />
             ))}
           </div>
-          <Typography variant='body2' color='textSecondary' component='p'>
+          <Typography variant='subtitle1' color='textSecondary'>
             Skills:
           </Typography>
           <div className={classes.chips}>
             {skills.map((skill: Skill, index: number) => (
-              <StyledChip
+              <Chip
+                style={{backgroundColor: skill.color, fontWeight: 'bold'}}
                 key={index}
-                variant='outlined'
                 size='small'
                 label={skill.type}
               />
