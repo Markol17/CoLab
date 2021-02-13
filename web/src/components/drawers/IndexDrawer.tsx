@@ -25,177 +25,163 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 const drawerWidth = 240;
 
 interface IndexDrawerProps {
-  isDrawerOpen: boolean;
-  isProjectOpen: boolean;
-  isBookmarksOpen: boolean;
-  isUserConnected: boolean;
-  projects: any;
-  handleProjectsClick: () => void;
-  handleBookmarksClick: () => void;
+	isDrawerOpen: boolean;
+	isProjectOpen: boolean;
+	isBookmarksOpen: boolean;
+	isUserConnected: boolean;
+	projects: any;
+	handleProjectsClick: () => void;
+	handleBookmarksClick: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-      whiteSpace: 'nowrap',
-    },
-    drawerOpen: {
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerClose: {
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      overflowX: 'hidden',
-      width: theme.spacing(6) + 1,
-      [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(7),
-      },
-    },
-    spacer: {
-      ...theme.mixins.toolbar,
-    },
-    nested: {
-      paddingLeft: theme.spacing(4),
-    },
-    projectAvatar: {
-      width: theme.spacing(4),
-      height: theme.spacing(4),
-    },
-  })
+	createStyles({
+		drawer: {
+			width: drawerWidth,
+			flexShrink: 0,
+			whiteSpace: 'nowrap',
+		},
+		drawerOpen: {
+			width: drawerWidth,
+			transition: theme.transitions.create('width', {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.enteringScreen,
+			}),
+		},
+		drawerClose: {
+			transition: theme.transitions.create('width', {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.leavingScreen,
+			}),
+			overflowX: 'hidden',
+			width: theme.spacing(6) + 1,
+			[theme.breakpoints.up('sm')]: {
+				width: theme.spacing(7),
+			},
+		},
+		spacer: {
+			...theme.mixins.toolbar,
+		},
+		nested: {
+			paddingLeft: theme.spacing(4),
+		},
+		projectAvatar: {
+			width: theme.spacing(4),
+			height: theme.spacing(4),
+		},
+	})
 );
 
 const IndexDrawer: React.FC<IndexDrawerProps> = ({
-  projects,
-  isDrawerOpen,
-  isProjectOpen,
-  isUserConnected,
-  isBookmarksOpen,
-  handleProjectsClick,
-  handleBookmarksClick,
+	projects,
+	isDrawerOpen,
+	isProjectOpen,
+	isUserConnected,
+	isBookmarksOpen,
+	handleProjectsClick,
+	handleBookmarksClick,
 }) => {
-  const classes = useStyles();
+	const classes = useStyles();
 
-  return (
-    <Drawer
-      variant='permanent'
-      className={clsx(classes.drawer, {
-        [classes.drawerOpen]: isDrawerOpen,
-        [classes.drawerClose]: !isDrawerOpen,
-      })}
-      classes={{
-        paper: clsx({
-          [classes.drawerOpen]: isDrawerOpen,
-          [classes.drawerClose]: !isDrawerOpen,
-        }),
-      }}
-    >
-      <div className={classes.spacer} />
-      <List>
-        {['Home', 'Explore'].map((text, index) => (
-          <ListItem button key={index}>
-            <ListItemIcon>
-              {index === 0 ? (
-                <NextLink href='/'>
-                <HomeIcon />
-                </NextLink>
-              ) : index === 1 ? (
-                <ExploreIcon />
-              ) : null}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      {isUserConnected && (
-        <>
-          <Divider />
-          <List>
-            <ListItem button key={'Projects'} onClick={handleProjectsClick}>
-              <ListItemIcon>
-                <AccountTreeIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Projects'} />
-              {isProjectOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={isProjectOpen} timeout='auto' unmountOnExit>
-              <List component='div' disablePadding>
-                {!!projects ? (
-                  projects.map(
-                    (
-                      project: {
-                        id: number;
-                        name: string;
-                        thumbnail: string;
-                      },
-                      index: number
-                    ) => (
-                      <ListItem key={index} button className={classes.nested}>
-                        <ListItemIcon>
-                          <Avatar
-                            alt='Project Avatar'
-                            className={classes.projectAvatar}
-                            src={
-                               !!project.thumbnail ? `http://localhost:4000/projects/thumbnails/${project.thumbnail}` : `http://localhost:4000/projects/thumbnails/placeholder.jpg`
-                            }
-                          />
-                        </ListItemIcon>
-                        <Typography noWrap>{project.name}</Typography>
-                      </ListItem>
-                    )
-                  )
-                ) : (
-                  <CircularProgress color='secondary' />
-                )}
-              </List>
-            </Collapse>
-            {/* bookmarks */}
-            <ListItem button key={'Bookmarks'} onClick={handleBookmarksClick}>
-              <ListItemIcon>
-                <BookmarksIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Bookmarks'} />
-              {isBookmarksOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={isBookmarksOpen} timeout='auto' unmountOnExit>
-              <List component='div' disablePadding>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <FileCopyIcon />
-                  </ListItemIcon>
-                  <ListItemText primary='Bookmark 1' />
-                </ListItem>
-              </List>
-            </Collapse>
-          </List>
-        </>
-      )}
-      <Divider />
+	return (
+		<Drawer
+			variant='permanent'
+			className={clsx(classes.drawer, {
+				[classes.drawerOpen]: isDrawerOpen,
+				[classes.drawerClose]: !isDrawerOpen,
+			})}
+			classes={{
+				paper: clsx({
+					[classes.drawerOpen]: isDrawerOpen,
+					[classes.drawerClose]: !isDrawerOpen,
+				}),
+			}}>
+			<div className={classes.spacer} />
+			<List>
+				{['Home', 'Explore'].map((text, index) => (
+					<ListItem button key={index}>
+						<ListItemIcon>
+							{index === 0 ? (
+								<NextLink href='/'>
+									<HomeIcon />
+								</NextLink>
+							) : index === 1 ? (
+								<ExploreIcon />
+							) : null}
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
+				))}
+			</List>
+			{isUserConnected && (
+				<>
+					<Divider />
+					<List>
+						<ListItem button key={'Projects'} onClick={handleProjectsClick}>
+							<ListItemIcon>
+								<AccountTreeIcon />
+							</ListItemIcon>
+							<ListItemText primary={'Projects'} />
+							{isProjectOpen ? <ExpandLess /> : <ExpandMore />}
+						</ListItem>
+						<Collapse in={isProjectOpen} timeout='auto' unmountOnExit>
+							<List component='div' disablePadding>
+								{!!projects ? (
+									projects.map((project: { id: number; name: string; thumbnail: string }, index: number) => (
+										<ListItem key={index} button className={classes.nested}>
+											<ListItemIcon>
+												<Avatar
+													alt='Project Avatar'
+													className={classes.projectAvatar}
+													src={
+														!!project.thumbnail
+															? `http://localhost:4000/projects/thumbnails/${project.thumbnail}`
+															: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
+													}
+												/>
+											</ListItemIcon>
+											<Typography noWrap>{project.name}</Typography>
+										</ListItem>
+									))
+								) : (
+									<CircularProgress color='secondary' />
+								)}
+							</List>
+						</Collapse>
+						{/* bookmarks */}
+						<ListItem button key={'Bookmarks'} onClick={handleBookmarksClick}>
+							<ListItemIcon>
+								<BookmarksIcon />
+							</ListItemIcon>
+							<ListItemText primary={'Bookmarks'} />
+							{isBookmarksOpen ? <ExpandLess /> : <ExpandMore />}
+						</ListItem>
+						<Collapse in={isBookmarksOpen} timeout='auto' unmountOnExit>
+							<List component='div' disablePadding>
+								<ListItem button className={classes.nested}>
+									<ListItemIcon>
+										<FileCopyIcon />
+									</ListItemIcon>
+									<ListItemText primary='Bookmark 1' />
+								</ListItem>
+							</List>
+						</Collapse>
+					</List>
+				</>
+			)}
+			<Divider />
 
-      <List>
-        {['Settings', 'Send Comments', 'Help'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index === 0 ? (
-                <SettingsIcon />
-              ) : index === 1 ? (
-                <AnnouncementIcon />
-              ) : (
-                <HelpIcon />
-              )}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
-  );
+			<List>
+				{['Settings', 'Send Comments', 'Help'].map((text, index) => (
+					<ListItem button key={text}>
+						<ListItemIcon>
+							{index === 0 ? <SettingsIcon /> : index === 1 ? <AnnouncementIcon /> : <HelpIcon />}
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
+				))}
+			</List>
+		</Drawer>
+	);
 };
 export default IndexDrawer;

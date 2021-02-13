@@ -259,7 +259,6 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
       <MenuItem onClick={logoutUser} disabled={logoutFetching}>
         Logout

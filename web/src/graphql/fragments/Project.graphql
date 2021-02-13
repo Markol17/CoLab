@@ -6,6 +6,9 @@ fragment Project on Project {
 	desc
 	points
 	thumbnail
+	members {
+		id
+	}
 	skills {
 		id
 		type
