@@ -11,8 +11,16 @@ import {
 	Typography,
 } from '@material-ui/core';
 import React, { useContext } from 'react';
-import { Category, CurrentUserDocument, Project, Skill, useJoinProjectMutation } from '../generated/graphql';
+import {
+	Category,
+	CurrentUserDocument,
+	Project,
+	Skill,
+	useCurrentUserQuery,
+	useJoinProjectMutation,
+} from '../generated/graphql';
 import { ModalsContext, TOGGLE_LOGIN } from '../utils/contexts/ModalsContext';
+import { isServer } from '../utils/isServer';
 
 interface ProjectCardProps {
 	userProjects: any;
@@ -77,7 +85,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export const ProjectCard: React.FC<ProjectCardProps> = ({ userProjects, project, setProject, toggleLearnMore }) => {
 	const classes = useStyles();
 	const { dispatch } = useContext(ModalsContext);
-	const [joinProjectMutation, { error }] = useJoinProjectMutation();
+	const [joinProjectMutation] = useJoinProjectMutation();
+	const { data } = useCurrentUserQuery({
+		skip: isServer(),
+	});
 	const { id, name, desc, thumbnail, categories, skills } = project!;
 
 	const userAlreadyJoined = () => {
@@ -95,7 +106,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ userProjects, project,
 	};
 
 	const handleJoin = async () => {
-		if (!error) {
+		if (!data?.currentUser) {
 			dispatch({ type: TOGGLE_LOGIN });
 			return;
 		}

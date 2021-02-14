@@ -11,7 +11,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { CurrentUserDocument, CurrentUserQuery, useRegisterMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { toErrorMap } from '../../utils/toErrorMap';
-import { IconButton, Typography } from '@material-ui/core';
+import { IconButton, InputAdornment, Typography } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 interface RegisterModalProps {
 	isOpen: boolean;
@@ -80,6 +81,15 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 	const classes = useStyles();
 	const [register] = useRegisterMutation();
 	const router = useRouter();
+	const [showPassword, setShowPassword] = useState(false);
+
+	const handleClickShowPassword = () => {
+		setShowPassword(!showPassword);
+	};
+
+	const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+	};
 
 	const formik = useFormik({
 		initialValues: { email: '', username: '', password: '' },
@@ -111,6 +121,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 			<form onSubmit={formik.handleSubmit}>
 				<DialogContent className={classes.modalContent}>
 					<TextField
+						autoFocus
 						error={!!formik.errors.email}
 						helperText={formik.errors.email}
 						variant='outlined'
@@ -144,13 +155,26 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						variant='outlined'
 						margin='dense'
 						label='Password'
-						type='password'
+						type={showPassword ? 'text' : 'password'}
 						fullWidth
 						name='password'
 						placeholder='Password'
 						onChange={formik.handleChange}
 						value={formik.values.password}
 						color='secondary'
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge='end'>
+										{showPassword ? <Visibility /> : <VisibilityOff />}
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
 					/>
 				</DialogContent>
 				<DialogActions className={classes.modalActions}>

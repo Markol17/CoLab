@@ -9,6 +9,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -52,8 +54,8 @@ export type Project = {
   skills: Array<Skill>;
   categories: Array<Category>;
   members: Array<User>;
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type User = {
@@ -64,8 +66,8 @@ export type User = {
   skills: Array<Skill>;
   projects: Array<Project>;
   avatar?: Maybe<Scalars['String']>;
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Skill = {
@@ -74,6 +76,7 @@ export type Skill = {
   type: Scalars['String'];
   color: Scalars['String'];
 };
+
 
 export type Category = {
   __typename?: 'Category';

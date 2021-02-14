@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -10,8 +10,9 @@ import { useFormik } from 'formik';
 import { CurrentUserDocument, CurrentUserQuery, useLoginMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { toErrorMap } from '../../utils/toErrorMap';
-import { IconButton, Typography, withStyles } from '@material-ui/core';
+import { IconButton, InputAdornment, Typography, withStyles } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -80,6 +81,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 	const classes = useStyles();
 	const [login] = useLoginMutation();
 	const router = useRouter();
+	const [showPassword, setShowPassword] = useState(false);
+
+	const handleClickShowPassword = () => {
+		setShowPassword(!showPassword);
+	};
+
+	const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+	};
 
 	const formik = useFormik({
 		initialValues: { usernameOrEmail: '', password: '' },
@@ -115,6 +125,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 			<form onSubmit={formik.handleSubmit}>
 				<DialogContent className={classes.modalContent}>
 					<TextField
+						autoFocus
 						error={!!formik.errors.usernameOrEmail}
 						helperText={formik.errors.usernameOrEmail}
 						variant='outlined'
@@ -135,12 +146,25 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 						color='secondary'
 						margin='dense'
 						label='Password'
-						type='password'
+						type={showPassword ? 'text' : 'password'}
 						fullWidth
 						name='password'
 						placeholder='Password'
 						onChange={formik.handleChange}
 						value={formik.values.password}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge='end'>
+										{showPassword ? <Visibility /> : <VisibilityOff />}
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
 					/>
 				</DialogContent>
 				<DialogActions className={classes.modalActions}>

@@ -40,7 +40,7 @@ const Index = () => {
 			offset: 0,
 			limit: 15,
 		},
-		notifyOnNetworkStatusChange: true,
+		//notifyOnNetworkStatusChange: true, -> makes the data undefined for some reason
 	});
 
 	useEffect(() => {
@@ -95,9 +95,10 @@ const Index = () => {
 			{!data && loading ? (
 				//TODO: add skeleton
 				<>
-					<Grid justify='center' container>
+					Loading...
+					{/* <Grid justify='center' container>
 						<CircularProgress color='secondary' />
-					</Grid>
+					</Grid> */}
 				</>
 			) : (
 				<>

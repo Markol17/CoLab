@@ -47,11 +47,11 @@ export class User extends BaseEntity {
 	@Column({ nullable: true })
 	avatar: string;
 
-	@Field(() => String)
+	@Field(() => Date)
 	@CreateDateColumn()
 	createdAt: Date;
 
-	@Field(() => String)
+	@Field(() => Date)
 	@UpdateDateColumn()
 	updatedAt: Date;
 }

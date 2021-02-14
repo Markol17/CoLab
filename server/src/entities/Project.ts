@@ -76,11 +76,11 @@ export class Project extends BaseEntity {
 		return projectMembersLoader.load(this.id);
 	}
 
-	@Field(() => String)
+	@Field(() => Date)
 	@CreateDateColumn()
 	createdAt: Date;
 
-	@Field(() => String)
+	@Field(() => Date)
 	@UpdateDateColumn()
 	updatedAt: Date;
 }

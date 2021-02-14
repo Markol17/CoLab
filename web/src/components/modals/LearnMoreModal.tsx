@@ -6,10 +6,18 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Image from 'material-ui-image';
-import { Category, CurrentUserDocument, Project, Skill, useJoinProjectMutation } from '../../generated/graphql';
+import {
+	Category,
+	CurrentUserDocument,
+	Project,
+	Skill,
+	useCurrentUserQuery,
+	useJoinProjectMutation,
+} from '../../generated/graphql';
 import { ModalsContext, TOGGLE_LOGIN } from '../../utils/contexts/ModalsContext';
 import { Box, Chip, DialogContentText, IconButton, Typography, withStyles } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { isServer } from '../../utils/isServer';
 
 interface LearnMoreModalProps {
 	userProjects: any;
@@ -100,14 +108,17 @@ const DialogTitle = withStyles(headerStyles)((props: any) => {
 export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, project, userProjects }) => {
 	const classes = useStyles();
 	const { dispatch } = useContext(ModalsContext);
-	const [joinProjectMutation, { error }] = useJoinProjectMutation();
+	const [joinProjectMutation] = useJoinProjectMutation();
+	const { data } = useCurrentUserQuery({
+		skip: isServer(),
+	});
 	const { id, name, desc, thumbnail, categories, skills, creator, members, createdAt, updatedAt } = project;
-	const createdDate = new Date(createdAt * 1000);
-	const updatedDate = new Date(updatedAt * 1000);
+	const createdDate = new Date(createdAt);
+	const updatedDate = new Date(updatedAt);
 
 	const handleJoin = async () => {
 		onClose();
-		if (!error) {
+		if (!data?.currentUser) {
 			dispatch({ type: TOGGLE_LOGIN });
 			return;
 		}
@@ -134,6 +145,21 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 
 		return userAlreadyJoined;
 	};
+
+	const months = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	];
 
 	return (
 		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
@@ -195,11 +221,15 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 				<Typography className={classes.subtitles} gutterBottom variant='subtitle1'>
 					Created on:
 				</Typography>
-				<DialogContentText>{createdDate.toDateString()}</DialogContentText>
+				<DialogContentText>
+					{months[createdDate.getMonth()] + ' ' + createdDate.getDate() + ', ' + createdDate.getFullYear()}
+				</DialogContentText>
 				<Typography className={classes.subtitles} gutterBottom variant='subtitle1'>
 					Last active:
 				</Typography>
-				<DialogContentText>{updatedDate.toDateString()}</DialogContentText>
+				<DialogContentText>
+					{months[updatedDate.getMonth()] + ' ' + updatedDate.getDate() + ', ' + updatedDate.getFullYear()}
+				</DialogContentText>
 			</DialogContent>
 			<DialogActions className={classes.modalActions}>
 				<Button onClick={onClose} variant='outlined' className={classes.cancel}>
