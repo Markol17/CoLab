@@ -32,6 +32,14 @@ export class UserService {
 		return user;
 	}
 
+	async getYearOfStudy(user: User): Promise<number> {
+		return (
+			user.expectedGraduationDate.getFullYear() -
+			user.startDateOfStudy.getFullYear() -
+			(user.expectedGraduationDate.getFullYear() - new Date().getFullYear())
+		);
+	}
+
 	async getProjects(userId: number, @Ctx() context: Context): Promise<UserProjectsResponse> {
 		const projects: any = [];
 		if (context.req.session.userId === userId) {

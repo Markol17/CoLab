@@ -8,10 +8,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import { useFormik } from 'formik';
 import CloseIcon from '@material-ui/icons/Close';
-import { CurrentUserDocument, CurrentUserQuery, useRegisterMutation } from '../../generated/graphql';
+import {
+	CurrentUserDocument,
+	CurrentUserQuery,
+	Program,
+	useRegisterMutation,
+	useSchoolsQuery,
+} from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { toErrorMap } from '../../utils/toErrorMap';
-import { IconButton, InputAdornment, Typography } from '@material-ui/core';
+import { CircularProgress, IconButton, InputAdornment, MenuItem, Typography } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 interface RegisterModalProps {
@@ -82,6 +88,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 	const [register] = useRegisterMutation();
 	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
+	const { data: schoolsData, loading: schoolsLoading } = useSchoolsQuery();
 
 	const handleClickShowPassword = () => {
 		setShowPassword(!showPassword);
@@ -92,7 +99,17 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 	};
 
 	const formik = useFormik({
-		initialValues: { email: '', username: '', password: '' },
+		initialValues: {
+			email: '',
+			username: '',
+			password: '',
+			firstName: '',
+			lastName: '',
+			startDateOfStudy: new Date(),
+			expectedGraduationDate: new Date(),
+			schoolId: 0,
+			programId: 0,
+		},
 		onSubmit: async (values, { setErrors }) => {
 			const response = await register({
 				variables: { attributes: values },
@@ -136,6 +153,34 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						color='secondary'
 					/>
 					<TextField
+						error={!!formik.errors.firstName}
+						helperText={formik.errors.firstName}
+						variant='outlined'
+						margin='dense'
+						label='First Name'
+						type='text'
+						fullWidth
+						name='firstName'
+						placeholder='First Name'
+						onChange={formik.handleChange}
+						value={formik.values.firstName}
+						color='secondary'
+					/>
+					<TextField
+						error={!!formik.errors.lastName}
+						helperText={formik.errors.lastName}
+						variant='outlined'
+						margin='dense'
+						label='Last Name'
+						type='text'
+						fullWidth
+						name='lastName'
+						placeholder='Last Name'
+						onChange={formik.handleChange}
+						value={formik.values.lastName}
+						color='secondary'
+					/>
+					<TextField
 						error={!!formik.errors.username}
 						helperText={formik.errors.username}
 						variant='outlined'
@@ -176,6 +221,52 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 							),
 						}}
 					/>
+					{schoolsLoading ? (
+						<CircularProgress color='secondary' />
+					) : (
+						<>
+							<TextField
+								error={!!formik.errors.schoolId}
+								helperText={formik.errors.schoolId}
+								select
+								variant='outlined'
+								margin='dense'
+								label='School'
+								type='text'
+								fullWidth
+								name='schoolId'
+								placeholder='School'
+								onChange={formik.handleChange}
+								value={formik.values.schoolId}
+								color='secondary'>
+								{schoolsData!.schools!.schools!.map((school) => (
+									<MenuItem key={school.id} value={school.id}>
+										{school.name}
+									</MenuItem>
+								))}
+							</TextField>
+							<TextField
+								error={!!formik.errors.programId}
+								helperText={formik.errors.programId}
+								select
+								variant='outlined'
+								margin='dense'
+								fullWidth
+								label='Program'
+								type='text'
+								name='programId'
+								placeholder='Program'
+								onChange={formik.handleChange}
+								value={formik.values.programId}
+								color='secondary'>
+								{schoolsData!.schools!.schools!.map((program) => (
+									<MenuItem key={program.id} value={program.id}>
+										{program.name}
+									</MenuItem>
+								))}
+							</TextField>
+						</>
+					)}
 				</DialogContent>
 				<DialogActions className={classes.modalActions}>
 					<Button onClick={onClose} variant='outlined' className={classes.cancel}>

@@ -65,11 +65,27 @@ export class UserRepository extends Repository<User> {
 	}
 
 	async createAndSaveUser(attributes: RegisterInput): Promise<User | void> {
-		const { email, username, password } = attributes;
+		const {
+			email,
+			username,
+			password,
+			firstName,
+			lastName,
+			startDateOfStudy,
+			expectedGraduationDate,
+			schoolId,
+			programId,
+		} = attributes;
 		const user = new User();
 		user.email = email;
 		user.username = username;
 		user.password = password;
+		user.firstName = firstName;
+		user.lastName = lastName;
+		user.startDateOfStudy = startDateOfStudy;
+		user.expectedGraduationDate = expectedGraduationDate;
+		user.schoolId = schoolId;
+		user.programId = programId;
 		try {
 			return await this.save(user);
 		} catch (err) {

@@ -16,6 +16,7 @@ import { Context } from 'src/types';
 import { ProjectCategory } from './ProjectCategory';
 import { Skill } from './Skill';
 import { UserProject } from './UserProject';
+import { School } from './School';
 
 @ObjectType()
 @Entity()
@@ -47,6 +48,9 @@ export class Project extends BaseEntity {
 	@Field()
 	@Column()
 	creatorId: number;
+
+	@ManyToOne(() => School, (school: School) => school.projects)
+	school: School;
 
 	@Field()
 	@ManyToOne(() => User, (user) => user.projects)

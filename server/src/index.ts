@@ -10,7 +10,7 @@ import Redis from 'ioredis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
-import { createConnection } from 'typeorm'; //getConnection
+import { createConnection } from 'typeorm';
 import { Project } from './entities/Project';
 import { User } from './entities/User';
 import path from 'path';
@@ -26,6 +26,9 @@ import { UserProject } from './entities/UserProject';
 import { createProjectMembersLoader } from './dataloaders/projectMembersLoader';
 import { SkillResolver } from './resolvers/SkillResolver';
 import { CategoryResolver } from './resolvers/categoryResolver';
+import { Program } from './entities/Program';
+import { School } from './entities/School';
+import { SchoolResolver } from './resolvers/SchoolResolver';
 
 const main = async () => {
 	await createConnection({
@@ -36,7 +39,7 @@ const main = async () => {
 		logging: true,
 		synchronize: true,
 		migrations: [path.join(__dirname, './migrations/*')],
-		entities: [ProjectSkill, ProjectCategory, User, UserSkill, Skill, Project, Category, UserProject],
+		entities: [ProjectSkill, ProjectCategory, User, UserSkill, Skill, Project, Category, UserProject, Program, School],
 	});
 	// await conn.runMigrations();
 	const app = express();
@@ -58,7 +61,7 @@ const main = async () => {
 				disableTouch: true,
 			}),
 			cookie: {
-				maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+				maxAge: 1000 * 60 * 60 * 24 * 365, // 1 years
 				httpOnly: true,
 				sameSite: 'lax', // csrf
 				secure: __prod__, // cookies only work in https
@@ -72,7 +75,7 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [ProjectResolver, UserResolver, SkillResolver, CategoryResolver],
+			resolvers: [ProjectResolver, UserResolver, SkillResolver, CategoryResolver, SchoolResolver],
 			validate: false,
 		}),
 		context: ({ req, res }) => ({

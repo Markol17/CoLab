@@ -1,4 +1,4 @@
-import { ObjectType, Field } from 'type-graphql';
+import { ObjectType, Field, Int } from 'type-graphql';
 import {
 	Entity,
 	PrimaryGeneratedColumn,
@@ -7,11 +7,15 @@ import {
 	Column,
 	BaseEntity,
 	OneToMany,
+	ManyToOne,
+	JoinColumn,
 } from 'typeorm';
 import { Project } from './Project';
 import { Skill } from './Skill';
 import { UserSkill } from './UserSkill';
 import { UserProject } from './UserProject';
+import { School } from './School';
+import { Program } from './Program';
 
 @ObjectType()
 @Entity()
@@ -25,11 +29,44 @@ export class User extends BaseEntity {
 	username!: string;
 
 	@Field()
+	@Column()
+	firstName!: string;
+
+	@Field()
+	@Column()
+	lastName!: string;
+
+	@Field()
 	@Column({ unique: true })
 	email!: string;
 
 	@Column()
 	password!: string;
+
+	@Column()
+	startDateOfStudy!: Date;
+
+	@Column()
+	expectedGraduationDate!: Date;
+
+	@Field(() => Int)
+	yearOfStudy: number;
+
+	@Column()
+	schoolId: number;
+
+	@Field(() => School)
+	@ManyToOne(() => School, (school) => school.users)
+	@JoinColumn({ name: 'schoolId' })
+	school: School;
+
+	@Column()
+	programId: number;
+
+	@Field(() => Program)
+	@ManyToOne(() => Program, (program) => program.users)
+	@JoinColumn({ name: 'programId' })
+	program: Program;
 
 	@OneToMany(() => UserSkill, (us) => us.skill)
 	skillConnection: Promise<UserSkill[]>;

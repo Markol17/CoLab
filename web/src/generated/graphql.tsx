@@ -22,6 +22,7 @@ export type Query = {
   currentUser?: Maybe<User>;
   skills?: Maybe<SkillsResponse>;
   categories?: Maybe<CategoriesResponse>;
+  schools: SchoolsResponse;
 };
 
 
@@ -62,12 +63,30 @@ export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
   username: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
   email: Scalars['String'];
+  yearOfStudy: Scalars['Int'];
+  school: School;
+  program: Program;
   skills: Array<Skill>;
   projects: Array<Project>;
   avatar?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type School = {
+  __typename?: 'School';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  programs: Array<Program>;
+};
+
+export type Program = {
+  __typename?: 'Program';
+  id: Scalars['Float'];
+  name: Scalars['String'];
 };
 
 export type Skill = {
@@ -101,6 +120,12 @@ export type CategoriesResponse = {
   __typename?: 'CategoriesResponse';
   errors?: Maybe<Array<FieldError>>;
   categories?: Maybe<Array<Category>>;
+};
+
+export type SchoolsResponse = {
+  __typename?: 'SchoolsResponse';
+  errors?: Maybe<Array<FieldError>>;
+  schools?: Maybe<Array<School>>;
 };
 
 export type Mutation = {
@@ -193,7 +218,13 @@ export type ChangePasswordInput = {
 export type RegisterInput = {
   email: Scalars['String'];
   username: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
   password: Scalars['String'];
+  startDateOfStudy: Scalars['DateTime'];
+  expectedGraduationDate: Scalars['DateTime'];
+  schoolId: Scalars['Int'];
+  programId: Scalars['Int'];
 };
 
 export type LoginInput = {
@@ -253,6 +284,21 @@ export type ProjectResponseFragment = (
     { __typename?: 'Project' }
     & ProjectFragment
   )> }
+);
+
+export type SchoolsResponseFragment = (
+  { __typename?: 'SchoolsResponse' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  )>>, schools?: Maybe<Array<(
+    { __typename?: 'School' }
+    & Pick<School, 'id' | 'name'>
+    & { programs: Array<(
+      { __typename?: 'Program' }
+      & Pick<Program, 'id' | 'name'>
+    )> }
+  )>> }
 );
 
 export type SkillsResponseFragment = (
@@ -435,6 +481,17 @@ export type ProjectQuery = (
   )> }
 );
 
+export type SchoolsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SchoolsQuery = (
+  { __typename?: 'Query' }
+  & { schools: (
+    { __typename?: 'SchoolsResponse' }
+    & SchoolsResponseFragment
+  ) }
+);
+
 export type SkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -510,6 +567,21 @@ export const ProjectResponseFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${ProjectFragmentDoc}`;
+export const SchoolsResponseFragmentDoc = gql`
+    fragment SchoolsResponse on SchoolsResponse {
+  errors {
+    ...Error
+  }
+  schools {
+    id
+    name
+    programs {
+      id
+      name
+    }
+  }
+}
+    ${ErrorFragmentDoc}`;
 export const SkillsResponseFragmentDoc = gql`
     fragment SkillsResponse on SkillsResponse {
   errors {
@@ -930,6 +1002,38 @@ export function useProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProjectQueryHookResult = ReturnType<typeof useProjectQuery>;
 export type ProjectLazyQueryHookResult = ReturnType<typeof useProjectLazyQuery>;
 export type ProjectQueryResult = Apollo.QueryResult<ProjectQuery, ProjectQueryVariables>;
+export const SchoolsDocument = gql`
+    query Schools {
+  schools {
+    ...SchoolsResponse
+  }
+}
+    ${SchoolsResponseFragmentDoc}`;
+
+/**
+ * __useSchoolsQuery__
+ *
+ * To run a query within a React component, call `useSchoolsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchoolsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchoolsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSchoolsQuery(baseOptions?: Apollo.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+        return Apollo.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+      }
+export function useSchoolsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+          return Apollo.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+        }
+export type SchoolsQueryHookResult = ReturnType<typeof useSchoolsQuery>;
+export type SchoolsLazyQueryHookResult = ReturnType<typeof useSchoolsLazyQuery>;
+export type SchoolsQueryResult = Apollo.QueryResult<SchoolsQuery, SchoolsQueryVariables>;
 export const SkillsDocument = gql`
     query Skills {
   skills {

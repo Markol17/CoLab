@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx, Query, FieldResolver, Root, UseMiddleware } from 'type-graphql';
+import { Resolver, Mutation, Arg, Ctx, Query, FieldResolver, Root, UseMiddleware, Int } from 'type-graphql';
 import { Context } from '../types';
 import { User } from '../entities/User';
 import { Project } from '../entities/Project';
@@ -22,6 +22,13 @@ export class UserResolver {
 	async skills(@Root() user: User, @Ctx() context: Context): Promise<UserSkillsResponse> {
 		const userService = new UserService();
 		return await userService.getSkills(user.id, context);
+	}
+
+	@FieldResolver(() => Int)
+	@UseMiddleware(isAuth)
+	async yearOfStudy(@Root() user: User): Promise<number> {
+		const userService = new UserService();
+		return await userService.getYearOfStudy(user);
 	}
 
 	@Query(() => User, { nullable: true })

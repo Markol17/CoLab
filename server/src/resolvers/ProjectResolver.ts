@@ -11,7 +11,7 @@ import { CreateProjectInput } from './InputTypes/ProjectInput';
 @Resolver(Project)
 export class ProjectResolver {
 	@FieldResolver(() => User)
-	creator(@Root() project: Project, @Ctx() { userLoader }: Context) {
+	async creator(@Root() project: Project, @Ctx() { userLoader }: Context): Promise<User> {
 		return userLoader.load(project.creatorId);
 	}
 
