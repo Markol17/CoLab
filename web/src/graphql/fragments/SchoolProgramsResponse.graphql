@@ -1,0 +1,9 @@
+fragment SchoolProgramsResponse on SchoolProgramsResponse {
+	errors {
+		...Error
+	}
+	programs {
+		id
+		name
+	}
+}

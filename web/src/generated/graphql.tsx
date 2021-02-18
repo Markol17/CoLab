@@ -23,6 +23,7 @@ export type Query = {
   skills?: Maybe<SkillsResponse>;
   categories?: Maybe<CategoriesResponse>;
   schools: SchoolsResponse;
+  schoolPrograms: SchoolProgramsResponse;
 };
 
 
@@ -34,6 +35,11 @@ export type QueryPaginatedProjectsArgs = {
 
 export type QueryProjectArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QuerySchoolProgramsArgs = {
+  schoolId: Scalars['Int'];
 };
 
 export type PaginatedProjects = {
@@ -80,7 +86,6 @@ export type School = {
   __typename?: 'School';
   id: Scalars['Float'];
   name: Scalars['String'];
-  programs: Array<Program>;
 };
 
 export type Program = {
@@ -126,6 +131,12 @@ export type SchoolsResponse = {
   __typename?: 'SchoolsResponse';
   errors?: Maybe<Array<FieldError>>;
   schools?: Maybe<Array<School>>;
+};
+
+export type SchoolProgramsResponse = {
+  __typename?: 'SchoolProgramsResponse';
+  errors?: Maybe<Array<FieldError>>;
+  programs?: Maybe<Array<Program>>;
 };
 
 export type Mutation = {
@@ -286,6 +297,17 @@ export type ProjectResponseFragment = (
   )> }
 );
 
+export type SchoolProgramsResponseFragment = (
+  { __typename?: 'SchoolProgramsResponse' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  )>>, programs?: Maybe<Array<(
+    { __typename?: 'Program' }
+    & Pick<Program, 'id' | 'name'>
+  )>> }
+);
+
 export type SchoolsResponseFragment = (
   { __typename?: 'SchoolsResponse' }
   & { errors?: Maybe<Array<(
@@ -294,10 +316,6 @@ export type SchoolsResponseFragment = (
   )>>, schools?: Maybe<Array<(
     { __typename?: 'School' }
     & Pick<School, 'id' | 'name'>
-    & { programs: Array<(
-      { __typename?: 'Program' }
-      & Pick<Program, 'id' | 'name'>
-    )> }
   )>> }
 );
 
@@ -481,6 +499,19 @@ export type ProjectQuery = (
   )> }
 );
 
+export type SchoolProgramsQueryVariables = Exact<{
+  schoolId: Scalars['Int'];
+}>;
+
+
+export type SchoolProgramsQuery = (
+  { __typename?: 'Query' }
+  & { schoolPrograms: (
+    { __typename?: 'SchoolProgramsResponse' }
+    & SchoolProgramsResponseFragment
+  ) }
+);
+
 export type SchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -567,6 +598,17 @@ export const ProjectResponseFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${ProjectFragmentDoc}`;
+export const SchoolProgramsResponseFragmentDoc = gql`
+    fragment SchoolProgramsResponse on SchoolProgramsResponse {
+  errors {
+    ...Error
+  }
+  programs {
+    id
+    name
+  }
+}
+    ${ErrorFragmentDoc}`;
 export const SchoolsResponseFragmentDoc = gql`
     fragment SchoolsResponse on SchoolsResponse {
   errors {
@@ -575,10 +617,6 @@ export const SchoolsResponseFragmentDoc = gql`
   schools {
     id
     name
-    programs {
-      id
-      name
-    }
   }
 }
     ${ErrorFragmentDoc}`;
@@ -1002,6 +1040,39 @@ export function useProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProjectQueryHookResult = ReturnType<typeof useProjectQuery>;
 export type ProjectLazyQueryHookResult = ReturnType<typeof useProjectLazyQuery>;
 export type ProjectQueryResult = Apollo.QueryResult<ProjectQuery, ProjectQueryVariables>;
+export const SchoolProgramsDocument = gql`
+    query SchoolPrograms($schoolId: Int!) {
+  schoolPrograms(schoolId: $schoolId) {
+    ...SchoolProgramsResponse
+  }
+}
+    ${SchoolProgramsResponseFragmentDoc}`;
+
+/**
+ * __useSchoolProgramsQuery__
+ *
+ * To run a query within a React component, call `useSchoolProgramsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchoolProgramsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchoolProgramsQuery({
+ *   variables: {
+ *      schoolId: // value for 'schoolId'
+ *   },
+ * });
+ */
+export function useSchoolProgramsQuery(baseOptions?: Apollo.QueryHookOptions<SchoolProgramsQuery, SchoolProgramsQueryVariables>) {
+        return Apollo.useQuery<SchoolProgramsQuery, SchoolProgramsQueryVariables>(SchoolProgramsDocument, baseOptions);
+      }
+export function useSchoolProgramsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolProgramsQuery, SchoolProgramsQueryVariables>) {
+          return Apollo.useLazyQuery<SchoolProgramsQuery, SchoolProgramsQueryVariables>(SchoolProgramsDocument, baseOptions);
+        }
+export type SchoolProgramsQueryHookResult = ReturnType<typeof useSchoolProgramsQuery>;
+export type SchoolProgramsLazyQueryHookResult = ReturnType<typeof useSchoolProgramsLazyQuery>;
+export type SchoolProgramsQueryResult = Apollo.QueryResult<SchoolProgramsQuery, SchoolProgramsQueryVariables>;
 export const SchoolsDocument = gql`
     query Schools {
   schools {

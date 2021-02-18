@@ -21,10 +21,9 @@ export class School extends BaseEntity {
 	@OneToMany(() => User, (user) => user.school)
 	users: Promise<User[]>;
 
-	@Field(() => [Program])
 	@OneToMany(() => Program, (program) => program.school)
-	programs: Promise<User[]>;
+	programs: Promise<Program[]>;
 
 	@OneToMany(() => Project, (project) => project.school)
-	projects: Promise<User[]>;
+	projects: Promise<Project[]>;
 }

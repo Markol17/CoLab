@@ -1,0 +1,5 @@
+query SchoolPrograms($schoolId: Int!) {
+	schoolPrograms(schoolId: $schoolId) {
+		...SchoolProgramsResponse
+	}
+}

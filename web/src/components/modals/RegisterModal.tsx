@@ -11,14 +11,17 @@ import CloseIcon from '@material-ui/icons/Close';
 import {
 	CurrentUserDocument,
 	CurrentUserQuery,
-	Program,
 	useRegisterMutation,
+	useSchoolProgramsQuery,
 	useSchoolsQuery,
 } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { toErrorMap } from '../../utils/toErrorMap';
-import { CircularProgress, IconButton, InputAdornment, MenuItem, Typography } from '@material-ui/core';
+import { CircularProgress, IconButton, InputAdornment, Typography } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { Autocomplete } from '@material-ui/lab';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 interface RegisterModalProps {
 	isOpen: boolean;
@@ -47,6 +50,12 @@ const useStyles = makeStyles((theme: Theme) =>
 			minWidth: '90px',
 			fontWeight: 'bold',
 			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+		},
+		datePickers: {
+			display: 'flex',
+		},
+		leftDatePicker: {
+			marginRight: '12px',
 		},
 	})
 );
@@ -89,6 +98,19 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
 	const { data: schoolsData, loading: schoolsLoading } = useSchoolsQuery();
+	const { data, loading } = useSchoolProgramsQuery();
+
+	const schoolOptions = schoolsLoading
+		? null
+		: schoolsData!.schools!.schools!.map((option) => {
+				const firstLetter = option.name[0].toUpperCase();
+				return {
+					firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+					...option,
+				};
+		  });
+
+	let programOptions: any = [];
 
 	const handleClickShowPassword = () => {
 		setShowPassword(!showPassword);
@@ -96,6 +118,32 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 
 	const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
+	};
+
+	const handleSchoolChange = (_event: any, school: any) => {
+		if (!school) {
+			formik.setFieldValue('schoolId', -1);
+			programOptions = [];
+		} else {
+			formik.setFieldValue('schoolId', school.id);
+			programOptions = loading
+				? null
+				: data!.schoolPrograms!.programs!.map((option) => {
+						const firstLetter = option.name[0].toUpperCase();
+						return {
+							firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+							...option,
+						};
+				  });
+		}
+	};
+	const handleStartDateChange = (_event: any, date: any) => {
+		const startDate = new Date(date);
+		formik.setFieldValue('startDateOfStudy', startDate);
+	};
+	const handleExpectedDateChange = (_event: any, date: any) => {
+		const expectedDate = new Date(date);
+		formik.setFieldValue('expectedGraduationDate', expectedDate);
 	};
 
 	const formik = useFormik({
@@ -107,8 +155,8 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 			lastName: '',
 			startDateOfStudy: new Date(),
 			expectedGraduationDate: new Date(),
-			schoolId: 0,
-			programId: 0,
+			schoolId: -1,
+			programId: -1,
 		},
 		onSubmit: async (values, { setErrors }) => {
 			const response = await register({
@@ -221,50 +269,87 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 							),
 						}}
 					/>
-					{schoolsLoading ? (
+					{schoolsLoading || !schoolOptions ? (
 						<CircularProgress color='secondary' />
 					) : (
 						<>
-							<TextField
-								error={!!formik.errors.schoolId}
-								helperText={formik.errors.schoolId}
-								select
-								variant='outlined'
+							<Autocomplete
+								options={schoolOptions!.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+								groupBy={(schoolOption) => schoolOption.firstLetter}
+								getOptionLabel={(schoolOption) => schoolOption.name}
+								size='small'
+								onChange={handleSchoolChange}
+								style={{ width: '100%' }}
+								renderInput={(params) => (
+									<TextField
+										{...params}
+										error={!!formik.errors.schoolId}
+										helperText={formik.errors.schoolId}
+										label='School'
+										variant='outlined'
+										color='secondary'
+										margin='dense'
+									/>
+								)}
+							/>
+						</>
+					)}
+					<MuiPickersUtilsProvider utils={DateFnsUtils}>
+						<div className={classes.datePickers}>
+							<KeyboardDatePicker
+								error={!!formik.errors.startDateOfStudy}
+								helperText={formik.errors.startDateOfStudy}
+								disableToolbar
+								variant='inline'
+								format='MM/dd/yyyy'
 								margin='dense'
-								label='School'
-								type='text'
-								fullWidth
-								name='schoolId'
-								placeholder='School'
-								onChange={formik.handleChange}
-								value={formik.values.schoolId}
-								color='secondary'>
-								{schoolsData!.schools!.schools!.map((school) => (
-									<MenuItem key={school.id} value={school.id}>
-										{school.name}
-									</MenuItem>
-								))}
-							</TextField>
-							<TextField
-								error={!!formik.errors.programId}
-								helperText={formik.errors.programId}
-								select
-								variant='outlined'
+								name='startDateOfStudy'
+								label='Start Date Of Study'
+								value={formik.values.startDateOfStudy}
+								onChange={handleStartDateChange}
+								inputVariant='outlined'
+								className={classes.leftDatePicker}
+								color='secondary'
+							/>
+							<KeyboardDatePicker
+								error={!!formik.errors.expectedGraduationDate}
+								helperText={formik.errors.expectedGraduationDate}
+								disableToolbar
+								variant='inline'
+								format='MM/dd/yyyy'
 								margin='dense'
-								fullWidth
-								label='Program'
-								type='text'
-								name='programId'
-								placeholder='Program'
-								onChange={formik.handleChange}
-								value={formik.values.programId}
-								color='secondary'>
-								{schoolsData!.schools!.schools!.map((program) => (
-									<MenuItem key={program.id} value={program.id}>
-										{program.name}
-									</MenuItem>
-								))}
-							</TextField>
+								name='expectedGraduationDate'
+								label='Expected Graduation Date'
+								value={formik.values.expectedGraduationDate}
+								onChange={handleExpectedDateChange}
+								inputVariant='outlined'
+								color='secondary'
+							/>
+						</div>
+					</MuiPickersUtilsProvider>
+					{schoolsLoading || programOptions.length === 0 ? (
+						<CircularProgress color='secondary' />
+					) : (
+						<>
+							<Autocomplete
+								options={programOptions!.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+								groupBy={(schoolOption) => schoolOption.firstLetter}
+								getOptionLabel={(schoolOption) => schoolOption.name}
+								size='small'
+								onChange={handleSchoolChange}
+								style={{ width: '100%' }}
+								renderInput={(params) => (
+									<TextField
+										{...params}
+										error={!!formik.errors.programId}
+										helperText={formik.errors.programId}
+										label='Program'
+										variant='outlined'
+										color='secondary'
+										margin='dense'
+									/>
+								)}
+							/>
 						</>
 					)}
 				</DialogContent>

@@ -5,9 +5,5 @@ fragment SchoolsResponse on SchoolsResponse {
 	schools {
 		id
 		name
-		programs {
-			id
-			name
-		}
 	}
 }

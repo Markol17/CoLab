@@ -3,7 +3,17 @@ var validator = require('validator');
 
 export const validateRegister = (attributes: RegisterInput) => {
 	let errors = [];
-	const { email, username, password, startDateOfStudy, expectedGraduationDate, firstName, lastName } = attributes;
+	const {
+		email,
+		username,
+		password,
+		startDateOfStudy,
+		expectedGraduationDate,
+		firstName,
+		lastName,
+		schoolId,
+		programId,
+	} = attributes;
 	if (!email.includes('@')) {
 		errors.push({
 			field: 'email',
@@ -25,10 +35,33 @@ export const validateRegister = (attributes: RegisterInput) => {
 		});
 	}
 
+	if (schoolId === -1) {
+		errors.push({
+			field: 'schoolId',
+			message: 'A school must be selected',
+		});
+	}
+
+	if (programId === -1) {
+		errors.push({
+			field: 'programId',
+			message: 'A program must be selected',
+		});
+	}
+
 	if (validator.isAfter(startDateOfStudy.toString(), expectedGraduationDate.toString())) {
 		errors.push({
 			field: 'startDateOfStudy',
 			message: 'Start date of study cannot be after the expected graduation date',
+		});
+	} else if (expectedGraduationDate.getFullYear() - startDateOfStudy.getFullYear() < 1) {
+		errors.push({
+			field: 'startDateOfStudy',
+			message: 'There must be alteast 1 year between the expected graduation date and the start date of study',
+		});
+		errors.push({
+			field: 'expectedGraduationDate',
+			message: 'There must be alteast 1 year between the expected graduation date and the start date of study',
 		});
 	}
 	if (validator.isBefore(expectedGraduationDate.toString(), startDateOfStudy.toString())) {

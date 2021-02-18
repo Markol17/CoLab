@@ -29,6 +29,7 @@ import { CategoryResolver } from './resolvers/categoryResolver';
 import { Program } from './entities/Program';
 import { School } from './entities/School';
 import { SchoolResolver } from './resolvers/SchoolResolver';
+import { ProgramResolver } from './resolvers/ProgramResolver';
 
 const main = async () => {
 	await createConnection({
@@ -75,7 +76,7 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [ProjectResolver, UserResolver, SkillResolver, CategoryResolver, SchoolResolver],
+			resolvers: [ProjectResolver, UserResolver, SkillResolver, CategoryResolver, SchoolResolver, ProgramResolver],
 			validate: false,
 		}),
 		context: ({ req, res }) => ({

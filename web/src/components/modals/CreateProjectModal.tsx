@@ -123,19 +123,19 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 	});
 
 	const getSkillsSelected = (_event: any, skills: { id: number; type: string }[]) => {
-		formik.values.skillIds = [];
+		let skillIds = [];
 		for (let i = 0; i < skills.length; i++) {
-			//@ts-ignore
-			formik.values.skillIds.push(skills[i].id);
+			skillIds.push(skills[i].id);
 		}
+		formik.setFieldValue('skillIds', skillIds);
 	};
 
 	const getCategoriesSelected = (_event: any, categories: { id: number; name: string }[]) => {
-		formik.values.categoryIds = [];
+		let categoryIds = [];
 		for (let i = 0; i < categories.length; i++) {
-			//@ts-ignore
-			formik.values.categoryIds.push(categories[i].id);
+			categoryIds.push(categories[i].id);
 		}
+		formik.setFieldValue('categoryIds', categoryIds);
 	};
 
 	const handleChange = (file: any) => {
@@ -220,7 +220,6 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 										variant='outlined'
 										label='Category(ies)'
 										placeholder='Category(ies)'
-										onChange={formik.handleChange}
 										color='secondary'
 									/>
 								)}
@@ -255,8 +254,6 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 										variant='outlined'
 										label='Skill(s)'
 										placeholder='Skill(s)'
-										onChange={formik.handleChange}
-										value={formik.values.skillIds}
 										color='secondary'
 									/>
 								)}

@@ -43,10 +43,10 @@ export class User extends BaseEntity {
 	@Column()
 	password!: string;
 
-	@Column()
+	@Column({ type: 'date' })
 	startDateOfStudy!: Date;
 
-	@Column()
+	@Column({ type: 'date' })
 	expectedGraduationDate!: Date;
 
 	@Field(() => Int)
