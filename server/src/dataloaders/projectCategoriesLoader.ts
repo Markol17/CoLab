@@ -1,5 +1,3 @@
-//FIXME: fix typing in dataloaders
-
 import DataLoader from 'dataloader';
 import { In } from 'typeorm';
 import { ProjectCategory } from '../entities/ProjectCategory';
@@ -28,8 +26,9 @@ const batchCategories = async (projectIds: readonly number[]) => {
 			projectIdToCategories[cp.projectId] = [(cp as any).__category__];
 		}
 	});
-
-	return projectIds.map((projectId) => projectIdToCategories[projectId]);
+	const mapping = projectIds.map((projectId) => projectIdToCategories[projectId]);
+	console.log(mapping);
+	return mapping;
 };
 
 export const createProjectCategoriesLoader = () => new DataLoader(batchCategories);

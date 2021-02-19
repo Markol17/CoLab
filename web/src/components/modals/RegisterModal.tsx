@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +11,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import {
 	CurrentUserDocument,
 	CurrentUserQuery,
+	School,
+	SchoolProgramsQuery,
 	useRegisterMutation,
 	useSchoolProgramsQuery,
 	useSchoolsQuery,
@@ -22,6 +24,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { Autocomplete } from '@material-ui/lab';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { SCHED_NONE } from 'cluster';
 
 interface RegisterModalProps {
 	isOpen: boolean;
@@ -97,20 +100,38 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 	const [register] = useRegisterMutation();
 	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
+	const [schoolId, setSchoolId] = useState(-1);
+	const [programOptions, setProgramOptions] = useState([]);
 	const { data: schoolsData, loading: schoolsLoading } = useSchoolsQuery();
-	const { data, loading } = useSchoolProgramsQuery();
+	const { data: programsData, loading: programsLoading } = useSchoolProgramsQuery({
+		variables: {
+			schoolId: schoolId,
+		},
+	});
+	useEffect(() => {
+		let programs: any = [];
+		if (schoolId !== -1 && !programsLoading) {
+			for (let i = 0; i < programsData!.schoolPrograms!.programs!.length; i++) {
+				programs.push(programsData!.schoolPrograms!.programs![i]);
+			}
+			//@ts-ignore
+			setProgramOptions(sortOptions(programs));
+		} else {
+			setProgramOptions(programs);
+		}
+	}, [programsData]);
 
-	const schoolOptions = schoolsLoading
-		? null
-		: schoolsData!.schools!.schools!.map((option) => {
-				const firstLetter = option.name[0].toUpperCase();
-				return {
-					firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-					...option,
-				};
-		  });
-
-	let programOptions: any = [];
+	const sortOptions = (options: any[]) => {
+		const temp = options.map((option) => {
+			const firstLetter = option.name[0].toUpperCase();
+			return {
+				firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+				...option,
+			};
+		});
+		return temp;
+	};
+	const schoolOptions = schoolsLoading ? [] : sortOptions(schoolsData!.schools!.schools!);
 
 	const handleClickShowPassword = () => {
 		setShowPassword(!showPassword);
@@ -123,18 +144,18 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 	const handleSchoolChange = (_event: any, school: any) => {
 		if (!school) {
 			formik.setFieldValue('schoolId', -1);
-			programOptions = [];
+			setSchoolId(-1);
 		} else {
 			formik.setFieldValue('schoolId', school.id);
-			programOptions = loading
-				? null
-				: data!.schoolPrograms!.programs!.map((option) => {
-						const firstLetter = option.name[0].toUpperCase();
-						return {
-							firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-							...option,
-						};
-				  });
+			setSchoolId(school.id);
+		}
+	};
+
+	const handleProgramChange = (_event: any, program: any) => {
+		if (!program) {
+			formik.setFieldValue('programId', -1);
+		} else {
+			formik.setFieldValue('programId', program.id);
 		}
 	};
 	const handleStartDateChange = (_event: any, date: any) => {
@@ -327,31 +348,28 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 							/>
 						</div>
 					</MuiPickersUtilsProvider>
-					{schoolsLoading || programOptions.length === 0 ? (
-						<CircularProgress color='secondary' />
-					) : (
-						<>
-							<Autocomplete
-								options={programOptions!.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-								groupBy={(schoolOption) => schoolOption.firstLetter}
-								getOptionLabel={(schoolOption) => schoolOption.name}
-								size='small'
-								onChange={handleSchoolChange}
-								style={{ width: '100%' }}
-								renderInput={(params) => (
-									<TextField
-										{...params}
-										error={!!formik.errors.programId}
-										helperText={formik.errors.programId}
-										label='Program'
-										variant='outlined'
-										color='secondary'
-										margin='dense'
-									/>
-								)}
+					<Autocomplete
+						options={programOptions!.sort(
+							(a: { firstLetter: any }, b: { firstLetter: string }) => -b.firstLetter.localeCompare(a.firstLetter)
+						)}
+						groupBy={(schoolOption: any) => schoolOption.firstLetter}
+						getOptionLabel={(schoolOption) => schoolOption.name}
+						size='small'
+						disabled={programOptions.length === 0}
+						onChange={handleProgramChange}
+						style={{ width: '100%' }}
+						renderInput={(params) => (
+							<TextField
+								{...params}
+								error={!!formik.errors.programId}
+								helperText={formik.errors.programId}
+								label='Program'
+								variant='outlined'
+								color='secondary'
+								margin='dense'
 							/>
-						</>
-					)}
+						)}
+					/>
 				</DialogContent>
 				<DialogActions className={classes.modalActions}>
 					<Button onClick={onClose} variant='outlined' className={classes.cancel}>

@@ -124,7 +124,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ userProjects, project,
 		setProject(project);
 		toggleLearnMore();
 	};
-
 	return (
 		<Card className={classes.card}>
 			<div className={classes.cardActionMedia} onClick={handleLearnMoreModal}>

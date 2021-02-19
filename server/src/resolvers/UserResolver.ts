@@ -7,9 +7,26 @@ import { ChangePasswordInput, LoginInput, RegisterInput } from './InputTypes/Use
 import { UserService } from '../services/UserService';
 import { Skill } from '../entities/Skill';
 import { isAuth } from '../middleware/isAuth';
+import { School } from '../entities/School';
+import { Program } from '../entities/Program';
+import { ProgramService } from '../services/ProgramService';
+import { SchoolService } from '../services/SchoolService';
 
 @Resolver(User)
 export class UserResolver {
+	@FieldResolver(() => School)
+	@UseMiddleware(isAuth)
+	async school(@Root() user: User): Promise<School> {
+		const schoolService = new SchoolService();
+		return (await schoolService.getSchool(user.schoolId)).school!;
+	}
+	@FieldResolver(() => Program)
+	@UseMiddleware(isAuth)
+	async program(@Root() user: User): Promise<Program> {
+		const programService = new ProgramService();
+		return (await programService.getProgram(user.programId)).program!;
+	}
+
 	@FieldResolver(() => [Project])
 	@UseMiddleware(isAuth)
 	async projects(@Root() user: User, @Ctx() context: Context): Promise<UserProjectsResponse> {

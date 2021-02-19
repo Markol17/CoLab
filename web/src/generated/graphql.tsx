@@ -332,8 +332,14 @@ export type SkillsResponseFragment = (
 
 export type UserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email'>
-  & { projects: Array<(
+  & Pick<User, 'id' | 'username' | 'firstName' | 'lastName' | 'yearOfStudy' | 'email'>
+  & { school: (
+    { __typename?: 'School' }
+    & Pick<School, 'id' | 'name'>
+  ), program: (
+    { __typename?: 'Program' }
+    & Pick<Program, 'id' | 'name'>
+  ), projects: Array<(
     { __typename?: 'Project' }
     & Pick<Project, 'id' | 'name' | 'thumbnail'>
   )>, skills: Array<(
@@ -635,6 +641,17 @@ export const UserFragmentDoc = gql`
     fragment User on User {
   id
   username
+  firstName
+  lastName
+  yearOfStudy
+  school {
+    id
+    name
+  }
+  program {
+    id
+    name
+  }
   email
   projects {
     id

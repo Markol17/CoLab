@@ -27,7 +27,6 @@ const batchSkills = async (projectIds: readonly number[]) => {
 		}
 	});
 	const mapping = projectIds.map((projectId) => projectIdToSkills[projectId]);
-
 	return mapping;
 };
 

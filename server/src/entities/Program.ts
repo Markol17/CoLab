@@ -1,4 +1,13 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm';
+import {
+	Entity,
+	BaseEntity,
+	PrimaryGeneratedColumn,
+	Column,
+	OneToMany,
+	CreateDateColumn,
+	ManyToOne,
+	JoinColumn,
+} from 'typeorm';
 import { ObjectType, Field } from 'type-graphql';
 import { User } from './User';
 import { School } from './School';
@@ -20,6 +29,10 @@ export class Program extends BaseEntity {
 	@OneToMany(() => User, (user) => user.program)
 	users: Promise<User[]>;
 
+	@Column()
+	schoolId: number;
+
 	@ManyToOne(() => School, (school) => school.programs)
+	@JoinColumn({ name: 'schoolId' })
 	school: School;
 }

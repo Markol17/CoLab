@@ -36,7 +36,6 @@ export class ProjectService {
 	async getPaginatedProject(offset: number, limit: number): Promise<PaginatedProjects> {
 		const realLimit = Math.min(15, limit);
 		const projects = await this.projectRepository.getPaginated({ offset, limit });
-
 		return {
 			projects: projects.slice(0, realLimit),
 			hasMore: projects.length === realLimit + 1,

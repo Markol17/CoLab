@@ -33,11 +33,9 @@ export class UserService {
 	}
 
 	async getYearOfStudy(user: User): Promise<number> {
-		return (
-			user.expectedGraduationDate.getFullYear() -
-			user.startDateOfStudy.getFullYear() -
-			(user.expectedGraduationDate.getFullYear() - new Date().getFullYear())
-		);
+		const start = new Date(user.startDateOfStudy);
+		const expected = new Date(user.expectedGraduationDate);
+		return expected.getFullYear() - start.getFullYear() - (expected.getFullYear() - new Date().getFullYear());
 	}
 
 	async getProjects(userId: number, @Ctx() context: Context): Promise<UserProjectsResponse> {

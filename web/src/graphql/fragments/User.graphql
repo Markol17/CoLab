@@ -1,6 +1,17 @@
 fragment User on User {
 	id
 	username
+	firstName
+	lastName
+	yearOfStudy
+	school {
+		id
+		name
+	}
+	program {
+		id
+		name
+	}
 	email
 	projects {
 		id

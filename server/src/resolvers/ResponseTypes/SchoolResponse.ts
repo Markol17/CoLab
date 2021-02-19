@@ -10,3 +10,12 @@ export class SchoolsResponse {
 	@Field(() => [School], { nullable: true })
 	schools?: School[];
 }
+
+@ObjectType()
+export class SchoolResponse {
+	@Field(() => [FieldError], { nullable: true })
+	errors?: FieldError[];
+
+	@Field(() => School, { nullable: true })
+	school?: School;
+}
