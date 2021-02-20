@@ -130,12 +130,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 						helperText={formik.errors.usernameOrEmail}
 						variant='outlined'
 						margin='dense'
-						label='Username Or Email'
+						label='Username or Email*'
 						type='text'
 						color='secondary'
 						fullWidth
 						name='usernameOrEmail'
-						placeholder='Username Or Email'
+						placeholder='Username or Email*'
 						onChange={formik.handleChange}
 						value={formik.values.usernameOrEmail}
 					/>
@@ -145,11 +145,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 						variant='outlined'
 						color='secondary'
 						margin='dense'
-						label='Password'
+						label='Password*'
 						type={showPassword ? 'text' : 'password'}
 						fullWidth
 						name='password'
-						placeholder='Password'
+						placeholder='Password*'
 						onChange={formik.handleChange}
 						value={formik.values.password}
 						InputProps={{

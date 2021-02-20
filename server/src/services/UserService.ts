@@ -20,12 +20,20 @@ export class UserService {
 		this.userRepository = getCustomRepository(UserRepository);
 	}
 
-	async getUser(context: Context): Promise<User | null> {
+	async getCurrentUser(context: Context): Promise<User | null> {
 		const { req } = context;
 		if (!req.session.userId) {
 			return null;
 		}
 		const user = await this.userRepository.getUserById(req.session.userId);
+		if (!user) {
+			return null;
+		}
+		return user;
+	}
+
+	async getUser(id: number): Promise<User | null> {
+		const user = await this.userRepository.getUserById(id);
 		if (!user) {
 			return null;
 		}

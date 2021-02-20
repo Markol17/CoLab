@@ -11,8 +11,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import {
 	CurrentUserDocument,
 	CurrentUserQuery,
-	School,
-	SchoolProgramsQuery,
 	useRegisterMutation,
 	useSchoolProgramsQuery,
 	useSchoolsQuery,
@@ -24,7 +22,6 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { Autocomplete } from '@material-ui/lab';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { SCHED_NONE } from 'cluster';
 
 interface RegisterModalProps {
 	isOpen: boolean;
@@ -212,11 +209,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						helperText={formik.errors.email}
 						variant='outlined'
 						margin='dense'
-						label='Email'
+						label='Email*'
 						type='email'
 						fullWidth
 						name='email'
-						placeholder='Email'
+						placeholder='Email*'
 						onChange={formik.handleChange}
 						value={formik.values.email}
 						color='secondary'
@@ -226,11 +223,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						helperText={formik.errors.firstName}
 						variant='outlined'
 						margin='dense'
-						label='First Name'
+						label='First Name*'
 						type='text'
 						fullWidth
 						name='firstName'
-						placeholder='First Name'
+						placeholder='First Name*'
 						onChange={formik.handleChange}
 						value={formik.values.firstName}
 						color='secondary'
@@ -240,11 +237,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						helperText={formik.errors.lastName}
 						variant='outlined'
 						margin='dense'
-						label='Last Name'
+						label='Last Name*'
 						type='text'
 						fullWidth
 						name='lastName'
-						placeholder='Last Name'
+						placeholder='Last Name*'
 						onChange={formik.handleChange}
 						value={formik.values.lastName}
 						color='secondary'
@@ -254,11 +251,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						helperText={formik.errors.username}
 						variant='outlined'
 						margin='dense'
-						label='Username'
+						label='Username*'
 						type='text'
 						fullWidth
 						name='username'
-						placeholder='Username'
+						placeholder='Username*'
 						onChange={formik.handleChange}
 						value={formik.values.username}
 						color='secondary'
@@ -268,11 +265,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						helperText={formik.errors.password}
 						variant='outlined'
 						margin='dense'
-						label='Password'
+						label='Password*'
 						type={showPassword ? 'text' : 'password'}
 						fullWidth
 						name='password'
-						placeholder='Password'
+						placeholder='Password*'
 						onChange={formik.handleChange}
 						value={formik.values.password}
 						color='secondary'
@@ -306,7 +303,8 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 										{...params}
 										error={!!formik.errors.schoolId}
 										helperText={formik.errors.schoolId}
-										label='School'
+										label='School*'
+										placeholder='School*'
 										variant='outlined'
 										color='secondary'
 										margin='dense'
@@ -325,7 +323,8 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 								format='MM/dd/yyyy'
 								margin='dense'
 								name='startDateOfStudy'
-								label='Start Date Of Study'
+								label='Start Date Of Study*'
+								placeholder='Start Date Of Study*'
 								value={formik.values.startDateOfStudy}
 								onChange={handleStartDateChange}
 								inputVariant='outlined'
@@ -340,7 +339,8 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 								format='MM/dd/yyyy'
 								margin='dense'
 								name='expectedGraduationDate'
-								label='Expected Graduation Date'
+								label='Expected Graduation Date*'
+								placeholder='Expected Graduation Date*'
 								value={formik.values.expectedGraduationDate}
 								onChange={handleExpectedDateChange}
 								inputVariant='outlined'
@@ -363,7 +363,8 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 								{...params}
 								error={!!formik.errors.programId}
 								helperText={formik.errors.programId}
-								label='Program'
+								label='Program*'
+								placeholder='Program*'
 								variant='outlined'
 								color='secondary'
 								margin='dense'

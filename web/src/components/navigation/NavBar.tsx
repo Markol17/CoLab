@@ -202,9 +202,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
 	const logoutUser = async () => {
 		handleMenuClose();
+		router.push('/');
 		await logout();
 		await apolloClient.resetStore();
-		router.push('/');
 	};
 
 	const handleCreateModalOpen = () => {
@@ -233,7 +233,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
-			<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+			<NextLink href='/profile/[id]' as={`/profile/${data?.currentUser?.id}`}>
+				<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+			</NextLink>
 			<MenuItem onClick={handleMenuClose}>Settings</MenuItem>
 			<MenuItem onClick={logoutUser} disabled={logoutFetching}>
 				Logout

@@ -51,7 +51,13 @@ export class UserResolver {
 	@Query(() => User, { nullable: true })
 	async currentUser(@Ctx() context: Context): Promise<User | null> {
 		const userService = new UserService();
-		return await userService.getUser(context);
+		return await userService.getCurrentUser(context);
+	}
+
+	@Query(() => User)
+	async user(@Arg('id', () => Int) id: number): Promise<User | null> {
+		const userService = new UserService();
+		return await userService.getUser(id);
 	}
 
 	@Mutation(() => UserResponse)
