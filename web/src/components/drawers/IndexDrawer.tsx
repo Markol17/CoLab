@@ -8,7 +8,7 @@ import Drawer from '@material-ui/core/Drawer';
 import NextLink from 'next/link';
 import clsx from 'clsx';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Avatar, CircularProgress, Typography } from '@material-ui/core';
+import { Avatar, CircularProgress, Link, Typography } from '@material-ui/core';
 import Collapse from '@material-ui/core/Collapse';
 
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -99,18 +99,25 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 			<div className={classes.spacer} />
 			<List>
 				{['Home', 'Explore'].map((text, index) => (
-					<ListItem button key={index}>
-						<ListItemIcon>
-							{index === 0 ? (
-								<NextLink href='/'>
-									<HomeIcon />
-								</NextLink>
-							) : index === 1 ? (
-								<ExploreIcon />
-							) : null}
-						</ListItemIcon>
-						<ListItemText primary={text} />
-					</ListItem>
+					<>
+						{index === 0 ? (
+							<NextLink href='/'>
+								<ListItem button key={index}>
+									<ListItemIcon>
+										<HomeIcon />
+									</ListItemIcon>
+									<ListItemText primary={text} />
+								</ListItem>
+							</NextLink>
+						) : index === 1 ? (
+							<ListItem button key={index}>
+								<ListItemIcon>
+									<ExploreIcon />
+								</ListItemIcon>
+								<ListItemText primary={text} />
+							</ListItem>
+						) : null}
+					</>
 				))}
 			</List>
 			{isUserConnected && (
@@ -128,20 +135,22 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 							<List component='div' disablePadding>
 								{!!projects ? (
 									projects.map((project: { id: number; name: string; thumbnail: string }, index: number) => (
-										<ListItem key={index} button className={classes.nested}>
-											<ListItemIcon>
-												<Avatar
-													alt='Project Avatar'
-													className={classes.projectAvatar}
-													src={
-														!!project.thumbnail
-															? `http://localhost:4000/projects/thumbnails/${project.thumbnail}`
-															: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
-													}
-												/>
-											</ListItemIcon>
-											<Typography noWrap>{project.name}</Typography>
-										</ListItem>
+										<NextLink href='/project/[id]' as={`/project/${project.id}`}>
+											<ListItem key={index} button className={classes.nested}>
+												<ListItemIcon>
+													<Avatar
+														alt='Project Avatar'
+														className={classes.projectAvatar}
+														src={
+															!!project.thumbnail
+																? `http://localhost:4000/projects/thumbnails/${project.thumbnail}`
+																: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
+														}
+													/>
+												</ListItemIcon>
+												<Typography noWrap>{project.name}</Typography>
+											</ListItem>
+										</NextLink>
 									))
 								) : (
 									<CircularProgress color='secondary' />

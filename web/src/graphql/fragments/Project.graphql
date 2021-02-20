@@ -1,7 +1,5 @@
 fragment Project on Project {
 	id
-	createdAt
-	updatedAt
 	name
 	desc
 	points
@@ -23,4 +21,6 @@ fragment Project on Project {
 		id
 		username
 	}
+	createdAt
+	updatedAt
 }

@@ -7,6 +7,7 @@ import { validateCreateProject } from '../utils/validateCreateProject';
 import { createWriteStream } from 'fs';
 import path from 'path';
 import { UserRepository } from '../repositories/UserRepository';
+import { Project } from '../entities/Project';
 
 export class ProjectService {
 	projectRepository: ProjectRepository;
@@ -17,20 +18,12 @@ export class ProjectService {
 		this.userRepository = getCustomRepository(UserRepository);
 	}
 
-	async getProject(projectId: number): Promise<ProjectResponse> {
+	async getProject(projectId: number): Promise<Project | null> {
 		const project = await this.projectRepository.getProjectById(projectId);
 		if (!project) {
-			return {
-				errors: [
-					{
-						field: 'project',
-						message: 'Project does not exists',
-					},
-				],
-			};
+			return null;
 		}
-
-		return { project };
+		return project;
 	}
 
 	async getPaginatedProject(offset: number, limit: number): Promise<PaginatedProjects> {

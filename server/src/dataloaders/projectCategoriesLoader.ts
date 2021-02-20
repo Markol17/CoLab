@@ -16,18 +16,16 @@ const batchCategories = async (projectIds: readonly number[]) => {
 			projectId: In(projectIds),
 		},
 	});
-
 	const projectIdToCategories: { [key: number]: Category[] } = {};
 
 	categoryProjects.forEach((cp) => {
-		if (cp.categoryId in projectIdToCategories) {
+		if (cp.projectId in projectIdToCategories) {
 			projectIdToCategories[cp.projectId].push((cp as any).__category__);
 		} else {
 			projectIdToCategories[cp.projectId] = [(cp as any).__category__];
 		}
 	});
 	const mapping = projectIds.map((projectId) => projectIdToCategories[projectId]);
-	console.log(mapping);
 	return mapping;
 };
 

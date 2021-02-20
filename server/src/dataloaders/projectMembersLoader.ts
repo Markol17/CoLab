@@ -16,7 +16,6 @@ const batchUsers = async (projectIds: readonly number[]) => {
 			projectId: In(projectIds),
 		},
 	});
-
 	const projectIdToUsers: { [key: number]: User[] } = {};
 
 	projectUsers.forEach((pu) => {

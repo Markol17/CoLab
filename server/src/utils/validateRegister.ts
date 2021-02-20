@@ -49,6 +49,8 @@ export const validateRegister = (attributes: RegisterInput) => {
 		});
 	}
 
+	// TODO: fix dates validation (better comparisson)
+
 	if (validator.isAfter(startDateOfStudy.toString(), expectedGraduationDate.toString())) {
 		errors.push({
 			field: 'startDateOfStudy',
@@ -62,6 +64,18 @@ export const validateRegister = (attributes: RegisterInput) => {
 		errors.push({
 			field: 'expectedGraduationDate',
 			message: 'There must be alteast 1 year between the expected graduation date and the start date of study',
+		});
+	}
+	if (startDateOfStudy.getFullYear() > new Date().getFullYear()) {
+		errors.push({
+			field: 'startDateOfStudy',
+			message: 'Start date of study cannot be after ' + new Date().toString(),
+		});
+	}
+	if (expectedGraduationDate.getFullYear() < new Date().getFullYear()) {
+		errors.push({
+			field: 'expectedGraduationDate',
+			message: 'Expected graduation date cannot be before ' + new Date().toString(),
 		});
 	}
 	if (validator.isBefore(expectedGraduationDate.toString(), startDateOfStudy.toString())) {

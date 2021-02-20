@@ -6,38 +6,34 @@ import { EditDeletePostButtons } from '../../components/EditDeletePostButtons';
 import { withApollo } from '../../utils/withApollo';
 
 const Project = ({}) => {
-  const { data, error, loading } = useGetProjectFromUrl();
+	const { data, error, loading } = useGetProjectFromUrl();
+	if (loading) {
+		return (
+			<Layout>
+				<div>loading...</div>
+			</Layout>
+		);
+	}
 
-  if (loading) {
-    return (
-      <Layout>
-        <div>loading...</div>
-      </Layout>
-    );
-  }
+	if (error) {
+		return <div>{error.message}</div>;
+	}
 
-  if (error) {
-    return <div>{error.message}</div>;
-  }
+	if (!data?.project) {
+		return (
+			<Layout>
+				<Box>Could not find project</Box>
+			</Layout>
+		);
+	}
 
-  if (!data?.project) {
-    return (
-      <Layout>
-        <Box>Could not find project</Box>
-      </Layout>
-    );
-  }
-
-  return (
-    <Layout>
-      <Box mb={4}>{data.project.name}</Box>
-      <Box mb={4}>{data.project.desc}</Box>
-      <EditDeletePostButtons
-        id={data.project.id}
-        creatorId={data.project.creator.id}
-      />
-    </Layout>
-  );
+	return (
+		<Layout>
+			<Box mb={4}>{data.project.name}</Box>
+			<Box mb={4}>{data.project.desc}</Box>
+			<Box mb={4}>{data.project.creator.username}</Box>
+		</Layout>
+	);
 };
 
 export default withApollo({ ssr: true })(Project);

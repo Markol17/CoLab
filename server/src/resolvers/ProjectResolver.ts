@@ -24,8 +24,8 @@ export class ProjectResolver {
 		return await projectService.getPaginatedProject(offset, limit);
 	}
 
-	@Query(() => Project, { nullable: true })
-	async project(@Arg('id', () => Int) id: number): Promise<ProjectResponse | undefined> {
+	@Query(() => Project)
+	async project(@Arg('id', () => Int) id: number): Promise<Project | null> {
 		const projectService = new ProjectService();
 		return await projectService.getProject(id);
 	}

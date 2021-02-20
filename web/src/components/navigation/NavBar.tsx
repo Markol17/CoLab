@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import TuneIcon from '@material-ui/icons/Tune';
 import IndexDrawer from '../drawers/IndexDrawer';
-import { Paper, MenuItem, Badge, Menu, InputBase, fade, Button, Typography } from '@material-ui/core';
+import { Paper, MenuItem, Badge, Menu, InputBase, fade, Button } from '@material-ui/core';
 import { useApolloClient } from '@apollo/client';
 import NextLink from 'next/link';
 import { useLogoutMutation, useCurrentUserQuery } from '../../generated/graphql';
@@ -329,14 +329,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 										inputProps={{ 'aria-label': 'search' }}
 									/>
 								</div>
-								<IconButton
+								{/* <IconButton
 									color='inherit'
 									aria-label='filter'
 									// onClick={toggleDrawer}
 									edge='end'
 									className={classes.menuButton}>
 									<TuneIcon />
-								</IconButton>
+								</IconButton> */}
 							</div>
 							{loading ? null /* data loading */ : !data?.currentUser ? (
 								/*user not logged in*/ <>

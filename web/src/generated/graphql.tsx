@@ -18,7 +18,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   paginatedProjects: PaginatedProjects;
-  project?: Maybe<Project>;
+  project: Project;
   currentUser?: Maybe<User>;
   skills?: Maybe<SkillsResponse>;
   categories?: Maybe<CategoriesResponse>;
@@ -270,7 +270,7 @@ export type JoinProjectResponseFragment = (
 
 export type ProjectFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'name' | 'desc' | 'points' | 'thumbnail'>
+  & Pick<Project, 'id' | 'name' | 'desc' | 'points' | 'thumbnail' | 'createdAt' | 'updatedAt'>
   & { members: Array<(
     { __typename?: 'User' }
     & Pick<User, 'id'>
@@ -499,10 +499,10 @@ export type ProjectQueryVariables = Exact<{
 
 export type ProjectQuery = (
   { __typename?: 'Query' }
-  & { project?: Maybe<(
+  & { project: (
     { __typename?: 'Project' }
     & ProjectFragment
-  )> }
+  ) }
 );
 
 export type SchoolProgramsQueryVariables = Exact<{
@@ -568,8 +568,6 @@ export const JoinProjectResponseFragmentDoc = gql`
 export const ProjectFragmentDoc = gql`
     fragment Project on Project {
   id
-  createdAt
-  updatedAt
   name
   desc
   points
@@ -591,6 +589,8 @@ export const ProjectFragmentDoc = gql`
     id
     username
   }
+  createdAt
+  updatedAt
 }
     `;
 export const ProjectResponseFragmentDoc = gql`
