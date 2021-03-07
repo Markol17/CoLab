@@ -198,7 +198,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 					))}
 				</div>
 				<Typography gutterBottom variant='subtitle1' className={classes.subtitles}>
-					Skills required:
+					Skills required to join:
 				</Typography>
 				<div className={classes.chips}>
 					{skills.map((skill: Skill, index: number) => (
@@ -215,7 +215,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 				</Typography>
 				<DialogContentText>{creator.username}</DialogContentText>
 				<Typography className={classes.subtitles} gutterBottom variant='subtitle1'>
-					Member(s):
+					Collaborator(s):
 				</Typography>
 				<DialogContentText>{members.length}</DialogContentText>
 				<Typography className={classes.subtitles} gutterBottom variant='subtitle1'>
@@ -233,7 +233,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 			</DialogContent>
 			<DialogActions className={classes.modalActions}>
 				<Button onClick={onClose} variant='outlined' className={classes.cancel}>
-					Cancel
+					Close
 				</Button>
 				{!userAlreadyJoined() && (
 					<Button

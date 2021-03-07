@@ -15,7 +15,7 @@ export class ProjectRepository extends Repository<Project> {
                 SELECT p.*
                 FROM project p
                 ORDER BY p."createdAt" DESC
-                OFFSET ${offset * limit} ROWS
+                OFFSET ${offset} ROWS
                 FETCH NEXT ${limit} ROWS ONLY
             `
 		);

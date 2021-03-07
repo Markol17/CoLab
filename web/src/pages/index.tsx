@@ -1,7 +1,7 @@
 //TODO: use lazy loading with React.lazy
 import { useEffect, useState } from 'react';
 import { Layout } from '../components/Layout';
-import { PaginatedProjectsQuery, Project, useCurrentUserQuery, usePaginatedProjectsQuery } from '../generated/graphql';
+import { PaginatedProjectsQuery, useCurrentUserQuery, usePaginatedProjectsQuery } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 import { makeStyles, Grid, CircularProgress } from '@material-ui/core';
 import { ProjectCard } from '../components/ProjectCard';
@@ -32,13 +32,14 @@ const Index = () => {
 	});
 	const [isLearnMoreOpen, setLearnMoreModal] = useState(false);
 	const classes = useStyles();
+	let offset = 12;
 	const { data: userData } = useCurrentUserQuery({
 		skip: isServer(),
 	});
 	const { data, error, loading, fetchMore, variables } = usePaginatedProjectsQuery({
 		variables: {
 			offset: 0,
-			limit: 15,
+			limit: 12,
 		},
 		//notifyOnNetworkStatusChange: true, -> makes the data undefined for some reason
 	});
@@ -58,13 +59,17 @@ const Index = () => {
 			fetchMore({
 				variables: {
 					limit: variables?.limit,
-					offset: data!.paginatedProjects.projects.length % 14,
+					offset: offset,
 				},
 				updateQuery: (previousValue, { fetchMoreResult }): PaginatedProjectsQuery => {
 					if (!fetchMoreResult) {
 						return previousValue as PaginatedProjectsQuery;
 					}
-
+					const projectsLenght = [
+						...(previousValue as PaginatedProjectsQuery).paginatedProjects.projects,
+						...(fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.projects,
+					].length;
+					offset = projectsLenght;
 					return {
 						__typename: 'Query',
 						paginatedProjects: {
