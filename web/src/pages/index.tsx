@@ -43,6 +43,7 @@ const Index = () => {
 		},
 		//notifyOnNetworkStatusChange: true, -> makes the data undefined for some reason
 	});
+	let hasMore = data?.paginatedProjects.hasMore;
 
 	useEffect(() => {
 		window.addEventListener('scroll', loadMore);
@@ -55,7 +56,7 @@ const Index = () => {
 
 	const loadMore = () => {
 		const isBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
-		if (isBottom && data?.paginatedProjects.hasMore) {
+		if (isBottom && hasMore) {
 			fetchMore({
 				variables: {
 					limit: variables?.limit,
@@ -70,6 +71,7 @@ const Index = () => {
 						...(fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.projects,
 					].length;
 					offset = projectsLenght;
+					hasMore = (fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.hasMore;
 					return {
 						__typename: 'Query',
 						paginatedProjects: {

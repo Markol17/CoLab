@@ -31,10 +31,15 @@ export class ProjectRepository extends Repository<Project> {
 
 	async createAndSaveProject(attributes: CreateProjectInput, { req }: Context): Promise<Project> {
 		const { name, desc, thumbnail } = attributes;
+		let thumbnailName = undefined;
+		if (!!thumbnail) {
+			const { filename } = await thumbnail;
+			thumbnailName = filename;
+		}
 		const project = new Project();
 		project.name = name;
 		project.desc = desc;
-		project.thumbnail = !!thumbnail ? thumbnail.filename : undefined;
+		project.thumbnail = thumbnailName;
 		project.creatorId = req.session.userId;
 
 		return await this.save(project);
