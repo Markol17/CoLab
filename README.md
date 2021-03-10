@@ -1,3 +1,4 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/50c0938dcc764e0fa5878b3cf5420b5d)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Markol17/CoLab&amp;utm_campaign=Badge_Grade)
 # CoLab
 
 Colab is a platform to help students collaborate on projects that matters.
