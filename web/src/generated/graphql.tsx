@@ -276,7 +276,7 @@ export type JoinProjectResponseFragment = (
 
 export type ProjectFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'name' | 'desc' | 'points' | 'thumbnail' | 'createdAt' | 'updatedAt'>
+  & Pick<Project, 'id' | 'name' | 'desc' | 'points' | 'thumbnail' | 'limit' | 'createdAt' | 'updatedAt'>
   & { members: Array<(
     { __typename?: 'User' }
     & Pick<User, 'id'>
@@ -591,6 +591,7 @@ export const ProjectFragmentDoc = gql`
   desc
   points
   thumbnail
+  limit
   members {
     id
   }

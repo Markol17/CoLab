@@ -15,7 +15,7 @@ import {
 	useJoinProjectMutation,
 } from '../../generated/graphql';
 import { ModalsContext, TOGGLE_LOGIN } from '../../utils/contexts/ModalsContext';
-import { Box, Chip, DialogContentText, IconButton, Typography, withStyles } from '@material-ui/core';
+import { Chip, DialogContentText, IconButton, Typography, withStyles } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { isServer } from '../../utils/isServer';
 
@@ -105,6 +105,21 @@ const DialogTitle = withStyles(headerStyles)((props: any) => {
 	);
 });
 
+export const months = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
+];
+
 export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, project, userProjects }) => {
 	const classes = useStyles();
 	const { dispatch } = useContext(ModalsContext);
@@ -146,21 +161,6 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 		return userAlreadyJoined;
 	};
 
-	const months = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	];
-
 	return (
 		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
 			<DialogTitle onClose={onClose}>{name}</DialogTitle>
@@ -174,6 +174,8 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 						}
 						disableTransition
 						aspectRatio={1.62}
+						imageStyle={{ borderRadius: '3px' }}
+						color='tranparent'
 					/>
 				</div>
 				<Typography className={classes.subtitles} variant='subtitle1' gutterBottom>

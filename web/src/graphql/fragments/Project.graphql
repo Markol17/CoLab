@@ -4,6 +4,7 @@ fragment Project on Project {
 	desc
 	points
 	thumbnail
+	limit
 	members {
 		id
 	}
