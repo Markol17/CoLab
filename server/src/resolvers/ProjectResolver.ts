@@ -1,12 +1,12 @@
-import { Arg, Ctx, FieldResolver, Int, Mutation, Query, Resolver, Root, UseMiddleware } from 'type-graphql';
-import { getConnection } from 'typeorm';
-import { Project } from '../entities/Project';
-import { User } from '../entities/User';
-import { isAuth } from '../middleware/isAuth';
-import { Context } from '../types';
-import { ProjectService } from '../services/ProjectService';
-import { JoinProjectResponse, PaginatedProjects, ProjectResponse } from './ResponseTypes/ProjectResponse';
-import { CreateProjectInput } from './InputTypes/ProjectInput';
+import { Arg, Ctx, FieldResolver, Int, Mutation, Query, Resolver, Root, UseMiddleware } from "type-graphql";
+import { getConnection } from "typeorm";
+import { Project } from "../entities/Project";
+import { User } from "../entities/User";
+import { isAuth } from "../middleware/isAuth";
+import { Context } from "../types";
+import { ProjectService } from "../services/ProjectService";
+import { JoinProjectResponse, PaginatedProjects, ProjectResponse } from "./ResponseTypes/ProjectResponse";
+import { CreateProjectInput } from "./InputTypes/ProjectInput";
 
 @Resolver(Project)
 export class ProjectResolver {
@@ -17,15 +17,15 @@ export class ProjectResolver {
 
 	@Query(() => PaginatedProjects)
 	async paginatedProjects(
-		@Arg('limit', () => Int) limit: number,
-		@Arg('offset', () => Int) offset: number
+		@Arg("limit", () => Int) limit: number,
+		@Arg("offset", () => Int) offset: number
 	): Promise<PaginatedProjects> {
 		const projectService = new ProjectService();
 		return await projectService.getPaginatedProject(offset, limit);
 	}
 
 	@Query(() => Project)
-	async project(@Arg('id', () => Int) id: number): Promise<Project | null> {
+	async project(@Arg("id", () => Int) id: number): Promise<Project | null> {
 		const projectService = new ProjectService();
 		return await projectService.getProject(id);
 	}
@@ -34,7 +34,7 @@ export class ProjectResolver {
 	@UseMiddleware(isAuth)
 	async joinProject(
 		@Ctx() context: Context,
-		@Arg('projectId', () => Int) projectId: number
+		@Arg("projectId", () => Int) projectId: number
 	): Promise<JoinProjectResponse> {
 		const projectService = new ProjectService();
 		return await projectService.joinProject(projectId, context);
@@ -43,7 +43,7 @@ export class ProjectResolver {
 	@Mutation(() => ProjectResponse)
 	@UseMiddleware(isAuth)
 	async createProject(
-		@Arg('attributes') attributes: CreateProjectInput,
+		@Arg("attributes") attributes: CreateProjectInput,
 		@Ctx() context: Context
 	): Promise<ProjectResponse> {
 		const projectService = new ProjectService();
@@ -54,9 +54,9 @@ export class ProjectResolver {
 	@Mutation(() => Project, { nullable: true })
 	@UseMiddleware(isAuth)
 	async updateProject(
-		@Arg('id', () => Int) id: number,
-		@Arg('name') name: string,
-		@Arg('desc') desc: string,
+		@Arg("id", () => Int) id: number,
+		@Arg("name") name: string,
+		@Arg("desc") desc: string,
 		@Ctx() { req }: Context
 	): Promise<Project | null> {
 		const result = await getConnection()
@@ -67,7 +67,7 @@ export class ProjectResolver {
 				id,
 				creatorId: req.session.userId,
 			})
-			.returning('*')
+			.returning("*")
 			.execute();
 
 		return result.raw[0];
@@ -75,7 +75,7 @@ export class ProjectResolver {
 
 	@Mutation(() => Boolean)
 	@UseMiddleware(isAuth)
-	async deleteProject(@Arg('id', () => Int) id: number, @Ctx() { req }: Context): Promise<boolean> {
+	async deleteProject(@Arg("id", () => Int) id: number, @Ctx() { req }: Context): Promise<boolean> {
 		//TODO: cascade delete
 		await Project.delete({ id, creatorId: req.session.userId });
 		return true;

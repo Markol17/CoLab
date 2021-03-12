@@ -1,6 +1,6 @@
-import { Project } from '../../entities/Project';
-import { Field, ObjectType } from 'type-graphql';
-import { FieldError } from './ErrorResponse';
+import { Project } from "../../entities/Project";
+import { Field, ObjectType } from "type-graphql";
+import { FieldError } from "./ErrorResponse";
 
 @ObjectType()
 export class PaginatedProjects {

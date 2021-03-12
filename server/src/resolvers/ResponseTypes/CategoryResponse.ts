@@ -1,6 +1,6 @@
-import { Category } from '../../entities/Category';
-import { Field, ObjectType } from 'type-graphql';
-import { FieldError } from './ErrorResponse';
+import { Category } from "../../entities/Category";
+import { Field, ObjectType } from "type-graphql";
+import { FieldError } from "./ErrorResponse";
 
 @ObjectType()
 export class CategoriesResponse {

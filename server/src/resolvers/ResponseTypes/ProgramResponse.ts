@@ -1,6 +1,6 @@
-import { Field, ObjectType } from 'type-graphql';
-import { FieldError } from './ErrorResponse';
-import { Program } from '../../entities/Program';
+import { Field, ObjectType } from "type-graphql";
+import { FieldError } from "./ErrorResponse";
+import { Program } from "../../entities/Program";
 
 @ObjectType()
 export class SchoolProgramsResponse {

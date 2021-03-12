@@ -1,7 +1,7 @@
-import { CategoryService } from '../services/CategoryService';
-import { Resolver, Query } from 'type-graphql';
-import { Category } from '../entities/Category';
-import { CategoriesResponse } from './ResponseTypes/CategoryResponse';
+import { CategoryService } from "../services/CategoryService";
+import { Resolver, Query } from "type-graphql";
+import { Category } from "../entities/Category";
+import { CategoriesResponse } from "./ResponseTypes/CategoryResponse";
 
 @Resolver(Category)
 export class CategoryResolver {

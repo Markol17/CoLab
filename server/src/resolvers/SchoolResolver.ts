@@ -1,7 +1,7 @@
-import { Query, Resolver } from 'type-graphql';
-import { School } from '../entities/School';
-import { SchoolService } from '../services/SchoolService';
-import { SchoolsResponse } from './ResponseTypes/SchoolResponse';
+import { Query, Resolver } from "type-graphql";
+import { School } from "../entities/School";
+import { SchoolService } from "../services/SchoolService";
+import { SchoolsResponse } from "./ResponseTypes/SchoolResponse";
 
 @Resolver(School)
 export class SchoolResolver {

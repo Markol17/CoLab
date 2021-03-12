@@ -1,6 +1,6 @@
-import { GraphQLUpload } from 'apollo-server-express';
-import { Upload } from 'src/types';
-import { Field, InputType, Int } from 'type-graphql';
+import { GraphQLUpload } from "apollo-server-express";
+import { Upload } from "src/types";
+import { Field, InputType, Int } from "type-graphql";
 
 @InputType()
 export class CreateProjectInput {
