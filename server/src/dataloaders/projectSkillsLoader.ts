@@ -1,14 +1,14 @@
-import DataLoader from 'dataloader';
-import { In } from 'typeorm';
-import { ProjectSkill } from '../entities/ProjectSkill';
-import { Skill } from '../entities/Skill';
+import DataLoader from "dataloader";
+import { In } from "typeorm";
+import { ProjectSkill } from "../entities/ProjectSkill";
+import { Skill } from "../entities/Skill";
 
 const batchSkills = async (projectIds: readonly number[]) => {
 	const projectSkills = await ProjectSkill.find({
 		join: {
-			alias: 'projectSkill',
+			alias: "projectSkill",
 			innerJoinAndSelect: {
-				skill: 'projectSkill.skill',
+				skill: "projectSkill.skill",
 			},
 		},
 		where: {

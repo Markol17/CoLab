@@ -1,14 +1,14 @@
-import DataLoader from 'dataloader';
-import { In } from 'typeorm';
-import { ProjectCategory } from '../entities/ProjectCategory';
-import { Category } from '../entities/Category';
+import DataLoader from "dataloader";
+import { In } from "typeorm";
+import { ProjectCategory } from "../entities/ProjectCategory";
+import { Category } from "../entities/Category";
 
 const batchCategories = async (projectIds: readonly number[]) => {
 	const categoryProjects = await ProjectCategory.find({
 		join: {
-			alias: 'projectCategory',
+			alias: "projectCategory",
 			innerJoinAndSelect: {
-				category: 'projectCategory.category',
+				category: "projectCategory.category",
 			},
 		},
 		where: {

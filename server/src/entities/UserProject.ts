@@ -1,6 +1,6 @@
-import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Project } from './Project';
-import { User } from './User';
+import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Project } from "./Project";
+import { User } from "./User";
 
 @Entity()
 export class UserProject extends BaseEntity {
@@ -13,12 +13,12 @@ export class UserProject extends BaseEntity {
 	@ManyToOne(() => User, (user) => user.projectConnection, {
 		primary: true,
 	})
-	@JoinColumn({ name: 'userId' })
+	@JoinColumn({ name: "userId" })
 	user: Promise<User>;
 
 	@ManyToOne(() => Project, (project) => project.memberConnection, {
 		primary: true,
 	})
-	@JoinColumn({ name: 'projectId' })
+	@JoinColumn({ name: "projectId" })
 	project: Promise<Project>;
 }

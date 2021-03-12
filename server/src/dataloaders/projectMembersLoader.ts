@@ -1,14 +1,14 @@
-import DataLoader from 'dataloader';
-import { UserProject } from '../entities/UserProject';
-import { In } from 'typeorm';
-import { User } from '../entities/User';
+import DataLoader from "dataloader";
+import { UserProject } from "../entities/UserProject";
+import { In } from "typeorm";
+import { User } from "../entities/User";
 
 const batchUsers = async (projectIds: readonly number[]) => {
 	const projectUsers = await UserProject.find({
 		join: {
-			alias: 'userProject',
+			alias: "userProject",
 			innerJoinAndSelect: {
-				user: 'userProject.user',
+				user: "userProject.user",
 			},
 		},
 		where: {

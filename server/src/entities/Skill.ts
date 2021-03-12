@@ -1,7 +1,7 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
-import { ObjectType, Field } from 'type-graphql';
-import { ProjectSkill } from './ProjectSkill';
-import { UserSkill } from './UserSkill';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from "typeorm";
+import { ObjectType, Field } from "type-graphql";
+import { ProjectSkill } from "./ProjectSkill";
+import { UserSkill } from "./UserSkill";
 
 @ObjectType()
 @Entity()

@@ -1,4 +1,4 @@
-import { ObjectType, Field } from 'type-graphql';
+import { ObjectType, Field } from "type-graphql";
 import {
 	Entity,
 	Column,
@@ -7,8 +7,8 @@ import {
 	UpdateDateColumn,
 	BaseEntity,
 	OneToMany,
-} from 'typeorm';
-import { ProjectCategory } from './ProjectCategory';
+} from "typeorm";
+import { ProjectCategory } from "./ProjectCategory";
 
 @ObjectType()
 @Entity()

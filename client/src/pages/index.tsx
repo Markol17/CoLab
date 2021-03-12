@@ -1,13 +1,13 @@
 //TODO: use lazy loading with React.lazy
-import { useEffect, useState } from 'react';
-import { Layout } from '../components/Layout';
-import { useCurrentUserQuery, usePaginatedProjectsQuery } from '../generated/graphql';
-import { withApollo } from '../utils/withApollo';
-import { makeStyles, Grid, CircularProgress } from '@material-ui/core';
-import { ProjectCard } from '../components/ProjectCard';
-import React from 'react';
-import { isServer } from '../utils/isServer';
-import { LearnMoreModal } from '../components/modals/LearnMoreModal';
+import { useEffect, useState } from "react";
+import { Layout } from "../components/Layout";
+import { useCurrentUserQuery, usePaginatedProjectsQuery } from "../generated/graphql";
+import { withApollo } from "../utils/withApollo";
+import { makeStyles, Grid, CircularProgress } from "@material-ui/core";
+import { ProjectCard } from "../components/ProjectCard";
+import React from "react";
+import { isServer } from "../utils/isServer";
+import { LearnMoreModal } from "../components/modals/LearnMoreModal";
 
 const useStyles = makeStyles({
 	root: {
@@ -17,18 +17,18 @@ const useStyles = makeStyles({
 		maxWidth: 345,
 	},
 	loadingContainer: {
-		height: '10%',
+		height: "10%",
 	},
 });
 
 const Index = () => {
 	const [currentProject, setProject] = useState({
-		name: '',
-		desc: '',
+		name: "",
+		desc: "",
 		categories: [],
 		skills: [],
 		members: [],
-		creator: { username: '' },
+		creator: { username: "" },
 	});
 	const [isLearnMoreOpen, setLearnMoreModal] = useState(false);
 	const [offset, setOffset] = useState(12);
@@ -45,8 +45,8 @@ const Index = () => {
 	});
 
 	useEffect(() => {
-		window.addEventListener('scroll', loadMore);
-		return () => window.removeEventListener('scroll', loadMore);
+		window.addEventListener("scroll", loadMore);
+		return () => window.removeEventListener("scroll", loadMore);
 	}, [offset]);
 
 	const handleLearnMoreModal = () => {

@@ -1,48 +1,48 @@
-import React from 'react';
-import { Layout } from '../../components/Layout';
-import { Avatar, Box, Chip, createStyles, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
-import { useGetProjectFromUrl } from '../../utils/useGetProjectFromUrl';
-import Image from 'material-ui-image';
-import { withApollo } from '../../utils/withApollo';
-import { AvatarGroup } from '@material-ui/lab';
-import { months } from '../../components/modals/LearnMoreModal';
-import { Category, Skill } from '../../generated/graphql';
+import React from "react";
+import { Layout } from "../../components/Layout";
+import { Avatar, Box, Chip, createStyles, makeStyles, Paper, Theme, Typography } from "@material-ui/core";
+import { useGetProjectFromUrl } from "../../utils/useGetProjectFromUrl";
+import Image from "material-ui-image";
+import { withApollo } from "../../utils/withApollo";
+import { AvatarGroup } from "@material-ui/lab";
+import { months } from "../../components/modals/LearnMoreModal";
+import { Category, Skill } from "../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		sectionContainer: {
-			boxShadow: '3px 3px 4px 0px rgb(0 0 0 / 20%)',
+			boxShadow: "3px 3px 4px 0px rgb(0 0 0 / 20%)",
 			padding: theme.spacing(3),
 		},
 		container: {
-			display: 'flex',
-			flexWrap: 'wrap',
+			display: "flex",
+			flexWrap: "wrap",
 		},
 		subContainer: {
-			display: 'flex',
-			flexWrap: 'wrap',
-			justifyContent: 'space-between',
+			display: "flex",
+			flexWrap: "wrap",
+			justifyContent: "space-between",
 		},
 		subDiv: {
-			width: '500px',
-			'&:nth-child(1)': {
+			width: "500px",
+			"&:nth-child(1)": {
 				marginRight: theme.spacing(3),
 			},
 		},
 		imgContainer: {
-			maxWidth: '500px',
-			minWidth: '500px',
+			maxWidth: "500px",
+			minWidth: "500px",
 			marginRight: theme.spacing(3),
 			marginBottom: theme.spacing(3),
 		},
 		title: {
-			fontWeight: 'bold',
+			fontWeight: "bold",
 		},
 		chips: {
 			marginBottom: theme.spacing(3),
-			display: 'flex',
-			flexWrap: 'wrap',
-			'& > *': {
+			display: "flex",
+			flexWrap: "wrap",
+			"& > *": {
 				margin: 2,
 			},
 		},
@@ -85,7 +85,7 @@ const Project = ({}) => {
 							}
 							disableTransition
 							aspectRatio={1.62}
-							imageStyle={{ borderRadius: '3px' }}
+							imageStyle={{ borderRadius: "3px" }}
 							color='tranparent'
 						/>
 					</div>
@@ -106,7 +106,7 @@ const Project = ({}) => {
 							<Typography variant='h6' className={classes.title}>
 								Members:
 							</Typography>
-							<AvatarGroup max={5} style={{ marginBottom: '5.6px' }}>
+							<AvatarGroup max={5} style={{ marginBottom: "5.6px" }}>
 								{data.project.members.map((member: any, index: number) => (
 									<Avatar
 										key={index}
@@ -120,9 +120,9 @@ const Project = ({}) => {
 							</Typography>
 							<Typography gutterBottom variant='subtitle1' color='textSecondary'>
 								{months[new Date(data.project.createdAt).getMonth()] +
-									' ' +
+									" " +
 									new Date(data.project.createdAt).getDate() +
-									', ' +
+									", " +
 									new Date(data.project.createdAt).getFullYear()}
 							</Typography>
 							<Typography variant='h6' className={classes.title}>
@@ -130,9 +130,9 @@ const Project = ({}) => {
 							</Typography>
 							<Typography gutterBottom variant='subtitle1' color='textSecondary'>
 								{months[new Date(data.project.createdAt).getMonth()] +
-									' ' +
+									" " +
 									new Date(data.project.updatedAt).getDate() +
-									', ' +
+									", " +
 									new Date(data.project.updatedAt).getFullYear()}
 							</Typography>
 						</div>
@@ -143,7 +143,7 @@ const Project = ({}) => {
 							<div className={classes.chips}>
 								{data.project.categories.map((category: Category, index: number) => (
 									<Chip
-										style={{ backgroundColor: category.color, fontWeight: 'bold' }}
+										style={{ backgroundColor: category.color, fontWeight: "bold" }}
 										key={index}
 										size='small'
 										label={category.name}
@@ -156,7 +156,7 @@ const Project = ({}) => {
 							<div className={classes.chips}>
 								{data.project.skills.map((skill: Skill, index: number) => (
 									<Chip
-										style={{ backgroundColor: skill.color, fontWeight: 'bold' }}
+										style={{ backgroundColor: skill.color, fontWeight: "bold" }}
 										key={index}
 										size='small'
 										label={skill.type}

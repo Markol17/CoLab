@@ -1,5 +1,5 @@
-import { useProjectQuery } from '../generated/graphql';
-import { useGetIntId } from './useGetIntId';
+import { useProjectQuery } from "../generated/graphql";
+import { useGetIntId } from "./useGetIntId";
 
 export const useGetProjectFromUrl = () => {
 	const intId = useGetIntId();

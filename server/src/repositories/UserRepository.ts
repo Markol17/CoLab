@@ -1,19 +1,19 @@
-import { User } from '../entities/User';
-import { EntityRepository, getConnection, Repository } from 'typeorm';
-import { Project } from '../entities/Project';
-import { UserProject } from '../entities/UserProject';
-import { Skill } from '../entities/Skill';
-import { UserSkill } from '../entities/UserSkill';
-import { RegisterInput } from '../resolvers/InputTypes/UserInput';
+import { User } from "../entities/User";
+import { EntityRepository, getConnection, Repository } from "typeorm";
+import { Project } from "../entities/Project";
+import { UserProject } from "../entities/UserProject";
+import { Skill } from "../entities/Skill";
+import { UserSkill } from "../entities/UserSkill";
+import { RegisterInput } from "../resolvers/InputTypes/UserInput";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 	async getProjectsByUserId(id: number): Promise<Project[]> {
 		const projects = await UserProject.find({
 			join: {
-				alias: 'userProject',
+				alias: "userProject",
 				innerJoinAndSelect: {
-					project: 'userProject.project',
+					project: "userProject.project",
 				},
 			},
 			where: {
@@ -39,9 +39,9 @@ export class UserRepository extends Repository<User> {
 	async getSkillsByUserId(id: number): Promise<Skill[]> {
 		const skills = await UserSkill.find({
 			join: {
-				alias: 'userSkill',
+				alias: "userSkill",
 				innerJoinAndSelect: {
-					skill: 'userSkill.skill',
+					skill: "userSkill.skill",
 				},
 			},
 			where: {
@@ -89,7 +89,7 @@ export class UserRepository extends Repository<User> {
 		try {
 			return await this.save(user);
 		} catch (err) {
-			if (err.code === '23505') {
+			if (err.code === "23505") {
 				return;
 			}
 		}
@@ -97,7 +97,7 @@ export class UserRepository extends Repository<User> {
 
 	async getUserByUsernameOrEmail(usernameOrEmail: string): Promise<User | undefined> {
 		return await this.findOne(
-			usernameOrEmail.includes('@') ? { where: { email: usernameOrEmail } } : { where: { username: usernameOrEmail } }
+			usernameOrEmail.includes("@") ? { where: { email: usernameOrEmail } } : { where: { username: usernameOrEmail } }
 		);
 	}
 
@@ -116,8 +116,8 @@ export class UserRepository extends Repository<User> {
 			.set({
 				password,
 			})
-			.where('id = :id', { id })
-			.returning('*')
+			.where("id = :id", { id })
+			.returning("*")
 			.execute()
 			.then((response) => {
 				return response.raw[0];
@@ -136,7 +136,7 @@ export class UserRepository extends Repository<User> {
 					projectId,
 				},
 			])
-			.returning('*')
+			.returning("*")
 			.execute()
 			.then((response) => {
 				return response.raw[0];

@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { useFormik } from 'formik';
-import { CurrentUserDocument, CurrentUserQuery, useLoginMutation } from '../../generated/graphql';
-import { useRouter } from 'next/router';
-import { toErrorMap } from '../../utils/toErrorMap';
-import { IconButton, InputAdornment, Typography, withStyles } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import React, { useState } from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import { useFormik } from "formik";
+import { CurrentUserDocument, CurrentUserQuery, useLoginMutation } from "../../generated/graphql";
+import { useRouter } from "next/router";
+import { toErrorMap } from "../../utils/toErrorMap";
+import { IconButton, InputAdornment, Typography, withStyles } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -28,19 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
 			padding: theme.spacing(1, 3, 2, 3),
 		},
 		login: {
-			textTransform: 'unset',
+			textTransform: "unset",
 			color: theme.palette.common.white,
-			minWidth: '90px',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
-			fontWeight: 'bold',
+			minWidth: "90px",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
+			fontWeight: "bold",
 		},
 		cancel: {
 			marginRight: theme.spacing(1),
 			borderColor: theme.palette.error.main,
-			textTransform: 'unset',
-			minWidth: '90px',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
-			fontWeight: 'bold',
+			textTransform: "unset",
+			minWidth: "90px",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
+			fontWeight: "bold",
 		},
 	})
 );
@@ -52,12 +52,12 @@ const headerStyles = (theme: Theme) =>
 			padding: theme.spacing(3),
 		},
 		closeButton: {
-			position: 'absolute',
+			position: "absolute",
 			right: theme.spacing(2),
 			top: theme.spacing(2),
 		},
 		title: {
-			fontWeight: 'bold',
+			fontWeight: "bold",
 		},
 	});
 
@@ -92,7 +92,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 	};
 
 	const formik = useFormik({
-		initialValues: { usernameOrEmail: '', password: '' },
+		initialValues: { usernameOrEmail: "", password: "" },
 		onSubmit: async (values, { setErrors }) => {
 			const response = await login({
 				variables: { attributes: values },
@@ -100,7 +100,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 					cache.writeQuery<CurrentUserQuery>({
 						query: CurrentUserDocument,
 						data: {
-							__typename: 'Query',
+							__typename: "Query",
 							currentUser: data?.login.user,
 						},
 					});
@@ -109,18 +109,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 			if (response.data?.login.errors) {
 				setErrors(toErrorMap(response.data.login.errors));
 			} else if (response.data?.login.user) {
-				if (typeof router.query.next === 'string') {
+				if (typeof router.query.next === "string") {
 					router.push(router.query.next);
 				} else {
 					onClose();
-					router.push('/');
+					router.push("/");
 				}
 			}
 		},
 	});
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
+		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={"sm"}>
 			<DialogTitle onClose={onClose}>Login</DialogTitle>
 			<form onSubmit={formik.handleSubmit}>
 				<DialogContent className={classes.modalContent}>
@@ -146,7 +146,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 						color='secondary'
 						margin='dense'
 						label='Password*'
-						type={showPassword ? 'text' : 'password'}
+						type={showPassword ? "text" : "password"}
 						fullWidth
 						name='password'
 						placeholder='Password*'

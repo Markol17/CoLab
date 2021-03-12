@@ -1,17 +1,17 @@
-import { UserRepository } from '../repositories/UserRepository';
-import { getCustomRepository } from 'typeorm';
-import { Ctx } from 'type-graphql';
-import { Context } from '../types';
-import argon2 from 'argon2';
-import { UserProjectsResponse, UserResponse, UserSkillsResponse } from '../resolvers/ResponseTypes/UserResponse';
-import { ChangePasswordInput, LoginInput, RegisterInput } from '../resolvers/InputTypes/UserInput';
-import { validateRegister } from '../utils/validateRegister';
-import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from '../constants';
-import { sendEmail } from '../utils/sendEmail';
-import { v4 } from 'uuid';
-import { Project } from '../entities/Project';
-import { Skill } from '../entities/Skill';
-import { User } from '../entities/User';
+import { UserRepository } from "../repositories/UserRepository";
+import { getCustomRepository } from "typeorm";
+import { Ctx } from "type-graphql";
+import { Context } from "../types";
+import argon2 from "argon2";
+import { UserProjectsResponse, UserResponse, UserSkillsResponse } from "../resolvers/ResponseTypes/UserResponse";
+import { ChangePasswordInput, LoginInput, RegisterInput } from "../resolvers/InputTypes/UserInput";
+import { validateRegister } from "../utils/validateRegister";
+import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
+import { sendEmail } from "../utils/sendEmail";
+import { v4 } from "uuid";
+import { Project } from "../entities/Project";
+import { Skill } from "../entities/Skill";
+import { User } from "../entities/User";
 
 export class UserService {
 	userRepository: UserRepository;
@@ -83,8 +83,8 @@ export class UserService {
 			return {
 				errors: [
 					{
-						field: 'email',
-						message: 'An account already exists with that email',
+						field: "email",
+						message: "An account already exists with that email",
 					},
 				],
 			};
@@ -114,12 +114,12 @@ export class UserService {
 			return {
 				errors: [
 					{
-						field: 'usernameOrEmail',
-						message: 'Incorrect password and email/username combination',
+						field: "usernameOrEmail",
+						message: "Incorrect password and email/username combination",
 					},
 					{
-						field: 'password',
-						message: 'Incorrect password and email/username combination',
+						field: "password",
+						message: "Incorrect password and email/username combination",
 					},
 				],
 			};
@@ -156,7 +156,7 @@ export class UserService {
 
 		const token = v4();
 
-		await redis.set(FORGET_PASSWORD_PREFIX + token, user.id, 'ex', 1000 * 60 * 60 * 24 * 3); // 3 days
+		await redis.set(FORGET_PASSWORD_PREFIX + token, user.id, "ex", 1000 * 60 * 60 * 24 * 3); // 3 days
 
 		await sendEmail(email, `<a href="http://localhost:3000/change-password/${token}">Reset Password</a>`);
 
@@ -170,8 +170,8 @@ export class UserService {
 			return {
 				errors: [
 					{
-						field: 'newPassword',
-						message: 'length must be greater than 2',
+						field: "newPassword",
+						message: "length must be greater than 2",
 					},
 				],
 			};
@@ -183,8 +183,8 @@ export class UserService {
 			return {
 				errors: [
 					{
-						field: 'token',
-						message: 'token expired',
+						field: "token",
+						message: "token expired",
 					},
 				],
 			};
@@ -197,8 +197,8 @@ export class UserService {
 			return {
 				errors: [
 					{
-						field: 'token',
-						message: 'user no longer exists',
+						field: "token",
+						message: "user no longer exists",
 					},
 				],
 			};

@@ -1,5 +1,5 @@
-import { useUserQuery } from '../generated/graphql';
-import { useGetIntId } from './useGetIntId';
+import { useUserQuery } from "../generated/graphql";
+import { useGetIntId } from "./useGetIntId";
 
 export const useGetProfileFromUrl = () => {
 	const intId = useGetIntId();

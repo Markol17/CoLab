@@ -1,28 +1,28 @@
-import React, { useContext } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import TuneIcon from '@material-ui/icons/Tune';
-import IndexDrawer from '../drawers/IndexDrawer';
-import { Paper, MenuItem, Badge, Menu, InputBase, fade, Button } from '@material-ui/core';
-import { useApolloClient } from '@apollo/client';
-import NextLink from 'next/link';
-import { useLogoutMutation, useCurrentUserQuery } from '../../generated/graphql';
-import { isServer } from '../../utils/isServer';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import SearchIcon from '@material-ui/icons/Search';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddIcon from '@material-ui/icons/Add';
-import { CreateProjectModal } from '../modals/CreateProjectModal';
-import { RegisterModal } from '../modals/RegisterModal';
-import { LoginModal } from '../modals/LoginModal';
-import { useRouter } from 'next/router';
-import { ModalsContext, TOGGLE_LOGIN, TOGGLE_REGISTER } from '../../utils/contexts/ModalsContext';
-const CoLab = require('../../assets/img/CoLab.svg');
+import React, { useContext } from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import TuneIcon from "@material-ui/icons/Tune";
+import IndexDrawer from "../drawers/IndexDrawer";
+import { Paper, MenuItem, Badge, Menu, InputBase, fade, Button } from "@material-ui/core";
+import { useApolloClient } from "@apollo/client";
+import NextLink from "next/link";
+import { useLogoutMutation, useCurrentUserQuery } from "../../generated/graphql";
+import { isServer } from "../../utils/isServer";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import SearchIcon from "@material-ui/icons/Search";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import AddIcon from "@material-ui/icons/Add";
+import { CreateProjectModal } from "../modals/CreateProjectModal";
+import { RegisterModal } from "../modals/RegisterModal";
+import { LoginModal } from "../modals/LoginModal";
+import { useRouter } from "next/router";
+import { ModalsContext, TOGGLE_LOGIN, TOGGLE_REGISTER } from "../../utils/contexts/ModalsContext";
+const CoLab = require("../../assets/img/CoLab.svg");
 
 interface NavBarProps {}
 
@@ -39,98 +39,98 @@ const useStyles = makeStyles((theme: Theme) =>
 			marginRight: 15,
 		},
 		hide: {
-			display: 'none',
+			display: "none",
 		},
 		content: {
 			flexGrow: 1,
 			padding: theme.spacing(3),
 		},
 		container: {
-			width: '100%',
-			display: 'flex',
-			justifyContent: 'space-between',
-			alignItems: 'center',
+			width: "100%",
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "center",
 		},
 		searchContainer: {
-			display: 'flex',
-			justifyContent: 'center',
-			alignItems: 'center',
+			display: "flex",
+			justifyContent: "center",
+			alignItems: "center",
 		},
 		search: {
-			position: 'relative',
+			position: "relative",
 			borderRadius: theme.shape.borderRadius,
 			backgroundColor: fade(theme.palette.common.white, 0.15),
-			'&:hover': {
+			"&:hover": {
 				backgroundColor: fade(theme.palette.common.white, 0.25),
 			},
 			marginRight: theme.spacing(2),
-			boxShadow: '3px 3px 10px 0px rgba(0,0,0,0.6)',
+			boxShadow: "3px 3px 10px 0px rgba(0,0,0,0.6)",
 			marginLeft: 15,
-			cursor: 'pointer',
-			[theme.breakpoints.up('sm')]: {
+			cursor: "pointer",
+			[theme.breakpoints.up("sm")]: {
 				marginLeft: theme.spacing(3),
-				width: '25%',
-				minWidth: '415px',
-				justifyContent: 'center',
+				width: "25%",
+				minWidth: "415px",
+				justifyContent: "center",
 			},
 		},
 		searchIcon: {
 			padding: theme.spacing(0, 1.5),
-			height: '100%',
-			position: 'absolute',
-			pointerEvents: 'none',
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
+			height: "100%",
+			position: "absolute",
+			pointerEvents: "none",
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
 		},
 		inputRoot: {
-			width: '100%',
-			color: 'inherit',
+			width: "100%",
+			color: "inherit",
 		},
 		inputInput: {
 			padding: theme.spacing(1, 1, 1, 0),
 			// vertical padding + font size from searchIcon
 			paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-			transition: theme.transitions.create('width'),
-			width: '100%',
-			[theme.breakpoints.up('md')]: {
-				width: '50ch',
+			transition: theme.transitions.create("width"),
+			width: "100%",
+			[theme.breakpoints.up("md")]: {
+				width: "50ch",
 			},
 		},
 		sectionDesktop: {
-			display: 'none',
-			[theme.breakpoints.up('md')]: {
-				display: 'flex',
+			display: "none",
+			[theme.breakpoints.up("md")]: {
+				display: "flex",
 			},
 		},
 		sectionMobile: {
-			display: 'flex',
-			[theme.breakpoints.up('md')]: {
-				display: 'none',
+			display: "flex",
+			[theme.breakpoints.up("md")]: {
+				display: "none",
 			},
 		},
 		login: {
 			marginRight: theme.spacing(2),
 			color: theme.palette.common.white,
 			borderColor: theme.palette.common.white,
-			textTransform: 'unset',
-			minWidth: '90px',
-			fontWeight: 'bold',
-			borderWidth: '1px',
-			boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.6)',
-			'&:hover': {
-				borderWidth: '1px',
+			textTransform: "unset",
+			minWidth: "90px",
+			fontWeight: "bold",
+			borderWidth: "1px",
+			boxShadow: "4px 4px 13px 0px rgba(0,0,0,0.6)",
+			"&:hover": {
+				borderWidth: "1px",
 			},
 		},
 		register: {
 			color: theme.palette.common.white,
-			textTransform: 'unset',
-			minWidth: '90px',
-			fontWeight: 'bold',
-			borderWidth: '1px',
-			boxShadow: '4px 4px 13px 0px rgba(0,0,0,0.6)',
-			'&:hover': {
-				borderWidth: '1px',
+			textTransform: "unset",
+			minWidth: "90px",
+			fontWeight: "bold",
+			borderWidth: "1px",
+			boxShadow: "4px 4px 13px 0px rgba(0,0,0,0.6)",
+			"&:hover": {
+				borderWidth: "1px",
 			},
 		},
 	})
@@ -202,7 +202,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
 	const logoutUser = async () => {
 		handleMenuClose();
-		router.push('/');
+		router.push("/");
 		await logout();
 		await apolloClient.resetStore();
 	};
@@ -223,14 +223,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 		dispatch({ type: TOGGLE_LOGIN });
 	};
 
-	const menuId = 'primary-search-account-menu';
+	const menuId = "primary-search-account-menu";
 	const renderMenu = (
 		<Menu
 			anchorEl={anchorEl}
-			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+			anchorOrigin={{ vertical: "top", horizontal: "right" }}
 			id={menuId}
 			keepMounted
-			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+			transformOrigin={{ vertical: "top", horizontal: "right" }}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
 			<NextLink href='/profile/[id]' as={`/profile/${data?.currentUser?.id}`}>
@@ -243,14 +243,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 		</Menu>
 	);
 
-	const mobileMenuId = 'primary-search-account-menu-mobile';
+	const mobileMenuId = "primary-search-account-menu-mobile";
 	const renderMobileMenu = (
 		<Menu
 			anchorEl={mobileMoreAnchorEl}
-			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+			anchorOrigin={{ vertical: "top", horizontal: "right" }}
 			id={mobileMenuId}
 			keepMounted
-			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+			transformOrigin={{ vertical: "top", horizontal: "right" }}
 			open={isMobileMenuOpen}
 			onClose={handleMobileMenuClose}>
 			<MenuItem onClick={handleCreateModalOpen}>
@@ -282,14 +282,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 		</Menu>
 	);
 
-	const mobileMenuIdUnregistered = 'primary-unregistered-menu-mobile';
+	const mobileMenuIdUnregistered = "primary-unregistered-menu-mobile";
 	const renderMobileMenuUnregistered = (
 		<Menu
 			anchorEl={unregisteredMobileMoreAnchorEl}
-			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+			anchorOrigin={{ vertical: "top", horizontal: "right" }}
 			id={mobileMenuIdUnregistered}
 			keepMounted
-			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+			transformOrigin={{ vertical: "top", horizontal: "right" }}
 			open={isUnregisteredMobileMenuOpen}
 			onClose={handleMobileMenuClose}>
 			<MenuItem onClick={handleLoginModal}>
@@ -328,7 +328,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 											root: classes.inputRoot,
 											input: classes.inputInput,
 										}}
-										inputProps={{ 'aria-label': 'search' }}
+										inputProps={{ "aria-label": "search" }}
 									/>
 								</div>
 								{/* <IconButton

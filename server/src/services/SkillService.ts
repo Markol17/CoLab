@@ -1,6 +1,6 @@
-import { getCustomRepository } from 'typeorm';
-import { SkillsResponse } from '../resolvers/ResponseTypes/SkillResponse';
-import { SkillRepository } from '../repositories/SkillRepository';
+import { getCustomRepository } from "typeorm";
+import { SkillsResponse } from "../resolvers/ResponseTypes/SkillResponse";
+import { SkillRepository } from "../repositories/SkillRepository";
 
 export class SkillService {
 	skillRepository: SkillRepository;

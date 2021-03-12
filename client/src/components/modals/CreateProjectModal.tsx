@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { useFormik } from 'formik';
-import { Checkbox, CircularProgress, IconButton, Typography, withStyles } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import React, { useState } from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import { useFormik } from "formik";
+import { Checkbox, CircularProgress, IconButton, Typography, withStyles } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import {
 	CurrentUserDocument,
 	useCategoriesQuery,
 	useCreateProjectMutation,
 	useSkillsQuery,
-} from '../../generated/graphql';
-import { useRouter } from 'next/router';
-import { DropzoneArea } from 'material-ui-dropzone';
-import { toErrorMap } from '../../utils/toErrorMap';
-import CloseIcon from '@material-ui/icons/Close';
+} from "../../generated/graphql";
+import { useRouter } from "next/router";
+import { DropzoneArea } from "material-ui-dropzone";
+import { toErrorMap } from "../../utils/toErrorMap";
+import CloseIcon from "@material-ui/icons/Close";
 
 interface CreateProjectModalProps {
 	isOpen: boolean;
@@ -36,20 +36,20 @@ const useStyles = makeStyles((theme: Theme) =>
 			padding: theme.spacing(1, 3, 2, 3),
 		},
 		create: {
-			textTransform: 'unset',
+			textTransform: "unset",
 			color: theme.palette.common.white,
-			minWidth: '90px',
-			fontWeight: 'bold',
+			minWidth: "90px",
+			fontWeight: "bold",
 		},
 		cancel: {
 			marginRight: theme.spacing(1),
 			borderColor: theme.palette.error.main,
-			textTransform: 'unset',
-			minWidth: '90px',
-			fontWeight: 'bold',
+			textTransform: "unset",
+			minWidth: "90px",
+			fontWeight: "bold",
 		},
 		subtitles: {
-			fontWeight: 'bold',
+			fontWeight: "bold",
 		},
 	})
 );
@@ -61,12 +61,12 @@ const headerStyles = (theme: Theme) =>
 			padding: theme.spacing(3),
 		},
 		closeButton: {
-			position: 'absolute',
+			position: "absolute",
 			right: theme.spacing(2),
 			top: theme.spacing(2),
 		},
 		title: {
-			fontWeight: 'bold',
+			fontWeight: "bold",
 		},
 	});
 
@@ -95,7 +95,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 	const { data: categoriesData, loading: categoriesLoading } = useCategoriesQuery();
 
 	const formik = useFormik({
-		initialValues: { name: '', desc: '', skillIds: [], categoryIds: [] },
+		initialValues: { name: "", desc: "", skillIds: [], categoryIds: [] },
 		onSubmit: async (values, { setErrors }) => {
 			const response = await createProject({
 				variables: {
@@ -117,7 +117,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 				setErrors(toErrorMap(response.data.createProject.errors));
 			} else if (response.data?.createProject.project) {
 				onClose();
-				router.push('/');
+				router.push("/");
 			}
 		},
 	});
@@ -127,7 +127,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 		for (let i = 0; i < skills.length; i++) {
 			skillIds.push(skills[i].id);
 		}
-		formik.setFieldValue('skillIds', skillIds);
+		formik.setFieldValue("skillIds", skillIds);
 	};
 
 	const getCategoriesSelected = (_event: any, categories: { id: number; name: string }[]) => {
@@ -135,7 +135,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 		for (let i = 0; i < categories.length; i++) {
 			categoryIds.push(categories[i].id);
 		}
-		formik.setFieldValue('categoryIds', categoryIds);
+		formik.setFieldValue("categoryIds", categoryIds);
 	};
 
 	const handleChange = (file: any) => {
@@ -146,7 +146,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 	const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
+		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={"sm"}>
 			<DialogTitle onClose={onClose}>Create a new project</DialogTitle>
 			<form onSubmit={formik.handleSubmit}>
 				<DialogContent className={classes.modalContent}>
@@ -154,13 +154,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 						Thumbnail
 					</Typography>
 					<DropzoneArea
-						acceptedFiles={['image/jpeg', 'image/png']}
+						acceptedFiles={["image/jpeg", "image/png"]}
 						filesLimit={1}
-						dropzoneText={'Drag and drop an image here or click'}
+						dropzoneText={"Drag and drop an image here or click"}
 						onChange={handleChange}
 						showPreviews={true}
 						showPreviewsInDropzone={false}
-						previewGridProps={{ container: { spacing: 1, direction: 'row' } }}
+						previewGridProps={{ container: { spacing: 1, direction: "row" } }}
 						previewText='Selected Image:'
 					/>
 					<TextField
@@ -211,7 +211,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 										{option.name}
 									</>
 								)}
-								style={{ width: '100%', marginTop: '8px' }}
+								style={{ width: "100%", marginTop: "8px" }}
 								renderInput={(params) => (
 									<TextField
 										{...params}
@@ -245,7 +245,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 										{option.type}
 									</>
 								)}
-								style={{ width: '100%', marginTop: '12px' }}
+								style={{ width: "100%", marginTop: "12px" }}
 								renderInput={(params) => (
 									<TextField
 										{...params}

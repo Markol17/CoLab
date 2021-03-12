@@ -9,8 +9,8 @@ import {
 	makeStyles,
 	Theme,
 	Typography,
-} from '@material-ui/core';
-import React, { useContext } from 'react';
+} from "@material-ui/core";
+import React, { useContext } from "react";
 import {
 	Category,
 	CurrentUserDocument,
@@ -18,9 +18,9 @@ import {
 	Skill,
 	useCurrentUserQuery,
 	useJoinProjectMutation,
-} from '../generated/graphql';
-import { ModalsContext, TOGGLE_LOGIN } from '../utils/contexts/ModalsContext';
-import { isServer } from '../utils/isServer';
+} from "../generated/graphql";
+import { ModalsContext, TOGGLE_LOGIN } from "../utils/contexts/ModalsContext";
+import { isServer } from "../utils/isServer";
 
 interface ProjectCardProps {
 	userProjects: any;
@@ -34,18 +34,18 @@ const useStyles = makeStyles((theme: Theme) =>
 		card: {
 			minWidth: 310,
 			maxWidth: 310,
-			minHeight: '100%',
-			maxHeight: '100%',
-			boxShadow: '7px 7px 10px 0px rgba(0,0,0,0.2)',
-			transition: 'transform 0.2s',
-			'&:hover': {
-				transform: 'scale(1.03)',
+			minHeight: "100%",
+			maxHeight: "100%",
+			boxShadow: "7px 7px 10px 0px rgba(0,0,0,0.2)",
+			transition: "transform 0.2s",
+			"&:hover": {
+				transform: "scale(1.03)",
 			},
 		},
 		chips: {
-			display: 'flex',
-			flexWrap: 'wrap',
-			'& > *': {
+			display: "flex",
+			flexWrap: "wrap",
+			"& > *": {
 				margin: 2,
 			},
 		},
@@ -57,24 +57,24 @@ const useStyles = makeStyles((theme: Theme) =>
 			maxHeight: 200,
 		},
 		cardActionMedia: {
-			cursor: 'pointer',
+			cursor: "pointer",
 		},
 		learnMore: {
-			minWidth: '47%',
-			margin: 'auto',
+			minWidth: "47%",
+			margin: "auto",
 			borderColor: theme.palette.common.white,
 			color: theme.palette.common.white,
-			textTransform: 'unset',
-			fontWeight: 'bold',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+			textTransform: "unset",
+			fontWeight: "bold",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
 		},
 		join: {
-			minWidth: '47%',
-			margin: 'auto',
-			textTransform: 'unset',
+			minWidth: "47%",
+			margin: "auto",
+			textTransform: "unset",
 			color: theme.palette.common.white,
-			fontWeight: 'bold',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+			fontWeight: "bold",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
 		},
 		subtitles: {
 			fontWeight: 600,
@@ -150,7 +150,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ userProjects, project,
 					<div className={classes.chips}>
 						{categories.map((category: Category, index: number) => (
 							<Chip
-								style={{ backgroundColor: category.color, fontWeight: 'bold' }}
+								style={{ backgroundColor: category.color, fontWeight: "bold" }}
 								key={index}
 								size='small'
 								label={category.name}
@@ -163,7 +163,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ userProjects, project,
 					<div className={classes.chips}>
 						{skills.map((skill: Skill, index: number) => (
 							<Chip
-								style={{ backgroundColor: skill.color, fontWeight: 'bold' }}
+								style={{ backgroundColor: skill.color, fontWeight: "bold" }}
 								key={index}
 								size='small'
 								label={skill.type}

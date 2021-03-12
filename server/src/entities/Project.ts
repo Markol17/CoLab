@@ -1,4 +1,4 @@
-import { ObjectType, Field, Ctx, Int } from 'type-graphql';
+import { ObjectType, Field, Ctx, Int } from "type-graphql";
 import {
 	Entity,
 	Column,
@@ -8,15 +8,15 @@ import {
 	BaseEntity,
 	ManyToOne,
 	OneToMany,
-} from 'typeorm';
-import { User } from './User';
-import { Category } from './Category';
-import { ProjectSkill } from './ProjectSkill';
-import { Context } from 'src/types';
-import { ProjectCategory } from './ProjectCategory';
-import { Skill } from './Skill';
-import { UserProject } from './UserProject';
-import { School } from './School';
+} from "typeorm";
+import { User } from "./User";
+import { Category } from "./Category";
+import { ProjectSkill } from "./ProjectSkill";
+import { Context } from "src/types";
+import { ProjectCategory } from "./ProjectCategory";
+import { Skill } from "./Skill";
+import { UserProject } from "./UserProject";
+import { School } from "./School";
 
 @ObjectType()
 @Entity()
@@ -34,7 +34,7 @@ export class Project extends BaseEntity {
 	desc!: string;
 
 	@Field(() => Int)
-	@Column({ type: 'int', default: 0 })
+	@Column({ type: "int", default: 0 })
 	points: number;
 
 	@Field({ nullable: true })

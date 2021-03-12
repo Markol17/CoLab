@@ -1,27 +1,27 @@
-import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import Drawer from '@material-ui/core/Drawer';
-import NextLink from 'next/link';
-import clsx from 'clsx';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Avatar, CircularProgress, Link, Typography } from '@material-ui/core';
-import Collapse from '@material-ui/core/Collapse';
+import React from "react";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import Drawer from "@material-ui/core/Drawer";
+import NextLink from "next/link";
+import clsx from "clsx";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Avatar, CircularProgress, Link, Typography } from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
 
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import HomeIcon from '@material-ui/icons/Home';
-import HelpIcon from '@material-ui/icons/Help';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ExploreIcon from '@material-ui/icons/Explore';
-import AnnouncementIcon from '@material-ui/icons/Announcement';
-import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import { useApolloClient } from '@apollo/client';
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import HomeIcon from "@material-ui/icons/Home";
+import HelpIcon from "@material-ui/icons/Help";
+import AccountTreeIcon from "@material-ui/icons/AccountTree";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ExploreIcon from "@material-ui/icons/Explore";
+import AnnouncementIcon from "@material-ui/icons/Announcement";
+import BookmarksIcon from "@material-ui/icons/Bookmarks";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import { useApolloClient } from "@apollo/client";
 
 const drawerWidth = 240;
 
@@ -40,23 +40,23 @@ const useStyles = makeStyles((theme: Theme) =>
 		drawer: {
 			width: drawerWidth,
 			flexShrink: 0,
-			whiteSpace: 'nowrap',
+			whiteSpace: "nowrap",
 		},
 		drawerOpen: {
 			width: drawerWidth,
-			transition: theme.transitions.create('width', {
+			transition: theme.transitions.create("width", {
 				easing: theme.transitions.easing.sharp,
 				duration: theme.transitions.duration.enteringScreen,
 			}),
 		},
 		drawerClose: {
-			transition: theme.transitions.create('width', {
+			transition: theme.transitions.create("width", {
 				easing: theme.transitions.easing.sharp,
 				duration: theme.transitions.duration.leavingScreen,
 			}),
-			overflowX: 'hidden',
+			overflowX: "hidden",
 			width: theme.spacing(6) + 1,
-			[theme.breakpoints.up('sm')]: {
+			[theme.breakpoints.up("sm")]: {
 				width: theme.spacing(7),
 			},
 		},
@@ -100,7 +100,7 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 			}}>
 			<div className={classes.spacer} />
 			<List>
-				{['Home', 'Explore'].map((text, index) => (
+				{["Home", "Explore"].map((text, index) => (
 					<>
 						{index === 0 ? (
 							<NextLink href='/'>
@@ -126,11 +126,11 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 				<>
 					<Divider />
 					<List>
-						<ListItem button key={'Projects'} onClick={handleProjectsClick}>
+						<ListItem button key={"Projects"} onClick={handleProjectsClick}>
 							<ListItemIcon>
 								<AccountTreeIcon />
 							</ListItemIcon>
-							<ListItemText primary={'Projects'} />
+							<ListItemText primary={"Projects"} />
 							{isProjectOpen ? <ExpandLess /> : <ExpandMore />}
 						</ListItem>
 						<Collapse in={isProjectOpen} timeout='auto' unmountOnExit>
@@ -160,11 +160,11 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 							</List>
 						</Collapse>
 						{/* bookmarks */}
-						<ListItem button key={'Bookmarks'} onClick={handleBookmarksClick}>
+						<ListItem button key={"Bookmarks"} onClick={handleBookmarksClick}>
 							<ListItemIcon>
 								<BookmarksIcon />
 							</ListItemIcon>
-							<ListItemText primary={'Bookmarks'} />
+							<ListItemText primary={"Bookmarks"} />
 							{isBookmarksOpen ? <ExpandLess /> : <ExpandMore />}
 						</ListItem>
 						<Collapse in={isBookmarksOpen} timeout='auto' unmountOnExit>
@@ -183,7 +183,7 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 			<Divider />
 
 			<List>
-				{['Settings', 'Send Comments', 'Help'].map((text, index) => (
+				{["Settings", "Send Comments", "Help"].map((text, index) => (
 					<ListItem button key={text}>
 						<ListItemIcon>
 							{index === 0 ? <SettingsIcon /> : index === 1 ? <AnnouncementIcon /> : <HelpIcon />}

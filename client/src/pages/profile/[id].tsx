@@ -1,8 +1,8 @@
-import React from 'react';
-import { Layout } from '../../components/Layout';
-import { Box } from '@material-ui/core';
-import { withApollo } from '../../utils/withApollo';
-import { useGetProfileFromUrl } from '../../utils/useGetProfileFromUrl';
+import React from "react";
+import { Layout } from "../../components/Layout";
+import { Box } from "@material-ui/core";
+import { withApollo } from "../../utils/withApollo";
+import { useGetProfileFromUrl } from "../../utils/useGetProfileFromUrl";
 
 const Profile = ({}) => {
 	const { data, error, loading } = useGetProfileFromUrl();
@@ -28,7 +28,7 @@ const Profile = ({}) => {
 
 	return (
 		<Layout>
-			<Box mb={4}>{data.user.firstName + ' ' + data.user.lastName}</Box>
+			<Box mb={4}>{data.user.firstName + " " + data.user.lastName}</Box>
 			<Box mb={4}>{data.user.username}</Box>
 			<Box mb={4}>{data.user.school.name}</Box>
 			<Box mb={4}>{data.user.program.name}</Box>

@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import Image from 'material-ui-image';
+import React, { useContext } from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import Image from "material-ui-image";
 import {
 	Category,
 	CurrentUserDocument,
@@ -13,11 +13,11 @@ import {
 	Skill,
 	useCurrentUserQuery,
 	useJoinProjectMutation,
-} from '../../generated/graphql';
-import { ModalsContext, TOGGLE_LOGIN } from '../../utils/contexts/ModalsContext';
-import { Chip, DialogContentText, IconButton, Typography, withStyles } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { isServer } from '../../utils/isServer';
+} from "../../generated/graphql";
+import { ModalsContext, TOGGLE_LOGIN } from "../../utils/contexts/ModalsContext";
+import { Chip, DialogContentText, IconButton, Typography, withStyles } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { isServer } from "../../utils/isServer";
 
 interface LearnMoreModalProps {
 	userProjects: any;
@@ -35,40 +35,40 @@ const useStyles = makeStyles((theme: Theme) =>
 			padding: theme.spacing(1, 3, 2, 3),
 		},
 		thumbnail: {
-			marginBottom: '20px',
+			marginBottom: "20px",
 		},
 		reqJoin: {
-			textTransform: 'unset',
+			textTransform: "unset",
 			color: theme.palette.common.white,
-			minWidth: '90px',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
-			fontWeight: 'bold',
+			minWidth: "90px",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
+			fontWeight: "bold",
 		},
 		cancel: {
 			marginRight: theme.spacing(1),
 			borderColor: theme.palette.error.main,
 			color: theme.palette.common.white,
-			textTransform: 'unset',
-			minWidth: '90px',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
-			fontWeight: 'bold',
+			textTransform: "unset",
+			minWidth: "90px",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
+			fontWeight: "bold",
 		},
 		chips: {
 			marginBottom: theme.spacing(3),
-			display: 'flex',
-			flexWrap: 'wrap',
-			'& > *': {
+			display: "flex",
+			flexWrap: "wrap",
+			"& > *": {
 				margin: 2,
 			},
 		},
 		subtitles: {
-			fontWeight: 'bold',
+			fontWeight: "bold",
 		},
 		subtitlesText: {
 			marginBottom: theme.spacing(2),
-			overflow: 'hidden',
-			textOverflow: 'ellipsis',
-			width: '100%',
+			overflow: "hidden",
+			textOverflow: "ellipsis",
+			width: "100%",
 		},
 	})
 );
@@ -80,12 +80,12 @@ const headerStyles = (theme: Theme) =>
 			padding: theme.spacing(3),
 		},
 		closeButton: {
-			position: 'absolute',
+			position: "absolute",
 			right: theme.spacing(2),
 			top: theme.spacing(2),
 		},
 		title: {
-			fontWeight: 'bold',
+			fontWeight: "bold",
 		},
 	});
 
@@ -106,18 +106,18 @@ const DialogTitle = withStyles(headerStyles)((props: any) => {
 });
 
 export const months = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December',
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
 ];
 
 export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, project, userProjects }) => {
@@ -162,7 +162,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 	};
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
+		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={"sm"}>
 			<DialogTitle onClose={onClose}>{name}</DialogTitle>
 			<DialogContent id='alert-dialog-description'>
 				<div className={classes.thumbnail}>
@@ -174,7 +174,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 						}
 						disableTransition
 						aspectRatio={1.62}
-						imageStyle={{ borderRadius: '3px' }}
+						imageStyle={{ borderRadius: "3px" }}
 						color='tranparent'
 					/>
 				</div>
@@ -192,7 +192,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 				<div className={classes.chips}>
 					{categories.map((category: Category, index: number) => (
 						<Chip
-							style={{ backgroundColor: category.color, fontWeight: 'bold' }}
+							style={{ backgroundColor: category.color, fontWeight: "bold" }}
 							key={index}
 							size='small'
 							label={category.name}
@@ -205,7 +205,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 				<div className={classes.chips}>
 					{skills.map((skill: Skill, index: number) => (
 						<Chip
-							style={{ backgroundColor: skill.color, fontWeight: 'bold' }}
+							style={{ backgroundColor: skill.color, fontWeight: "bold" }}
 							key={index}
 							size='small'
 							label={skill.type}
@@ -224,13 +224,13 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 					Created on:
 				</Typography>
 				<DialogContentText>
-					{months[createdDate.getMonth()] + ' ' + createdDate.getDate() + ', ' + createdDate.getFullYear()}
+					{months[createdDate.getMonth()] + " " + createdDate.getDate() + ", " + createdDate.getFullYear()}
 				</DialogContentText>
 				<Typography className={classes.subtitles} gutterBottom variant='subtitle1'>
 					Last active:
 				</Typography>
 				<DialogContentText>
-					{months[updatedDate.getMonth()] + ' ' + updatedDate.getDate() + ', ' + updatedDate.getFullYear()}
+					{months[updatedDate.getMonth()] + " " + updatedDate.getDate() + ", " + updatedDate.getFullYear()}
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions className={classes.modalActions}>

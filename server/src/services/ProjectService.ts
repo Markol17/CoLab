@@ -1,13 +1,13 @@
-import { ProjectRepository } from '../repositories/ProjectRepository';
-import { getCustomRepository } from 'typeorm';
-import { JoinProjectResponse, PaginatedProjects, ProjectResponse } from 'src/resolvers/ResponseTypes/ProjectResponse';
-import { Context } from '../types';
-import { CreateProjectInput } from '../resolvers/InputTypes/ProjectInput';
-import { validateCreateProject } from '../utils/validateCreateProject';
-import { createWriteStream } from 'fs';
-import path from 'path';
-import { UserRepository } from '../repositories/UserRepository';
-import { Project } from '../entities/Project';
+import { ProjectRepository } from "../repositories/ProjectRepository";
+import { getCustomRepository } from "typeorm";
+import { JoinProjectResponse, PaginatedProjects, ProjectResponse } from "src/resolvers/ResponseTypes/ProjectResponse";
+import { Context } from "../types";
+import { CreateProjectInput } from "../resolvers/InputTypes/ProjectInput";
+import { validateCreateProject } from "../utils/validateCreateProject";
+import { createWriteStream } from "fs";
+import path from "path";
+import { UserRepository } from "../repositories/UserRepository";
+import { Project } from "../entities/Project";
 
 export class ProjectService {
 	projectRepository: ProjectRepository;
@@ -63,9 +63,9 @@ export class ProjectService {
 				const { createReadStream, filename } = await thumbnail;
 				await new Promise((resolve, reject) =>
 					createReadStream()
-						.pipe(createWriteStream(path.join(__dirname, '../../uploads/projects/thumbnails', filename)))
-						.on('finish', () => resolve(true))
-						.on('error', () => reject(false))
+						.pipe(createWriteStream(path.join(__dirname, "../../uploads/projects/thumbnails", filename)))
+						.on("finish", () => resolve(true))
+						.on("error", () => reject(false))
 				);
 			}
 		}
@@ -81,8 +81,8 @@ export class ProjectService {
 			return {
 				errors: [
 					{
-						field: 'project',
-						message: 'This project does not exist',
+						field: "project",
+						message: "This project does not exist",
 					},
 				],
 			};
@@ -93,8 +93,8 @@ export class ProjectService {
 			return {
 				errors: [
 					{
-						field: 'project',
-						message: 'This project is full',
+						field: "project",
+						message: "This project is full",
 					},
 				],
 			};
@@ -118,8 +118,8 @@ export class ProjectService {
 			return {
 				errors: [
 					{
-						field: 'project',
-						message: 'You are already joined this project',
+						field: "project",
+						message: "You are already joined this project",
 					},
 				],
 			};
@@ -132,8 +132,8 @@ export class ProjectService {
 		return {
 			errors: [
 				{
-					field: 'project',
-					message: 'Could not join project',
+					field: "project",
+					message: "Could not join project",
 				},
 			],
 		};

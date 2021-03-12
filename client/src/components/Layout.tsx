@@ -1,15 +1,15 @@
-import React from 'react';
-import { Wrapper } from './Wrapper';
-import { NavBar } from './navigation/NavBar';
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import ModalsContextProvider from '../utils/contexts/ModalsContext';
+import React from "react";
+import { Wrapper } from "./Wrapper";
+import { NavBar } from "./navigation/NavBar";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import ModalsContextProvider from "../utils/contexts/ModalsContext";
 
 interface LayoutProps {}
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
-			display: 'flex',
+			display: "flex",
 		},
 	})
 );

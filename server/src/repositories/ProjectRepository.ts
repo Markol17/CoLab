@@ -1,10 +1,10 @@
-import { CreateProjectInput } from 'src/resolvers/InputTypes/ProjectInput';
-import { Context } from '../types';
-import { EntityRepository, getConnection, Repository } from 'typeorm';
-import { Project } from '../entities/Project';
-import { ProjectSkill } from '../entities/ProjectSkill';
-import { ProjectCategory } from '../entities/ProjectCategory';
-import { UserProject } from '../entities/UserProject';
+import { CreateProjectInput } from "src/resolvers/InputTypes/ProjectInput";
+import { Context } from "../types";
+import { EntityRepository, getConnection, Repository } from "typeorm";
+import { Project } from "../entities/Project";
+import { ProjectSkill } from "../entities/ProjectSkill";
+import { ProjectCategory } from "../entities/ProjectCategory";
+import { UserProject } from "../entities/UserProject";
 
 @EntityRepository(Project)
 export class ProjectRepository extends Repository<Project> {

@@ -1,6 +1,6 @@
-import { ProgramResponse, SchoolProgramsResponse } from 'src/resolvers/ResponseTypes/ProgramResponse';
-import { getCustomRepository } from 'typeorm';
-import { ProgramRepository } from '../repositories/ProgramRepository';
+import { ProgramResponse, SchoolProgramsResponse } from "src/resolvers/ResponseTypes/ProgramResponse";
+import { getCustomRepository } from "typeorm";
+import { ProgramRepository } from "../repositories/ProgramRepository";
 
 export class ProgramService {
 	programRepository: ProgramRepository;

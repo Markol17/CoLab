@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { useFormik } from 'formik';
-import CloseIcon from '@material-ui/icons/Close';
+import React, { useEffect, useState } from "react";
+import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import { useFormik } from "formik";
+import CloseIcon from "@material-ui/icons/Close";
 import {
 	CurrentUserDocument,
 	CurrentUserQuery,
 	useRegisterMutation,
 	useSchoolProgramsQuery,
 	useSchoolsQuery,
-} from '../../generated/graphql';
-import { useRouter } from 'next/router';
-import { toErrorMap } from '../../utils/toErrorMap';
-import { CircularProgress, IconButton, InputAdornment, Typography } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { Autocomplete } from '@material-ui/lab';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+} from "../../generated/graphql";
+import { useRouter } from "next/router";
+import { toErrorMap } from "../../utils/toErrorMap";
+import { CircularProgress, IconButton, InputAdornment, Typography } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Autocomplete } from "@material-ui/lab";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 interface RegisterModalProps {
 	isOpen: boolean;
@@ -37,25 +37,25 @@ const useStyles = makeStyles((theme: Theme) =>
 			padding: theme.spacing(1, 3, 2, 3),
 		},
 		register: {
-			textTransform: 'unset',
+			textTransform: "unset",
 			color: theme.palette.common.white,
-			minWidth: '90px',
-			fontWeight: 'bold',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+			minWidth: "90px",
+			fontWeight: "bold",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
 		},
 		cancel: {
 			marginRight: theme.spacing(1),
 			borderColor: theme.palette.error.main,
-			textTransform: 'unset',
-			minWidth: '90px',
-			fontWeight: 'bold',
-			boxShadow: '3px 2px 9px 0px rgba(0,0,0,0.15)',
+			textTransform: "unset",
+			minWidth: "90px",
+			fontWeight: "bold",
+			boxShadow: "3px 2px 9px 0px rgba(0,0,0,0.15)",
 		},
 		datePickers: {
-			display: 'flex',
+			display: "flex",
 		},
 		leftDatePicker: {
-			marginRight: '12px',
+			marginRight: "12px",
 		},
 	})
 );
@@ -67,12 +67,12 @@ const headerStyles = (theme: Theme) =>
 			padding: theme.spacing(3),
 		},
 		closeButton: {
-			position: 'absolute',
+			position: "absolute",
 			right: theme.spacing(2),
 			top: theme.spacing(2),
 		},
 		title: {
-			fontWeight: 'bold',
+			fontWeight: "bold",
 		},
 	});
 
@@ -122,7 +122,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 		const temp = options.map((option) => {
 			const firstLetter = option.name[0].toUpperCase();
 			return {
-				firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+				firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
 				...option,
 			};
 		});
@@ -140,37 +140,37 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 
 	const handleSchoolChange = (_event: any, school: any) => {
 		if (!school) {
-			formik.setFieldValue('schoolId', -1);
+			formik.setFieldValue("schoolId", -1);
 			setSchoolId(-1);
 		} else {
-			formik.setFieldValue('schoolId', school.id);
+			formik.setFieldValue("schoolId", school.id);
 			setSchoolId(school.id);
 		}
 	};
 
 	const handleProgramChange = (_event: any, program: any) => {
 		if (!program) {
-			formik.setFieldValue('programId', -1);
+			formik.setFieldValue("programId", -1);
 		} else {
-			formik.setFieldValue('programId', program.id);
+			formik.setFieldValue("programId", program.id);
 		}
 	};
 	const handleStartDateChange = (_event: any, date: any) => {
 		const startDate = new Date(date);
-		formik.setFieldValue('startDateOfStudy', startDate);
+		formik.setFieldValue("startDateOfStudy", startDate);
 	};
 	const handleExpectedDateChange = (_event: any, date: any) => {
 		const expectedDate = new Date(date);
-		formik.setFieldValue('expectedGraduationDate', expectedDate);
+		formik.setFieldValue("expectedGraduationDate", expectedDate);
 	};
 
 	const formik = useFormik({
 		initialValues: {
-			email: '',
-			username: '',
-			password: '',
-			firstName: '',
-			lastName: '',
+			email: "",
+			username: "",
+			password: "",
+			firstName: "",
+			lastName: "",
 			startDateOfStudy: new Date(),
 			expectedGraduationDate: new Date(),
 			schoolId: -1,
@@ -183,7 +183,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 					cache.writeQuery<CurrentUserQuery>({
 						query: CurrentUserDocument,
 						data: {
-							__typename: 'Query',
+							__typename: "Query",
 							currentUser: data?.register.user,
 						},
 					});
@@ -193,13 +193,13 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 				setErrors(toErrorMap(response.data.register.errors));
 			} else if (response.data?.register.user) {
 				onClose();
-				router.push('/');
+				router.push("/");
 			}
 		},
 	});
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={'sm'}>
+		<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth={"sm"}>
 			<DialogTitle onClose={onClose}>Register</DialogTitle>
 			<form onSubmit={formik.handleSubmit}>
 				<DialogContent className={classes.modalContent}>
@@ -266,7 +266,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						variant='outlined'
 						margin='dense'
 						label='Password*'
-						type={showPassword ? 'text' : 'password'}
+						type={showPassword ? "text" : "password"}
 						fullWidth
 						name='password'
 						placeholder='Password*'
@@ -297,7 +297,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 								getOptionLabel={(schoolOption) => schoolOption.name}
 								size='small'
 								onChange={handleSchoolChange}
-								style={{ width: '100%' }}
+								style={{ width: "100%" }}
 								renderInput={(params) => (
 									<TextField
 										{...params}
@@ -357,7 +357,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose })
 						size='small'
 						disabled={programOptions.length === 0}
 						onChange={handleProgramChange}
-						style={{ width: '100%' }}
+						style={{ width: "100%" }}
 						renderInput={(params) => (
 							<TextField
 								{...params}

@@ -1,6 +1,6 @@
-import { getCustomRepository } from 'typeorm';
-import { CategoryRepository } from '../repositories/CategoryRepository';
-import { CategoriesResponse } from '../resolvers/ResponseTypes/CategoryResponse';
+import { getCustomRepository } from "typeorm";
+import { CategoryRepository } from "../repositories/CategoryRepository";
+import { CategoriesResponse } from "../resolvers/ResponseTypes/CategoryResponse";
 
 export class CategoryService {
 	categoryRepository: CategoryRepository;

@@ -7,10 +7,10 @@ import {
 	CreateDateColumn,
 	ManyToOne,
 	JoinColumn,
-} from 'typeorm';
-import { ObjectType, Field } from 'type-graphql';
-import { User } from './User';
-import { School } from './School';
+} from "typeorm";
+import { ObjectType, Field } from "type-graphql";
+import { User } from "./User";
+import { School } from "./School";
 
 @ObjectType()
 @Entity()
@@ -33,6 +33,6 @@ export class Program extends BaseEntity {
 	schoolId: number;
 
 	@ManyToOne(() => School, (school) => school.programs)
-	@JoinColumn({ name: 'schoolId' })
+	@JoinColumn({ name: "schoolId" })
 	school: School;
 }

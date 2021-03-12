@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from 'type-graphql';
+import { ObjectType, Field, Int } from "type-graphql";
 import {
 	Entity,
 	PrimaryGeneratedColumn,
@@ -9,13 +9,13 @@ import {
 	OneToMany,
 	ManyToOne,
 	JoinColumn,
-} from 'typeorm';
-import { Project } from './Project';
-import { Skill } from './Skill';
-import { UserSkill } from './UserSkill';
-import { UserProject } from './UserProject';
-import { School } from './School';
-import { Program } from './Program';
+} from "typeorm";
+import { Project } from "./Project";
+import { Skill } from "./Skill";
+import { UserSkill } from "./UserSkill";
+import { UserProject } from "./UserProject";
+import { School } from "./School";
+import { Program } from "./Program";
 
 @ObjectType()
 @Entity()
@@ -43,10 +43,10 @@ export class User extends BaseEntity {
 	@Column()
 	password!: string;
 
-	@Column({ type: 'date' })
+	@Column({ type: "date" })
 	startDateOfStudy!: Date;
 
-	@Column({ type: 'date' })
+	@Column({ type: "date" })
 	expectedGraduationDate!: Date;
 
 	@Field(() => Int)
@@ -57,7 +57,7 @@ export class User extends BaseEntity {
 
 	@Field(() => School)
 	@ManyToOne(() => School, (school) => school.users)
-	@JoinColumn({ name: 'schoolId' })
+	@JoinColumn({ name: "schoolId" })
 	school: School;
 
 	@Column()
@@ -65,7 +65,7 @@ export class User extends BaseEntity {
 
 	@Field(() => Program)
 	@ManyToOne(() => Program, (program) => program.users)
-	@JoinColumn({ name: 'programId' })
+	@JoinColumn({ name: "programId" })
 	program: Program;
 
 	@OneToMany(() => UserSkill, (us) => us.skill)

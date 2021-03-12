@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer } from "react";
 
 export const ModalsContext = createContext<{
 	login: boolean;
@@ -7,9 +7,9 @@ export const ModalsContext = createContext<{
 	dispatch: React.Dispatch<any>;
 }>({ login: false, register: false, learnMore: false, dispatch: () => null });
 
-export const TOGGLE_LOGIN = 'toggleLogin';
-export const TOGGLE_REGISTER = 'toggleRegister';
-export const TOGGLE_LEARNMORE = 'toggleLearnMore';
+export const TOGGLE_LOGIN = "toggleLogin";
+export const TOGGLE_REGISTER = "toggleRegister";
+export const TOGGLE_LEARNMORE = "toggleLearnMore";
 const ModalsReducer = (state: { login: boolean; register: boolean; learnMore: boolean }, action: { type: string }) => {
 	switch (action.type) {
 		case TOGGLE_LOGIN:
