@@ -1,7 +1,7 @@
 //TODO: use lazy loading with React.lazy
 import { useEffect, useState } from 'react';
 import { Layout } from '../components/Layout';
-import { PaginatedProjectsQuery, useCurrentUserQuery, usePaginatedProjectsQuery } from '../generated/graphql';
+import { useCurrentUserQuery, usePaginatedProjectsQuery } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 import { makeStyles, Grid, CircularProgress } from '@material-ui/core';
 import { ProjectCard } from '../components/ProjectCard';
@@ -31,8 +31,8 @@ const Index = () => {
 		creator: { username: '' },
 	});
 	const [isLearnMoreOpen, setLearnMoreModal] = useState(false);
+	const [offset, setOffset] = useState(12);
 	const classes = useStyles();
-	let offset = 12;
 	const { data: userData } = useCurrentUserQuery({
 		skip: isServer(),
 	});
@@ -41,14 +41,13 @@ const Index = () => {
 			offset: 0,
 			limit: 12,
 		},
-		//notifyOnNetworkStatusChange: true, -> makes the data undefined for some reason
+		notifyOnNetworkStatusChange: true, // rerender on refetch
 	});
-	let hasMore = data?.paginatedProjects.hasMore;
 
 	useEffect(() => {
 		window.addEventListener('scroll', loadMore);
 		return () => window.removeEventListener('scroll', loadMore);
-	}, []);
+	}, [offset]);
 
 	const handleLearnMoreModal = () => {
 		setLearnMoreModal(!isLearnMoreOpen);
@@ -56,34 +55,14 @@ const Index = () => {
 
 	const loadMore = () => {
 		const isBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
-		if (isBottom && hasMore) {
+		if (isBottom && data?.paginatedProjects.hasMore && !loading) {
 			fetchMore({
 				variables: {
 					limit: variables?.limit,
 					offset: offset,
 				},
-				updateQuery: (previousValue, { fetchMoreResult }): PaginatedProjectsQuery => {
-					if (!fetchMoreResult) {
-						return previousValue as PaginatedProjectsQuery;
-					}
-					const projectsLenght = [
-						...(previousValue as PaginatedProjectsQuery).paginatedProjects.projects,
-						...(fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.projects,
-					].length;
-					offset = projectsLenght;
-					hasMore = (fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.hasMore;
-					return {
-						__typename: 'Query',
-						paginatedProjects: {
-							__typename: 'PaginatedProjects',
-							hasMore: (fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.hasMore,
-							projects: [
-								...(previousValue as PaginatedProjectsQuery).paginatedProjects.projects,
-								...(fetchMoreResult as PaginatedProjectsQuery).paginatedProjects.projects,
-							],
-						},
-					};
-				},
+			}).then((fetchMoreResult: any) => {
+				setOffset(offset + fetchMoreResult.data.paginatedProjects.projects.length);
 			});
 		}
 	};

@@ -1,4 +1,3 @@
-import { FlashOnRounded } from '@material-ui/icons';
 import React, { createContext, useReducer } from 'react';
 
 export const ModalsContext = createContext<{

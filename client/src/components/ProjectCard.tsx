@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			maxWidth: 310,
 			minHeight: '100%',
 			maxHeight: '100%',
-			boxShadow: '7px 7px 18px 0px rgba(0,0,0,0.2)',
+			boxShadow: '7px 7px 10px 0px rgba(0,0,0,0.2)',
 			transition: 'transform 0.2s',
 			'&:hover': {
 				transform: 'scale(1.03)',

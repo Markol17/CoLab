@@ -21,6 +21,7 @@ import AnnouncementIcon from '@material-ui/icons/Announcement';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import { useApolloClient } from '@apollo/client';
 
 const drawerWidth = 240;
 
@@ -82,6 +83,7 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 	handleBookmarksClick,
 }) => {
 	const classes = useStyles();
+	const apolloClient = useApolloClient();
 
 	return (
 		<Drawer
