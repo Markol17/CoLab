@@ -32,7 +32,7 @@ export class ProjectRepository extends Repository<Project> {
 	async createAndSaveProject(attributes: CreateProjectInput, { req }: Context): Promise<Project> {
 		const { name, desc, thumbnail } = attributes;
 		let thumbnailName = undefined;
-		if (!!thumbnail) {
+		if (thumbnail) {
 			const { filename } = await thumbnail;
 			thumbnailName = filename;
 		}

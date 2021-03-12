@@ -135,7 +135,7 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 						</ListItem>
 						<Collapse in={isProjectOpen} timeout='auto' unmountOnExit>
 							<List component='div' disablePadding>
-								{!!projects ? (
+								{projects ? (
 									projects.map((project: { id: number; name: string; thumbnail: string }, index: number) => (
 										<NextLink href='/project/[id]' as={`/project/${project.id}`}>
 											<ListItem key={index} button className={classes.nested}>
@@ -144,7 +144,7 @@ const IndexDrawer: React.FC<IndexDrawerProps> = ({
 														alt='Project Avatar'
 														className={classes.projectAvatar}
 														src={
-															!!project.thumbnail
+															project.thumbnail
 																? `http://localhost:4000/projects/thumbnails/${project.thumbnail}`
 																: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
 														}

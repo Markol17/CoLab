@@ -132,7 +132,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ userProjects, project,
 					component='img'
 					alt='Thumbnail'
 					src={
-						!!thumbnail
+						thumbnail
 							? `http://localhost:4000/projects/thumbnails/${thumbnail}`
 							: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
 					}

@@ -168,7 +168,7 @@ export const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose,
 				<div className={classes.thumbnail}>
 					<Image
 						src={
-							!!thumbnail
+							thumbnail
 								? `http://localhost:4000/projects/thumbnails/${thumbnail}`
 								: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
 						}

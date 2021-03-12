@@ -103,7 +103,7 @@ export class UserService {
 		if (!user) {
 			errorCount++;
 		}
-		if (!!user) {
+		if (user) {
 			const valid = await argon2.verify(user.password, password);
 			if (!valid) {
 				errorCount++;

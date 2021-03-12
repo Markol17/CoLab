@@ -59,7 +59,7 @@ export class ProjectService {
 			await this.projectRepository.saveProjectCategoryIds(cIds);
 			await this.joinProject(project.id, context);
 
-			if (!!thumbnail) {
+			if (thumbnail) {
 				const { createReadStream, filename } = await thumbnail;
 				await new Promise((resolve, reject) =>
 					createReadStream()

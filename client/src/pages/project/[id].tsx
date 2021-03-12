@@ -79,7 +79,7 @@ const Project = ({}) => {
 					<div className={classes.imgContainer}>
 						<Image
 							src={
-								!!data.project.thumbnail
+								data.project.thumbnail
 									? `http://localhost:4000/projects/thumbnails/${data.project.thumbnail}`
 									: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
 							}

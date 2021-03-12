@@ -125,7 +125,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, 
 	const getSkillsSelected = (_event: any, skills: { id: number; type: string }[]) => {
 		let skillIds = [];
 		for (let i = 0; i < skills.length; i++) {
-			skillIds.push(skills[i].id);
+			skillIds.push(skills[parseInt(i)].id);
 		}
 		formik.setFieldValue("skillIds", skillIds);
 	};
