@@ -8,15 +8,15 @@ import { UserSkill } from "./UserSkill";
 export class Skill extends BaseEntity {
 	@Field()
 	@PrimaryGeneratedColumn()
-	id!: number;
+	id: number;
 
 	@Field()
 	@Column({ unique: true })
-	type!: string;
+	type: string;
 
 	@Field()
 	@Column()
-	color!: string;
+	color: string;
 
 	@CreateDateColumn()
 	createdAt: Date;

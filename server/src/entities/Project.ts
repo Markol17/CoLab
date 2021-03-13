@@ -17,21 +17,22 @@ import { ProjectCategory } from "./ProjectCategory";
 import { Skill } from "./Skill";
 import { UserProject } from "./UserProject";
 import { School } from "./School";
+import { Section } from "./Section";
 
 @ObjectType()
 @Entity()
 export class Project extends BaseEntity {
 	@Field()
 	@PrimaryGeneratedColumn()
-	id!: number;
+	id: number;
 
 	@Field()
 	@Column()
-	name!: string;
+	name: string;
 
 	@Field()
 	@Column()
-	desc!: string;
+	desc: string;
 
 	@Field(() => Int)
 	@Column({ type: "int", default: 0 })
@@ -39,7 +40,7 @@ export class Project extends BaseEntity {
 
 	@Field({ nullable: true })
 	@Column({ nullable: true })
-	thumbnail?: string;
+	thumbnail: string;
 
 	@Field(() => Int)
 	@Column({ default: 30 })
@@ -51,6 +52,9 @@ export class Project extends BaseEntity {
 
 	@ManyToOne(() => School, (school: School) => school.projects)
 	school: School;
+
+	@OneToMany(() => Section, (section) => section.project)
+	sections: Section[];
 
 	@Field()
 	@ManyToOne(() => User, (user) => user.projects)

@@ -17,11 +17,11 @@ import { School } from "./School";
 export class Program extends BaseEntity {
 	@Field()
 	@PrimaryGeneratedColumn()
-	id!: number;
+	id: number;
 
 	@Field()
 	@Column({ unique: true })
-	name!: string;
+	name: string;
 
 	@CreateDateColumn()
 	createdAt: Date;

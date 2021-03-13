@@ -15,15 +15,15 @@ import { ProjectCategory } from "./ProjectCategory";
 export class Category extends BaseEntity {
 	@Field()
 	@PrimaryGeneratedColumn()
-	id!: number;
+	id: number;
 
 	@Field()
 	@Column()
-	name!: string;
+	name: string;
 
 	@Field()
 	@Column()
-	color!: string;
+	color: string;
 
 	@CreateDateColumn()
 	createdAt: Date;

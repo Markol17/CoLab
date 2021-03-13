@@ -8,14 +8,18 @@ import { createWriteStream } from "fs";
 import path from "path";
 import { UserRepository } from "../repositories/UserRepository";
 import { Project } from "../entities/Project";
+import { Section } from "../entities/Section";
+import { SectionRepository } from "../repositories/SectionRepository";
 
 export class ProjectService {
 	projectRepository: ProjectRepository;
 	userRepository: UserRepository;
+	sectionRepository: SectionRepository;
 
 	constructor() {
 		this.projectRepository = getCustomRepository(ProjectRepository);
 		this.userRepository = getCustomRepository(UserRepository);
+		this.sectionRepository = getCustomRepository(SectionRepository);
 	}
 
 	async getProject(projectId: number): Promise<Project | null> {
@@ -33,6 +37,10 @@ export class ProjectService {
 			projects: projects,
 			hasMore: projects.length === realLimit,
 		};
+	}
+
+	async getSections(projectId: number): Promise<Section[]> {
+		return await this.sectionRepository.getSectonsByProjectId(projectId);
 	}
 
 	async createProject(attributes: CreateProjectInput, context: Context): Promise<ProjectResponse> {

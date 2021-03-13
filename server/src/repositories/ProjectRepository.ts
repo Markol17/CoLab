@@ -39,7 +39,7 @@ export class ProjectRepository extends Repository<Project> {
 		const project = new Project();
 		project.name = name;
 		project.desc = desc;
-		project.thumbnail = thumbnailName;
+		project.thumbnail = thumbnailName as string;
 		project.creatorId = req.session.userId;
 
 		return await this.save(project);

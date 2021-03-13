@@ -5,6 +5,7 @@ import { createProjectSkillsLoader } from "./dataloaders/projectSkillsLoader";
 import { createProjectCategoriesLoader } from "./dataloaders/projectCategoriesLoader";
 import { Stream } from "stream";
 import { createProjectMembersLoader } from "./dataloaders/projectMembersLoader";
+import { createSectionLinksLoader } from "./dataloaders/sectionLinksLoader";
 
 export type Context = {
 	req: Request & { session: Express.Session };
@@ -14,6 +15,7 @@ export type Context = {
 	projectSkillsLoader: ReturnType<typeof createProjectSkillsLoader>;
 	projectCategoriesLoader: ReturnType<typeof createProjectCategoriesLoader>;
 	projectMembersLoader: ReturnType<typeof createProjectMembersLoader>;
+	sectionLinksLoader: ReturnType<typeof createSectionLinksLoader>;
 };
 export interface Upload {
 	filename: string;

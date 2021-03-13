@@ -276,7 +276,7 @@ export type JoinProjectResponseFragment = (
 
 export type ProjectFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'name' | 'desc' | 'points' | 'thumbnail' | 'limit' | 'createdAt' | 'updatedAt'>
+  & Pick<Project, 'id' | 'name' | 'desc' | 'points' | 'thumbnail' | 'limit' | 'creatorId' | 'createdAt' | 'updatedAt'>
   & { members: Array<(
     { __typename?: 'User' }
     & Pick<User, 'id'>
@@ -288,7 +288,7 @@ export type ProjectFragment = (
     & Pick<Category, 'id' | 'name' | 'color'>
   )>, creator: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username'>
+    & Pick<User, 'username'>
   ) }
 );
 
@@ -606,9 +606,9 @@ export const ProjectFragmentDoc = gql`
     color
   }
   creator {
-    id
     username
   }
+  creatorId
   createdAt
   updatedAt
 }

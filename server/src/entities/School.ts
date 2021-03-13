@@ -9,11 +9,11 @@ import { Project } from "./Project";
 export class School extends BaseEntity {
 	@Field()
 	@PrimaryGeneratedColumn()
-	id!: number;
+	id: number;
 
 	@Field()
 	@Column({ unique: true })
-	name!: string;
+	name: string;
 
 	@CreateDateColumn()
 	createdAt: Date;

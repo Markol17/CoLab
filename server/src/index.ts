@@ -30,6 +30,10 @@ import { Program } from "./entities/Program";
 import { School } from "./entities/School";
 import { SchoolResolver } from "./resolvers/SchoolResolver";
 import { ProgramResolver } from "./resolvers/ProgramResolver";
+import { Section } from "./entities/Section";
+import { Link } from "./entities/Link";
+import { SectionResolver } from "./resolvers/SectionResolver";
+import { createSectionLinksLoader } from "./dataloaders/sectionLinksLoader";
 
 const main = async () => {
 	await createConnection({
@@ -40,7 +44,20 @@ const main = async () => {
 		logging: true,
 		synchronize: true,
 		migrations: [path.join(__dirname, "./migrations/*")],
-		entities: [ProjectSkill, ProjectCategory, User, UserSkill, Skill, Project, Category, UserProject, Program, School],
+		entities: [
+			ProjectSkill,
+			ProjectCategory,
+			User,
+			UserSkill,
+			Skill,
+			Project,
+			Category,
+			UserProject,
+			Program,
+			School,
+			Section,
+			Link,
+		],
 	});
 	// await conn.runMigrations();
 	const app = express();
@@ -76,7 +93,15 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [ProjectResolver, UserResolver, SkillResolver, CategoryResolver, SchoolResolver, ProgramResolver],
+			resolvers: [
+				ProjectResolver,
+				UserResolver,
+				SkillResolver,
+				CategoryResolver,
+				SchoolResolver,
+				ProgramResolver,
+				SectionResolver,
+			],
 			validate: false,
 		}),
 		context: ({ req, res }) => ({
@@ -87,6 +112,7 @@ const main = async () => {
 			projectSkillsLoader: createProjectSkillsLoader(),
 			projectCategoriesLoader: createProjectCategoriesLoader(),
 			projectMembersLoader: createProjectMembersLoader(),
+			sectionLinksLoader: createSectionLinksLoader(),
 		}),
 	});
 

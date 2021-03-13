@@ -22,32 +22,32 @@ import { Program } from "./Program";
 export class User extends BaseEntity {
 	@Field()
 	@PrimaryGeneratedColumn()
-	id!: number;
+	id: number;
 
 	@Field()
 	@Column({ unique: true })
-	username!: string;
+	username: string;
 
 	@Field()
 	@Column()
-	firstName!: string;
+	firstName: string;
 
 	@Field()
 	@Column()
-	lastName!: string;
+	lastName: string;
 
 	@Field()
 	@Column({ unique: true })
-	email!: string;
+	email: string;
 
 	@Column()
-	password!: string;
+	password: string;
 
 	@Column({ type: "date" })
-	startDateOfStudy!: Date;
+	startDateOfStudy: Date;
 
 	@Column({ type: "date" })
-	expectedGraduationDate!: Date;
+	expectedGraduationDate: Date;
 
 	@Field(() => Int)
 	yearOfStudy: number;

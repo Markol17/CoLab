@@ -7,12 +7,19 @@ import { Context } from "../types";
 import { ProjectService } from "../services/ProjectService";
 import { JoinProjectResponse, PaginatedProjects, ProjectResponse } from "./ResponseTypes/ProjectResponse";
 import { CreateProjectInput } from "./InputTypes/ProjectInput";
+import { Section } from "../entities/Section";
 
 @Resolver(Project)
 export class ProjectResolver {
 	@FieldResolver(() => User)
 	async creator(@Root() project: Project, @Ctx() { userLoader }: Context): Promise<User> {
 		return userLoader.load(project.creatorId);
+	}
+
+	@FieldResolver(() => [Section])
+	async sections(@Root() project: Project): Promise<Section[]> {
+		const projectService = new ProjectService();
+		return await projectService.getSections(project.id);
 	}
 
 	@Query(() => PaginatedProjects)
@@ -24,14 +31,15 @@ export class ProjectResolver {
 		return await projectService.getPaginatedProject(offset, limit);
 	}
 
+	@UseMiddleware(isAuth)
 	@Query(() => Project)
 	async project(@Arg("id", () => Int) id: number): Promise<Project | null> {
 		const projectService = new ProjectService();
 		return await projectService.getProject(id);
 	}
 
-	@Mutation(() => JoinProjectResponse)
 	@UseMiddleware(isAuth)
+	@Mutation(() => JoinProjectResponse)
 	async joinProject(
 		@Ctx() context: Context,
 		@Arg("projectId", () => Int) projectId: number
@@ -40,8 +48,8 @@ export class ProjectResolver {
 		return await projectService.joinProject(projectId, context);
 	}
 
-	@Mutation(() => ProjectResponse)
 	@UseMiddleware(isAuth)
+	@Mutation(() => ProjectResponse)
 	async createProject(
 		@Arg("attributes") attributes: CreateProjectInput,
 		@Ctx() context: Context
@@ -51,8 +59,8 @@ export class ProjectResolver {
 	}
 
 	//TODO: support updating skills and categories
-	@Mutation(() => Project, { nullable: true })
 	@UseMiddleware(isAuth)
+	@Mutation(() => Project, { nullable: true })
 	async updateProject(
 		@Arg("id", () => Int) id: number,
 		@Arg("name") name: string,
@@ -73,8 +81,8 @@ export class ProjectResolver {
 		return result.raw[0];
 	}
 
-	@Mutation(() => Boolean)
 	@UseMiddleware(isAuth)
+	@Mutation(() => Boolean)
 	async deleteProject(@Arg("id", () => Int) id: number, @Ctx() { req }: Context): Promise<boolean> {
 		//TODO: cascade delete
 		await Project.delete({ id, creatorId: req.session.userId });

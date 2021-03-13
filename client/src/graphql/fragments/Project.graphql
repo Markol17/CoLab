@@ -19,9 +19,9 @@ fragment Project on Project {
 		color
 	}
 	creator {
-		id
 		username
 	}
+	creatorId
 	createdAt
 	updatedAt
 }

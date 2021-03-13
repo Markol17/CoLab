@@ -6,7 +6,7 @@ import Image from "material-ui-image";
 import { withApollo } from "../../utils/withApollo";
 import { AvatarGroup } from "@material-ui/lab";
 import { months } from "../../components/modals/LearnMoreModal";
-import { Category, Skill } from "../../generated/graphql";
+import { Category, Skill, useCurrentUserQuery } from "../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -51,8 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Project = ({}) => {
 	const classes = useStyles();
-	const { data, error, loading } = useGetProjectFromUrl();
-	if (loading) {
+	const { data: projectData, error, loading: projectLoading } = useGetProjectFromUrl();
+	const { data: userData, loading: userLoading } = useCurrentUserQuery();
+	if (projectLoading || userLoading) {
 		return (
 			<Layout>
 				<div>loading...</div>
@@ -64,7 +65,15 @@ const Project = ({}) => {
 		return <div>{error.message}</div>;
 	}
 
-	if (!data?.project) {
+	if (!userData?.currentUser) {
+		return (
+			<Layout>
+				<Box>User not authenticated</Box>
+			</Layout>
+		);
+	}
+
+	if (!projectData?.project) {
 		return (
 			<Layout>
 				<Box>Could not find project</Box>
@@ -74,105 +83,108 @@ const Project = ({}) => {
 
 	return (
 		<Layout>
-			<Paper className={classes.sectionContainer}>
-				<div className={classes.container}>
-					<div className={classes.imgContainer}>
-						<Image
-							src={
-								data.project.thumbnail
-									? `http://localhost:4000/projects/thumbnails/${data.project.thumbnail}`
-									: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
-							}
-							disableTransition
-							aspectRatio={1.62}
-							imageStyle={{ borderRadius: "3px" }}
-							color='tranparent'
-						/>
-					</div>
-					<div className={classes.subContainer}>
-						<div className={classes.subDiv}>
-							<Typography className={classes.title} variant='h3'>
-								{data.project.name}
-							</Typography>
-							<Typography gutterBottom variant='subtitle1' color='textSecondary'>
-								{data.project.desc}
-							</Typography>
-							<Typography variant='h6' className={classes.title}>
-								Creator:
-							</Typography>
-							<Typography gutterBottom variant='subtitle1' color='textSecondary'>
-								{data.project.creator.username}
-							</Typography>
-							<Typography variant='h6' className={classes.title}>
-								Members:
-							</Typography>
-							<AvatarGroup max={5} style={{ marginBottom: "5.6px" }}>
-								{data.project.members.map((member: any, index: number) => (
-									<Avatar
-										key={index}
-										alt={member.username}
-										// src='http://localhost:4000/projects/thumbnails/placeholder.jpg'
-									/>
-								))}
-							</AvatarGroup>
-							<Typography variant='h6' className={classes.title}>
-								Created on:
-							</Typography>
-							<Typography gutterBottom variant='subtitle1' color='textSecondary'>
-								{months[new Date(data.project.createdAt).getMonth()] +
-									" " +
-									new Date(data.project.createdAt).getDate() +
-									", " +
-									new Date(data.project.createdAt).getFullYear()}
-							</Typography>
-							<Typography variant='h6' className={classes.title}>
-								Last active:
-							</Typography>
-							<Typography gutterBottom variant='subtitle1' color='textSecondary'>
-								{months[new Date(data.project.createdAt).getMonth()] +
-									" " +
-									new Date(data.project.updatedAt).getDate() +
-									", " +
-									new Date(data.project.updatedAt).getFullYear()}
-							</Typography>
+			<>
+				<Paper className={classes.sectionContainer}>
+					<div className={classes.container}>
+						<div className={classes.imgContainer}>
+							<Image
+								src={
+									projectData.project.thumbnail
+										? `http://localhost:4000/projects/thumbnails/${projectData.project.thumbnail}`
+										: `http://localhost:4000/projects/thumbnails/placeholder.jpg`
+								}
+								disableTransition
+								aspectRatio={1.62}
+								imageStyle={{ borderRadius: "3px" }}
+								color='tranparent'
+							/>
 						</div>
-						<div className={classes.subDiv}>
-							<Typography variant='h6' className={classes.title}>
-								Category(ies):
-							</Typography>
-							<div className={classes.chips}>
-								{data.project.categories.map((category: Category, index: number) => (
-									<Chip
-										style={{ backgroundColor: category.color, fontWeight: "bold" }}
-										key={index}
-										size='small'
-										label={category.name}
-									/>
-								))}
+						<div className={classes.subContainer}>
+							<div className={classes.subDiv}>
+								<Typography className={classes.title} variant='h3'>
+									{projectData.project.name}
+								</Typography>
+								<Typography gutterBottom variant='subtitle1' color='textSecondary'>
+									{projectData.project.desc}
+								</Typography>
+								<Typography variant='h6' className={classes.title}>
+									Creator:
+								</Typography>
+								<Typography gutterBottom variant='subtitle1' color='textSecondary'>
+									{projectData.project.creator.username}
+								</Typography>
+								<Typography variant='h6' className={classes.title}>
+									Members:
+								</Typography>
+								<AvatarGroup max={5} style={{ marginBottom: "5.6px" }}>
+									{projectData.project.members.map((member: any, index: number) => (
+										<Avatar
+											key={index}
+											alt={member.username}
+											// src='http://localhost:4000/projects/thumbnails/placeholder.jpg'
+										/>
+									))}
+								</AvatarGroup>
+								<Typography variant='h6' className={classes.title}>
+									Created on:
+								</Typography>
+								<Typography gutterBottom variant='subtitle1' color='textSecondary'>
+									{months[new Date(projectData.project.createdAt).getMonth()] +
+										" " +
+										new Date(projectData.project.createdAt).getDate() +
+										", " +
+										new Date(projectData.project.createdAt).getFullYear()}
+								</Typography>
+								<Typography variant='h6' className={classes.title}>
+									Last active:
+								</Typography>
+								<Typography gutterBottom variant='subtitle1' color='textSecondary'>
+									{months[new Date(projectData.project.createdAt).getMonth()] +
+										" " +
+										new Date(projectData.project.updatedAt).getDate() +
+										", " +
+										new Date(projectData.project.updatedAt).getFullYear()}
+								</Typography>
 							</div>
-							<Typography variant='h6' className={classes.title}>
-								Skill(s) required:
-							</Typography>
-							<div className={classes.chips}>
-								{data.project.skills.map((skill: Skill, index: number) => (
-									<Chip
-										style={{ backgroundColor: skill.color, fontWeight: "bold" }}
-										key={index}
-										size='small'
-										label={skill.type}
-									/>
-								))}
+							<div className={classes.subDiv}>
+								<Typography variant='h6' className={classes.title}>
+									Category(ies):
+								</Typography>
+								<div className={classes.chips}>
+									{projectData.project.categories.map((category: Category, index: number) => (
+										<Chip
+											style={{ backgroundColor: category.color, fontWeight: "bold" }}
+											key={index}
+											size='small'
+											label={category.name}
+										/>
+									))}
+								</div>
+								<Typography variant='h6' className={classes.title}>
+									Skill(s) required:
+								</Typography>
+								<div className={classes.chips}>
+									{projectData.project.skills.map((skill: Skill, index: number) => (
+										<Chip
+											style={{ backgroundColor: skill.color, fontWeight: "bold" }}
+											key={index}
+											size='small'
+											label={skill.type}
+										/>
+									))}
+								</div>
+								<Typography variant='h6' className={classes.title}>
+									Collaborators limit:
+								</Typography>
+								<Typography gutterBottom variant='subtitle1' color='textSecondary'>
+									{projectData.project.limit}
+								</Typography>
 							</div>
-							<Typography variant='h6' className={classes.title}>
-								Collaborators limit:
-							</Typography>
-							<Typography gutterBottom variant='subtitle1' color='textSecondary'>
-								{data.project.limit}
-							</Typography>
 						</div>
 					</div>
-				</div>
-			</Paper>
+				</Paper>
+				{userData?.currentUser?.id === projectData.project.creatorId && <div>hello creator</div>}
+			</>
 		</Layout>
 	);
 };
